@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MultiplayerSolitaireGame
+﻿namespace MultiplayerSolitaireGame
 {
     class TestProgram
     {

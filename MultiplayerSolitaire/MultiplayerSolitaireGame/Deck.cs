@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MultiplayerSolitaireGame
+﻿namespace MultiplayerSolitaireGame
 {
+    using System;
+    using System.Text;
+
     public class Deck
     {
         public Card[] Cards;

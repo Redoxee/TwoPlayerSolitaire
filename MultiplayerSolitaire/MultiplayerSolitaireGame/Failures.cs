@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MultiplayerSolitaireGame
+﻿namespace MultiplayerSolitaireGame
 {
     [System.Flags]
     public enum Failures : ulong

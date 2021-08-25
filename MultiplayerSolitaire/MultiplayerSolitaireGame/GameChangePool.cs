@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MultiplayerSolitaireGame
+﻿namespace MultiplayerSolitaireGame
 {
+    using System;
+    
     public class GameChangePool
     {
         private const int SizeIncrement = 20;
