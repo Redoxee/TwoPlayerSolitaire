@@ -1,0 +1,663 @@
+﻿<!doctype html>
+<meta charset="utf-8">
+<style>
+    #output {
+        overflow: auto;
+        float: right;
+        border: 1pt;
+        border-color: black;
+        border-style: solid;
+        min-width: 300pt;
+        max-width: 50%;
+    }
+
+    #output > p {
+        overflow-wrap: break-word;
+    }
+
+    #output span {
+        color: blue;
+    }
+
+    #output span.error {
+        color: red;
+    }
+
+    .bet {
+        text-align : center;
+    }
+
+        .bet p {
+            margin: 0pt;
+        }
+
+    .card {
+        border : 1pt;
+        border-style : solid;
+        border-color : darkgray;
+    }
+
+    .otherPlayer {
+        border: 1pt;
+        border-style: solid;
+        border-color: black;
+    }
+
+
+</style>
+<h2>Whist</h2>
+<div id=playArea></div>
+<div id=output></div>
+<script>
+    const GameStateID = [
+        "Initialize",
+        "Betting",
+        "Fold",
+        "EndGame",
+        "Unkown"];
+
+    const SigilLabel = [
+        "Spade",
+        "Club",
+        "Heart",
+        "Diamond"];
+
+    const SigilSymbol = [
+        '\u2660',
+        '\u2663',
+        '\u2661',
+        '\u2662'];
+
+    const ValueLabel = [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "Jack",
+        "Queen",
+        "King",
+        "Ace",
+    ];
+
+    class Player {
+        constructor() {
+            this.RootNode = createElementWithClass("table", "player");
+            this.PlayerLabel = document.createTextNode("Player " + localPlayerIndex);
+            var paragraph = document.createElement("p");
+            paragraph.appendChild(this.PlayerLabel);
+            this.RootNode.appendChild(paragraph);
+
+            this.Hand = new Hand();
+            this.RootNode.appendChild(this.Hand.RootNode);
+
+            this.BetLabel = document.createTextNode("Betting ?");
+            this.RootNode.appendChild(this.BetLabel);
+
+            this.PlayedCard = new Card(0);
+            this.PlayedCard.SetInteractable(false);
+            this.RootNode.appendChild(this.PlayedCard.RootNode);
+            this.PlayedCard.RootNode.hidden = true;
+        }
+
+        Setup(gameData) {
+            this.PlayerLabel.textContent = "Player " + (gameData.PlayerIndex + 1);
+            this.BetLabel.textContent = "Betting " + gameData.Bet;
+            this.Hand.Setup(gameData.Hand);
+        }
+
+        SetBetValue(betValue) {
+            this.BetLabel.textContent = "Betting " + betValue;
+        }
+
+        PlayCard(cardIndex) {
+            this.PlayedCard.Setup(this.Hand.Cards[cardIndex].CardData);
+            this.PlayedCard.RootNode.hidden = false;
+            this.Hand.HideCard(cardIndex);
+        }
+    }
+
+    class Hand {
+        constructor() {
+            this.RootNode = createElementWithClass("table", "playerHand");
+            this.Cards = [];
+
+            this.PoolSize = 27;
+
+            for (var index = 0; index < this.PoolSize; ++index) {
+                this.Cards[index] = new Card(index);
+                var col = document.createElement("th");
+                this.RootNode.appendChild(col);
+                col.appendChild(this.Cards[index].RootNode);
+            }
+        }
+
+        Setup(cards) {
+            for (var index = 0; index < this.PoolSize; ++index) {
+                if (index >= cards.length) {
+                    this.Cards[index].RootNode.hidden = true;
+                    continue;
+                }
+
+                this.Cards[index].hidden = false;
+                this.Cards[index].Setup(cards[index]);
+            }
+        }
+
+        SetInteractable(isInteractable) {
+            for (var index = 0; index < this.PoolSize; ++index) {
+                this.Cards[index].SetInteractable(isInteractable);
+            }
+        }
+
+        HideCard(cardIndex) {
+            this.Cards[cardIndex].RootNode.hidden = true;
+        }
+    }
+
+    class Card {
+        constructor(cardIndex) {
+            this.RootNode = createElementWithClass("table", "card");
+            this.CardIndex = cardIndex;
+            var row = document.createElement("tr");
+            this.CardLabel = document.createTextNode("? of ?");
+            row.appendChild(this.CardLabel);
+            this.RootNode.appendChild(row);
+            row = document.createElement("tr");
+            this.Button = document.createElement("button");
+            this.ButtonLabel = document.createTextNode("Play");
+            row.appendChild(this.Button);
+            this.Button.appendChild(this.ButtonLabel);
+            this.RootNode.appendChild(row);
+            this.Button.hidden = true;
+
+            this.Button.addEventListener("click", function () {
+                requestPlayCard(cardIndex)
+            });
+        }
+
+        Setup(cardData) {
+            this.CardData = cardData;
+            this.CardLabel.textContent = ValueLabel[cardData.Value] + " of " + SigilSymbol[cardData.Sigil];
+        }
+
+        SetInteractable(interactable) {
+            this.Button.hidden = !interactable;
+        }
+    }
+
+    class Bet{
+        constructor(betValue) {
+            this.Value = betValue;
+            this.RootNode = createElementWithClass("table", "bet");
+            this.Button = document.createElement("button");
+            var textNode = document.createTextNode("" + betValue);
+            this.Button.appendChild(textNode);
+            this.RootNode.appendChild(this.Button);
+
+            this.Button.addEventListener("click", function () {
+                requestBet(betValue);
+            });
+        }
+    }
+
+    class Bettings {
+        constructor() {
+            this.RootNode = createElementWithClass("table", "Bettings");
+            var row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+            this.Bets = [];
+            this.PoolSize = 28;
+
+            for (var index = 0; index < this.PoolSize; ++index) {
+                var bet = new Bet(index);
+                this.Bets[index] = bet;
+                var col = document.createElement("th");
+                col.appendChild(bet.RootNode);
+                row.appendChild(col);
+            }
+        }
+
+        Setup(bets) {
+            for (var index = 0; index < this.PoolSize; ++index) {
+                if (index >= bets.length) {
+                    this.Bets[index].RootNode.hidden = true;
+                    continue;
+                }
+
+                this.Bets[index].RootNode.hidden = false;
+            }
+        }
+
+        SetVisible(isVisible) {
+            this.RootNode.hidden = !isVisible;
+        }
+    }
+
+    class PlayerSlots {
+        constructor() {
+            this.RootNode = document.createElement("table");
+            this.Buttons = [];
+            var row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+
+            this.PoolSize = 10;
+            for (var index = 0; index < this.PoolSize; ++index) {
+                this.Buttons[index] = document.createElement("button");
+                var label = document.createTextNode("Player " + (index + 1));
+                this.Buttons[index].appendChild(label);
+                row.appendChild(this.Buttons[index]);
+
+                (function (capturedButton, capturedIndex) {
+                    capturedButton.addEventListener("click", function () {
+                        requestPlayerSlots(capturedIndex);
+                    })
+                })(this.Buttons[index], index);
+            }
+        }
+
+        Setup(availableSlost) {
+            for (var index = 0; index < this.PoolSize; ++index) {
+                if (index >= availableSlots.length) {
+                    this.Buttons[index].hidden = true;
+                    continue;
+                }
+
+                if (!availableSlots[index]) {
+                    this.Buttons[index].hidden = true;
+                    continue;
+                }
+
+                this.Buttons[index].hidden = false;
+            }
+        }
+    }
+
+    class GameInfo {
+        constructor() {
+            this.RootNode = document.createElement("table");
+            var playerParagraph = document.createElement("p");
+            this.RootNode.appendChild(playerParagraph);
+            this.CurrentPlayerMessage = "Current player : ";
+            this.CurrentPlayerLabel = document.createTextNode(this.CurrentPlayerMessage);
+            playerParagraph.appendChild(this.CurrentPlayerLabel);
+
+            this.Atout = new Card();
+            this.RootNode.appendChild(document.createTextNode("Atout"));
+            this.RootNode.appendChild(this.Atout.RootNode);
+        }
+
+        Setup(playerIndex, atoutCardData) {
+            this.CurrentPlayerLabel.textContent = this.CurrentPlayerMessage + (playerIndex + 1);
+            this.Atout.Setup(atoutCardData);
+        }
+
+        SetCurrentPlayer(currentPlayer) {
+            this.CurrentPlayerLabel.textContent = this.CurrentPlayerMessage + (currentPlayer + 1);
+        }
+    }
+
+    class Opponent {
+        constructor(index) {
+            this.RootNode = createElementWithClass("table", "otherPlayer");
+            this.OpponentIndex = index;
+
+            var row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+            this.PlayerLabel = document.createTextNode("Player " + (index + 1));
+            row.appendChild(this.PlayerLabel);
+
+            row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+            this.ScoreLabel = document.createTextNode("Score : ?");
+            row.appendChild(this.ScoreLabel);
+
+            row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+            this.BetLabel = document.createTextNode("Bet ?");
+            row.appendChild(this.BetLabel);
+
+            row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+            this.CardLabel = document.createTextNode("? Cards");
+            row.appendChild(this.CardLabel);
+        }
+
+        Setup(opponentData) {
+            this.ScoreLabel.textContent = "Score : " + opponentData.CurrentScore;
+            this.BetLabel.textContent = "Bet : " + opponentData.Bet;
+            this.CardLabel.textContent = "Cards in hand : " + opponentData.NumberOfCards;
+        }
+
+        SetBetValue(betValue) {
+            this.BetValue = betValue;
+            this.BetLabel.textContent = "Bet : " + betValue;
+        }
+    }
+
+    class OpponentsTable {
+        constructor() {
+            this.RootNode = document.createElement("table");
+            this.PoolSize = 10;
+            var row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+
+            this.Opponents = [];
+            for (var index = 0; index < this.PoolSize; ++index) {
+                this.Opponents[index] = new Opponent(index);
+                var col = document.createElement("th");
+                row.appendChild(col);
+                col.appendChild(this.Opponents[index].RootNode);
+            }
+        }
+
+        Setup(opponentsData, indexToIgnore) {
+            var numberOfOpponents = opponentsData.length;
+            for (var index = 0; index < this.PoolSize; ++index) {
+                if (index >= numberOfOpponents || index == indexToIgnore) {
+                    this.Opponents[index].RootNode.hidden = true;
+                    continue;
+                }
+
+                this.Opponents[index].Setup(opponentsData[index]);
+                this.Opponents[index].RootNode.hidden = false;
+            }
+        }
+
+        SetOpponentBet(opponentIndex, betValue) {
+            this.Opponents[opponentIndex].SetBetValue(betValue);
+        }
+    }
+
+    var websocket = null;
+    var isConnected = false;
+    var gameWebSocketUrl = document.URL.replace("http://", "ws://");
+
+    var output = document.querySelector("#output");
+    var playArea = document.querySelector("#playArea");
+
+    var player = new Player();
+    var playerSlots = new PlayerSlots();
+    var gameInfo = new GameInfo();
+    var opponentsTable = new OpponentsTable();
+    var bettings = new Bettings();
+
+    var otherPlayersParent = document.createElement("table");
+    var otherPlayers = [];
+
+    var currentState = "None";
+    var localPlayerIndex = -1;
+    var availableSlots = [];
+    var nextOrderID = 0;
+
+    var pendingOrders = [];
+    var messageHandles = [];
+    var gameState = null;
+
+    messageHandles["AvailablePlayerSlots"] = handleAvailablePlayerSlots;
+    messageHandles["OrderAcknowledgement"] = handleOrderAcknowledgement;
+    messageHandles["PlayerViewUpdate"] = handlePlayerViewUpdate;
+    messageHandles["SandboxChanges"] = handleSandboxUpdate;
+
+    writeToScreen("WS URI " + gameWebSocketUrl);
+
+    createWebSocket();
+
+    function doSend(message) {
+        writeToScreen("SENT: " + message);
+        websocket.send(message);
+    }
+
+    function writeToScreen(message) {
+        output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
+    }
+
+    function recieveWebSocketMessage(e) {
+        var messageData = null;
+        writeToScreen("Recieving message " + e.data);
+        try {
+            messageData = JSON.parse(e.data);
+        }
+        catch (error) {
+            writeToScreen("error while parsing json" + error.message);
+        }
+
+        if (messageData.MessageType in messageHandles) {
+            messageHandles[messageData.MessageType](messageData);
+        }
+        else {
+            writeToScreen("Unkown message type.");
+        }
+    }
+
+    function createWebSocket() {
+        console.log(gameWebSocketUrl);
+        websocket = new WebSocket(gameWebSocketUrl);
+
+        websocket.onopen = function (e) {
+            isConnected = true;
+            writeToScreen("CONNECTED");
+            var requestPlayerSlots = '{ "OrderType": "RequestPlayerSlots" }';
+            doSend(requestPlayerSlots);
+        };
+
+        websocket.onclose = function (e) {
+            writeToScreen("DISCONNECTED");
+        };
+
+        websocket.onmessage = recieveWebSocketMessage;
+
+        websocket.onerror = function (e) {
+            writeToScreen("<span class=error>ERROR:</span> " + e.data);
+        };
+    }
+
+    function handleOrderAcknowledgement(messageData) {
+        if (pendingOrders[messageData.OrderID] != null) {
+            pendingOrders[messageData.OrderID](messageData);
+            pendingOrders[messageData.OrderID] = null;
+        }else {
+            writeToScreen("No acknowledgment found for order " + messageData.OrderID + ".");
+
+            var pendingOrderKeys = pendingOrders.keys();
+            var keyMessage = "PendingOrder keys :";
+            for (const key of pendingOrderKeys) {
+                keyMessage += " " + key;
+            }
+
+            writeToScreen(keyMessage);
+        }
+    }
+
+    function handleAvailablePlayerSlots(messageData)
+    {
+        availableSlots = messageData.AvaialablePlayerSlots;
+
+        if (localPlayerIndex < 0) {
+            clearPlayArea();
+
+            playerSlots.Setup(availableSlots);
+            playArea.appendChild(playerSlots.RootNode);
+        }
+        else {
+            var numberOfAvailableSlots = 0;
+            for (var index = 0; index < availableSlots.length; ++index) {
+                if (availableSlots[index]) {
+                    numberOfAvailableSlots++;
+                }
+            }
+
+            if (numberOfAvailableSlots > 0) {
+                clearPlayArea();
+
+                var p = document.createElement("p").appendChild(document.createTextNode("Waiting for " + numberOfAvailableSlots + " players."));
+                playArea.appendChild(p);
+            }
+            else {
+                if (currentState == "None") {
+                    if (gameState == null) {
+                        currentState = "WaitingForGameState";
+                    }
+                    else {
+                        SetupFromGameState();
+                    }
+                }
+            }
+        }
+    }
+
+    function handlePlayerViewUpdate(messageData)
+    {
+        gameState = messageData;
+
+        if (GameStateID[gameState.GameStateID] != null) {
+            gameState.GameStateID = GameStateID[gameState.GameStateID];
+        }
+
+        if (currentState == "WaitingForGameState") {
+            SetupFromGameState();
+        }
+    }
+
+    function handleSandboxUpdate(messageData) {
+        for (var changeIndex = 0; changeIndex < messageData.GameChanges.length; ++changeIndex) {
+            var gameChange = messageData.GameChanges[changeIndex];
+            if (gameChange.ChangeType == "GameStateChange") {
+                gameState.GameStateID = gameChange.GameState;
+
+                gameInfo.SetCurrentPlayer(gameChange.PlayerIndex);
+
+                if (gameState.GameStateID == "Fold") {
+                    player.Hand.SetInteractable(true);
+                }
+                else {
+                    player.Hand.SetInteractable(false);
+                }
+
+                if (gameState.GameStateID == "Bet") {
+                    bettings.SetVisible(true);
+                }
+                else {
+                    bettings.SetVisible(false);
+                }
+            }
+            else if (gameChange.ChangeType == "PlayerBet") {
+                if (gameChange.PlayerIndex == localPlayerIndex) {
+                }
+                else {
+                    opponentsTable.SetOpponentBet(gameChange.PlayerIndex, gameChange.BetValue);
+                }
+            }
+
+            else if (gameChange.ChangeType == "PlayedCard") {
+                var playerIndex = gameChange.PlayedCard.PlayerIndex;
+                var cardIndex = gameChange.PlayedCard.IndexInHand;
+                if (playerIndex == localPlayerIndex) {
+                    var nbCards = gameState.Hand.length;
+                    gameState.Hand[cardIndex] = null;
+                    for (var index = cardIndex + 1; index < nbCards; ++index) {
+                        gameState.Hand[cardIndex - 1] = gameState.Hand[cardIndex];
+                    }
+
+                    player.PlayCard(cardIndex);
+                }
+                else {
+                    gameState.OtherPlayers[playerIndex].NumberOfCards--;
+                    otherPlayerObject[playerIndex].NumberOfCardsLabel.textContent = "Number of cards " + gameState.OtherPlayers[playerIndex].NumberOfCards;
+                }
+            }
+            else if (gameChange.ChangeType == "NextPlayer") {
+                gameInfo.SetCurrentPlayer(gameChange.PlayerIndex);
+            }
+        }
+    }
+
+    function setHandCardInteractable(interactable) {
+        for (var index = 0; index < playerObject.Hand.Cards.length; ++index) {
+            playerObject.Hand.Cards[index].Button.hidden = interactable;
+        }
+    }
+
+    function SetupFromGameState() {
+        clearPlayArea();
+
+        if (gameState.GameStateID == "Betting" || gameState.GameStateID == "Fold") {
+            gameInfo.Setup(gameState.CurrentPlayer, gameState.TrumpCard)
+            playArea.appendChild(gameInfo.RootNode);
+
+            opponentsTable.Setup(gameState.OtherPlayers, localPlayerIndex);
+            playArea.appendChild(opponentsTable.RootNode);
+
+            player.Setup(gameState);
+            playArea.appendChild(player.RootNode);
+
+            if (gameState.GameStateID == "Betting" && gameState.Bet == -1) {
+                bettings.Setup(gameState.BetFailures);
+                playArea.appendChild(bettings.RootNode);
+            }
+        }
+    }
+
+    function requestPlayerSlots(requestedIndex) {
+        if (localPlayerIndex >= 0) {
+            return;
+        }
+
+        if (!availableSlots[requestedIndex]) {
+            return;
+        }
+
+        var orderID = nextOrderID++;
+        var requestPlayerIndex = '{"OrderType":"SelectPlayerSlot", "PlayerIndex": ' + requestedIndex + ', "OrderID" : ' + orderID + '}';
+        pendingOrders[orderID] = function (responseData) {
+            if (responseData.FailureFlags == "None") {
+                localPlayerIndex = requestedIndex;
+            }
+        };
+
+        doSend(requestPlayerIndex);
+    }
+
+    function requestBet(betValue) {
+        var orderID = nextOrderID++;
+        var betOrder = '{"OrderType":"PlaceBet", "BetValue": ' + betValue + ', "OrderID" : ' + orderID + '}';
+        pendingOrders[orderID] = function (responseData) {
+            if (responseData.FailureFlags == "None") {
+                player.SetBetValue(betValue);
+            }
+        };
+
+        doSend(betOrder);
+    }
+
+    function requestPlayCard(cardIndex) {
+        var orderID = nextOrderID++;
+        var playOrder = '{"OrderType":"PlayCard", "CardIndex": ' + cardIndex + ', OrderID : ' + orderID + '}';
+        pendingOrders[orderID] = function (responseData) { };
+
+        doSend(playOrder);
+    }
+
+    function clearChilds(node) {
+        while (node.firstChild) {
+            node.removeChild(node.firstChild);
+        }
+    }
+
+    function clearPlayArea() {
+        while (playArea.firstChild) {
+            playArea.removeChild(playArea.firstChild)
+        }
+    }
+
+    function createElementWithClass(element, className) {
+        var el = document.createElement(element);
+        el.className = className;
+        return el;
+    }
+
+</script>
