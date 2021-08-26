@@ -3,8 +3,7 @@
     public enum GameStateID : short
     {
         Initialize,
-        Betting,
-        Fold,
+        Playing,
         EndGame,
         Unkown,
     }

@@ -12,7 +12,7 @@ namespace WebMultiplayerSolitaire
 
         public static string GetIndexPage()
         {
-            ResourceManager resourceManager = new ResourceManager("WebMultiplayerSolitaire.Properties.Resources", typeof(Program).Assembly);
+            ResourceManager resourceManager = new ResourceManager("WebCardGame.Properties.Resources", typeof(Program).Assembly);
             string indexFile = resourceManager.GetString("GameIndex");
 
             string insert = string.Empty;

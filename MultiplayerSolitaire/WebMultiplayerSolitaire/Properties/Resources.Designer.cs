@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebWist.Properties {
+namespace WebCardGame.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace WebWist.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebWist.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebCardGame.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,34 +62,36 @@ namespace WebWist.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;!doctype html&gt;
+        ///&lt;meta charset=&quot;utf-8&quot;&gt;
         ///&lt;style&gt;
-        ///    textarea {
-        ///        vertical-align: bottom;
-        ///    }
-        ///
         ///    #output {
         ///        overflow: auto;
+        ///        float: right;
+        ///        border: 1pt;
+        ///        border-color: black;
+        ///        border-style: solid;
+        ///        min-width: 300pt;
+        ///        max-width: 50%;
         ///    }
         ///
-        ///        #output &gt; p {
-        ///            overflow-wrap: break-word;
-        ///        }
+        ///    #output &gt; p {
+        ///        overflow-wrap: break-word;
+        ///    }
         ///
-        ///        #output span {
-        ///            color: blue;
-        ///        }
+        ///    #output span {
+        ///        color: blue;
+        ///    }
         ///
-        ///            #output span.error {
-        ///                color: red;
-        ///            }
-        ///&lt;/style&gt;
-        ///&lt;h2&gt;WebSocket Test&lt;/h2&gt;
-        ///&lt;textarea cols=60 rows=6&gt;&lt;/textarea&gt;
-        ///&lt;button&gt;Connect&lt;/button&gt;
-        ///&lt;div id=output&gt;&lt;/div&gt;
-        ///&lt;script&gt;
-        ///$INSERT_SERIALIZATION
-        ///&lt;/scrip [rest of string was truncated]&quot;;.
+        ///    #output span.error {
+        ///        color: red;
+        ///    }
+        ///
+        ///    .bet {
+        ///        text-align : center;
+        ///    }
+        ///
+        ///        .bet p {
+        ///            marg [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameIndex {
             get {

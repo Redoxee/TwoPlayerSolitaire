@@ -6,14 +6,12 @@
 
         internal GameStateMachine stateMachine;
 
-        public GameManager(int numberOfPlayers, int numberOfTurns, GameChangePool gameChanges = null)
+        public GameManager(GameChangePool gameChanges = null)
         {
-            int maxHandSize = numberOfTurns / 2 + 1;
-
+            const int numberOfPlayers = 2;
             this.Sandbox = new Sandbox();
             this.Sandbox.Deck = new Deck();
             this.Sandbox.Players = new Player[numberOfPlayers];
-            this.Sandbox.MaxHandSize = maxHandSize;
 
             for (int index = 0; index < numberOfPlayers; ++index)
             {
@@ -46,17 +44,6 @@
         public GameStateID GetStateID()
         {
             return this.stateMachine.GetStateID();
-        }
-
-        public Failures[] GetBetFailures(int playerIndex)
-        {
-            if (this.stateMachine.GetStateID() != GameStateID.Betting)
-            {
-                System.Console.WriteLine("Querying bet failures in the wrong state");
-                return null;
-            }
-
-            return this.Sandbox.Players[playerIndex].Failures;
         }
 
         public string GetDebugString()

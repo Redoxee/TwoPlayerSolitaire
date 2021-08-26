@@ -13,6 +13,7 @@
         }
 
         public static readonly string[] ValueNames = {
+            "1",
             "2",
             "3",
             "4",
@@ -22,10 +23,6 @@
             "8",
             "9",
             "10",
-            "Jack",
-            "Queen",
-            "King",
-            "Ace",
         };
     }
 

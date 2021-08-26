@@ -6,13 +6,16 @@ namespace MultiplayerSolitaireGame
     {
         public readonly int Index;
 
-        public List<Card> Hand = new List<Card>();
-        public Failures[] Failures;
-        public int Bet;
-        public int FoldWon;
-        public int Score;
+        public const int BoardWidth = 3;
 
-        public int SelectedCard;
+        public Card[] Hand = new Card[Player.BoardWidth];
+        public Card[] Board = new Card[Player.BoardWidth];
+
+        public int Shield;
+        public int Health;
+        public int PairBullet;
+
+        public int Score;
 
         public Player(int index)
         {

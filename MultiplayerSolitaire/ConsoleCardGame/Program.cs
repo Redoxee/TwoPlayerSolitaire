@@ -1,6 +1,9 @@
-﻿namespace MultiplayerSolitaireGame
+﻿using System;
+using MultiplayerSolitaireGame;
+
+namespace ConsoleCardGame
 {
-    class TestProgram
+    class Program
     {
         static void Main(string[] args)
         {
@@ -26,7 +29,7 @@
                     Failures failure = gameManager.ProcessOrder(order, gameChanges);
                     System.Console.WriteLine(failure.ToString());
                 }
-                
+
                 if (splitted[0].Trim().ToLower() == "quit")
                 {
                     quit = true;
@@ -86,7 +89,7 @@
                     CardIndex = cardIndex,
                 };
             }
-            
+
 
             return order;
         }
