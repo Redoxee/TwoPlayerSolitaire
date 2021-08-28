@@ -7,13 +7,9 @@
         public override void StartState(GameStateMachine stateMachine)
         {
             Sandbox sandbox = stateMachine.gameManager.Sandbox;
+            sandbox.CurrentPlayer = 0;
 
-            for (int index = 0; index < sandbox.Players.Length; ++index)
-            {
-                sandbox.Players[index].Score = 0;
-            }
-
-            stateMachine.SetNextState(new InitializeTurnState());
+            stateMachine.SetNextState(new InitializeRoundState());
         }
 
         public override Failures ProcessOrder(GameStateMachine stateMachine, GameOrder order, GameChangePool gameChanges)
@@ -22,37 +18,103 @@
         }
     }
 
-    internal class InitializeTurnState : GameState
+    internal class InitializeRoundState : GameState
     {
         public override GameStateID StateID => GameStateID.Initialize;
 
         public override void StartState(GameStateMachine stateMachine)
         {
             Sandbox sandbox = stateMachine.gameManager.Sandbox;
+
+            sandbox.DiscardPile.Clear();
             sandbox.Deck.RefillDeck();
             sandbox.Deck.Shuffle();
 
-            int handSize = sandbox.GetHandSizeForTurn(sandbox.CurrentTurn);
-
-            for (int playerIndex = 0; playerIndex < sandbox.Players.Length; ++playerIndex)
+            for (int index = 0; index < sandbox.Players.Length; ++index)
             {
-                Player player = sandbox.Players[playerIndex];
-                player.Hand.Clear();
-                player.SelectedCard = -1;
-                player.Bet = -1;
-
-                for (int cardIndex = 0; cardIndex < handSize; ++cardIndex)
+                Player player = sandbox.Players[index];
+                player.Health = 2;
+                player.PairBullet = 0;
+                player.Shield = 0;
+                for (int cardIndex = 0; cardIndex < Player.BoardWidth; ++index)
                 {
-                    player.Hand.Add(sandbox.Deck.PickCard());
+                    player.Hand[cardIndex] = sandbox.Deck.PickCard();
+                    player.Board[cardIndex].Value = Card.None;
                 }
             }
 
-            sandbox.TrumpCard = sandbox.Deck.PickCard();
+            stateMachine.SetNextState(new PlayTurnState());
+        }
+        public override Failures ProcessOrder(GameStateMachine stateMachine, GameOrder order, GameChangePool gameChanges)
+        {
+            return Failures.WrongOrder;
+        }
+    }
 
-            stateMachine.SetNextState(new BettingState());
+    public class PlayCardOrder : GameOrder
+    {
+        public int PlayerIndex;
+        public int CardIndex;
+        public int BoardIndex;
+    }
+
+    internal class PlayTurnState : GameState
+    {
+        public override GameStateID StateID => GameStateID.Playing;
+
+        public override void StartState(GameStateMachine stateMachine)
+        {
         }
 
-        public override Failures ProcessOrder(GameStateMachine context, GameOrder order, GameChangePool gameChanges)
+        public override Failures ProcessOrder(GameStateMachine stateMachine, GameOrder order, GameChangePool gameChanges)
+        {
+            if (!(order is PlayCardOrder playCardOrder))
+            {
+                return Failures.WrongOrder;
+            }
+
+            Sandbox sandbox = stateMachine.gameManager.Sandbox;
+            if (playCardOrder.PlayerIndex != sandbox.CurrentPlayer)
+            {
+                return Failures.WrongPlayer;
+            }
+
+            if (playCardOrder.CardIndex < 0 || playCardOrder.CardIndex >= Player.BoardWidth)
+            {
+                return Failures.CardOutOfBounds;
+            }
+
+            if (playCardOrder.BoardIndex < 0 || playCardOrder.BoardIndex >= Player.BoardWidth)
+            {
+                return Failures.CardOutOfBounds;
+            }
+
+            Player player = sandbox.Players[playCardOrder.PlayerIndex];
+            if (player.Board[playCardOrder.BoardIndex].IsValide())
+            {
+                sandbox.Deck.AddCardUnder(player.Board[playCardOrder.BoardIndex]);
+            }
+
+            player.Board[playCardOrder.BoardIndex] = player.Hand[playCardOrder.CardIndex];
+            player.Hand[playCardOrder.CardIndex].Value = Card.None;
+
+            stateMachine.SetNextState(new ResolveTurnState());
+
+            return Failures.None;
+        }
+
+    }
+
+    internal class ResolveTurnState : GameState
+    {
+        public override GameStateID StateID => GameStateID.Transitioning;
+
+        public override void StartState(GameStateMachine stateMachine)
+        {
+
+        }
+
+        public override Failures ProcessOrder(GameStateMachine stateMachine, GameOrder order, GameChangePool gameChanges)
         {
             return Failures.WrongOrder;
         }
@@ -294,13 +356,6 @@
             return $"{base.GetDebugMessage(stateMachine)} - Waiting for player {sandbox.CurrentPlayer} to play a card, Hand : [{string.Join(",", sandbox.Players[sandbox.CurrentPlayer].Hand)}].";
         }
     }
-
-    public class PlayCardOrder : GameOrder 
-    {
-        public int PlayerIndex;
-        public int CardIndex;
-    }
-
     internal class ResolveFoldState : GameState
     {
         public override GameStateID StateID => GameStateID.Unkown;

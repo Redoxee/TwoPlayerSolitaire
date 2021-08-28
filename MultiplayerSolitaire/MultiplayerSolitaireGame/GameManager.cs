@@ -12,6 +12,7 @@
             this.Sandbox = new Sandbox();
             this.Sandbox.Deck = new Deck();
             this.Sandbox.Players = new Player[numberOfPlayers];
+            this.Sandbox.DiscardPile = new CardStack();
 
             for (int index = 0; index < numberOfPlayers; ++index)
             {

@@ -5,7 +5,7 @@
         public Deck Deck;
         public Player[] Players;
 
-        public PlayedCard[] DiscardPile;
+        public CardStack DiscardPile;
 
         public int CurrentTurn;
         public int CurrentPlayer;

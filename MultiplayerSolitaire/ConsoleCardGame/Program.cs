@@ -5,10 +5,10 @@ namespace ConsoleCardGame
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string[] _)
         {
             GameChangePool gameChanges = new GameChangePool();
-            GameManager gameManager = new GameManager(numberOfPlayers: 2, numberOfTurns: 3, gameChanges);
+            GameManager gameManager = new GameManager(gameChanges);
 
             bool quit = false;
             do

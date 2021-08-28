@@ -4,6 +4,7 @@
     {
         Initialize,
         Playing,
+        Transitioning,
         EndGame,
         Unkown,
     }

@@ -61,6 +61,11 @@
             return this.Cards[--this.NumberOfCards];
         }
 
+        public void AddCardUnder(Card card)
+        {
+            this.Cards[this.NumberOfCards++] = card;
+        }
+
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();

@@ -3,13 +3,20 @@
     [System.Serializable]
     public struct Card
     {
+        public const short None = -1;
+
         public short Value;
         public Sigil Sigil;
 
         public override string ToString()
         {
-            string cardValue = this.Value < Card.ValueNames.Length ? Card.ValueNames[this.Value] : this.Value.ToString();
+            string cardValue = this.Value == -1 ? "None" : this.Value < Card.ValueNames.Length ? Card.ValueNames[this.Value] : this.Value.ToString();
             return $"[{cardValue} of {this.Sigil}]";
+        }
+
+        public bool IsValide()
+        {
+            return this.Value != Card.None;
         }
 
         public static readonly string[] ValueNames = {
