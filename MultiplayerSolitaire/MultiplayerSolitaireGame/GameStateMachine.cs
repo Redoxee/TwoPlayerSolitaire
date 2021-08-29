@@ -2,14 +2,14 @@
 {
     internal class GameStateMachine
     {
-        internal GameManager gameManager;
+        internal GameManager GameManager;
 
         private GameState currentState = null;
         private GameState nextGameState = null;
 
         public GameStateMachine(GameManager manager)
         {
-            this.gameManager = manager;
+            this.GameManager = manager;
         }
 
         public Failures ProcessOrder(GameOrder order, GameChangePool gameChanges)
@@ -68,14 +68,14 @@
                 System.Console.WriteLine($"[GameStateMachine] Transitioning from state {(this.currentState != null ? this.currentState.ToString() : "null")} to state {next.GetType().Name}.");
                 this.nextGameState = null;
                 this.currentState = next;
-                this.currentState.StartState(this);
+                this.currentState.StartState(this, gameChanges);
 
                 if (gameChanges != null && this.currentState.StateID != GameStateID.Unkown)
                 {
                     ref GameChange gameChange = ref gameChanges.AllocateGameChange();
                     gameChange.ChangeType = GameChange.GameChangeType.GameStateChange;
                     gameChange.GameState = this.currentState.StateID;
-                    gameChange.PlayerIndex = this.gameManager.Sandbox.CurrentPlayer;
+                    gameChange.PlayerIndex = this.GameManager.Sandbox.CurrentPlayer;
                 }
 
                 loopCounter++;
@@ -90,7 +90,7 @@
 
     internal abstract class GameState
     {
-        public abstract void StartState(GameStateMachine stateMachine);
+        public abstract void StartState(GameStateMachine stateMachine, GameChangePool gameChanges);
 
         public abstract Failures ProcessOrder(GameStateMachine stateMachine, GameOrder order, GameChangePool gameChanges);
 

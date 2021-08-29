@@ -10,9 +10,9 @@
         public int CurrentTurn;
         public int CurrentPlayer;
 
-        public int NumberOfPlayers
+        public int OtherPlayer()
         {
-            get => this.Players.Length;
+            return (this.CurrentPlayer + 1) % this.Players.Length;
         }
     }
 }

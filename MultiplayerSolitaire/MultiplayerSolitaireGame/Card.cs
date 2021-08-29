@@ -10,8 +10,13 @@
 
         public override string ToString()
         {
-            string cardValue = this.Value == -1 ? "None" : this.Value < Card.ValueNames.Length ? Card.ValueNames[this.Value] : this.Value.ToString();
-            return $"[{cardValue} of {this.Sigil}]";
+            if (this.Value == -1)
+            {
+                return "[   of        ]";
+            }
+
+            string cardValue = this.Value < Card.ValueNames.Length ? Card.ValueNames[this.Value] : this.Value.ToString();
+            return $"[{cardValue, -2} of {this.Sigil,-7}]";
         }
 
         public bool IsValide()

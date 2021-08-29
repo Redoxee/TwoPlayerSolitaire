@@ -1,5 +1,4 @@
-﻿using System;
-using MultiplayerSolitaireGame;
+﻿using MultiplayerSolitaireGame;
 
 namespace ConsoleCardGame
 {
@@ -7,13 +6,30 @@ namespace ConsoleCardGame
     {
         static void Main(string[] _)
         {
+            Card[] cards = new Card[3];
+            Deck deck = new Deck();
+            for (int i = 0; i < 1000; ++i)
+            {
+                deck.Refill();
+                deck.Shuffle();
+
+                for (int ci = 0; ci < 3; ++ci)
+                {
+                    cards[ci] = deck.PickCard();
+                }
+
+                byte usedFlags;
+                CardCombo combo = Combo.Compute(cards, out usedFlags);
+                System.Console.WriteLine($"{cards[0]}{cards[1]}{cards[2]} : {combo} | {usedFlags}");
+            }
+
             GameChangePool gameChanges = new GameChangePool();
             GameManager gameManager = new GameManager(gameChanges);
-
             bool quit = false;
             do
             {
-                System.Console.WriteLine(gameManager.GetDebugString());
+
+                System.Console.WriteLine("-------------------------------\n" + gameManager.GetDebugString());
 
                 string line = System.Console.ReadLine();
                 string[] splitted = line.Split(' ');
@@ -49,30 +65,11 @@ namespace ConsoleCardGame
 
             string stringOrder = input[2].Trim().ToLower();
 
-            if (stringOrder == "bet")
-            {
-                int playerIndex;
-                int betValue;
-                if (!int.TryParse(input[1], out playerIndex))
-                {
-                    return null;
-                }
-
-                if (!int.TryParse(input[3], out betValue))
-                {
-                    return null;
-                }
-
-                order = new PlaceBetOrder()
-                {
-                    PlayerIndex = playerIndex,
-                    BetValue = betValue,
-                };
-            }
-            else if (stringOrder == "play")
+            if (stringOrder == "play")
             {
                 int playerIndex;
                 int cardIndex;
+                int boardIndex;
                 if (!int.TryParse(input[1], out playerIndex))
                 {
                     return null;
@@ -83,10 +80,16 @@ namespace ConsoleCardGame
                     return null;
                 }
 
+                if (!int.TryParse(input[5], out boardIndex))
+                {
+                    return null;
+                }
+
                 order = new PlayCardOrder()
                 {
                     PlayerIndex = playerIndex,
                     CardIndex = cardIndex,
+                    BoardIndex = boardIndex,
                 };
             }
 

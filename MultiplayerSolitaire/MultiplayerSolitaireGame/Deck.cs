@@ -11,10 +11,10 @@
 
         public Deck()
         {
-            this.RefillDeck();
+            this.Refill();
         }
 
-        public void RefillDeck()
+        public void Refill()
         {
             this.NumberOfCards = 0;
 
