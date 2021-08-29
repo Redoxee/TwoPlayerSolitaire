@@ -45,14 +45,14 @@
 
 
 </style>
-<h2>Whist</h2>
+<h2>Two Players Solitaire</h2>
 <div id=playArea></div>
 <div id=output></div>
 <script>
     const GameStateID = [
         "Initialize",
-        "Betting",
-        "Fold",
+        "Playing",
+        "Transitioning",
         "EndGame",
         "Unkown"];
 
@@ -69,6 +69,7 @@
         '\u2662'];
 
     const ValueLabel = [
+        "Ace",
         "2",
         "3",
         "4",
@@ -78,10 +79,6 @@
         "8",
         "9",
         "10",
-        "Jack",
-        "Queen",
-        "King",
-        "Ace",
     ];
 
     class Player {
@@ -187,54 +184,6 @@
 
         SetInteractable(interactable) {
             this.Button.hidden = !interactable;
-        }
-    }
-
-    class Bet{
-        constructor(betValue) {
-            this.Value = betValue;
-            this.RootNode = createElementWithClass("table", "bet");
-            this.Button = document.createElement("button");
-            var textNode = document.createTextNode("" + betValue);
-            this.Button.appendChild(textNode);
-            this.RootNode.appendChild(this.Button);
-
-            this.Button.addEventListener("click", function () {
-                requestBet(betValue);
-            });
-        }
-    }
-
-    class Bettings {
-        constructor() {
-            this.RootNode = createElementWithClass("table", "Bettings");
-            var row = document.createElement("tr");
-            this.RootNode.appendChild(row);
-            this.Bets = [];
-            this.PoolSize = 28;
-
-            for (var index = 0; index < this.PoolSize; ++index) {
-                var bet = new Bet(index);
-                this.Bets[index] = bet;
-                var col = document.createElement("th");
-                col.appendChild(bet.RootNode);
-                row.appendChild(col);
-            }
-        }
-
-        Setup(bets) {
-            for (var index = 0; index < this.PoolSize; ++index) {
-                if (index >= bets.length) {
-                    this.Bets[index].RootNode.hidden = true;
-                    continue;
-                }
-
-                this.Bets[index].RootNode.hidden = false;
-            }
-        }
-
-        SetVisible(isVisible) {
-            this.RootNode.hidden = !isVisible;
         }
     }
 
@@ -384,7 +333,6 @@
     var playerSlots = new PlayerSlots();
     var gameInfo = new GameInfo();
     var opponentsTable = new OpponentsTable();
-    var bettings = new Bettings();
 
     var otherPlayersParent = document.createElement("table");
     var otherPlayers = [];
@@ -622,19 +570,7 @@
         doSend(requestPlayerIndex);
     }
 
-    function requestBet(betValue) {
-        var orderID = nextOrderID++;
-        var betOrder = '{"OrderType":"PlaceBet", "BetValue": ' + betValue + ', "OrderID" : ' + orderID + '}';
-        pendingOrders[orderID] = function (responseData) {
-            if (responseData.FailureFlags == "None") {
-                player.SetBetValue(betValue);
-            }
-        };
-
-        doSend(betOrder);
-    }
-
-    function requestPlayCard(cardIndex) {
+    function requestPlayCard(cardIndex, boardIndex) {
         var orderID = nextOrderID++;
         var playOrder = '{"OrderType":"PlayCard", "CardIndex": ' + cardIndex + ', OrderID : ' + orderID + '}';
         pendingOrders[orderID] = function (responseData) { };
