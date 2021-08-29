@@ -105,11 +105,11 @@
                 Board = new MSG.Card[player.Board.Length]
             };
 
-            player.Hand.CopyTo(view.Hand, player.Hand.Length);
-            player.Board.CopyTo(view.Board, player.Board.Length);
+            player.Hand.CopyTo(view.Hand, 0);
+            player.Board.CopyTo(view.Board, 0);
             
             view.DiscardPile = new MSG.Card[sandbox.DiscardPile.Count];
-            sandbox.DiscardPile.Data.CopyTo(view.DiscardPile, sandbox.DiscardPile.Count);
+            System.Array.Copy(sandbox.DiscardPile.Data, 0, view.DiscardPile, 0, sandbox.DiscardPile.Count);
 
             view.GameStateID = this.gameManager.GetStateID();
             view.CurrentPlayer = sandbox.CurrentPlayer;
@@ -123,7 +123,7 @@
             view.OtherPlayer.PairBullets = otherPlayer.PairBullets;
 
             view.OtherPlayer.Board = new MSG.Card[otherPlayer.Board.Length];
-            otherPlayer.Board.CopyTo(view.OtherPlayer.Board, otherPlayer.Board.Length);
+            otherPlayer.Board.CopyTo(view.OtherPlayer.Board, 0);
 
             return view;
         }

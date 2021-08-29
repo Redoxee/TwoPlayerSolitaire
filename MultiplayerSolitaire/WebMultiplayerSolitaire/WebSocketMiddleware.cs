@@ -204,6 +204,7 @@ namespace WebMultiplayerSolitaire
             {
                 Console.WriteLine($"Socket {client.SocketId}:");
                 Program.ReportException(ex);
+                Console.WriteLine(ex.StackTrace);
             }
             finally
             {
