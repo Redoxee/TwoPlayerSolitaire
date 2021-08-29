@@ -6,16 +6,18 @@
 
         internal GameStateMachine stateMachine;
 
-        System.Text.StringBuilder workingStringBuilder = new System.Text.StringBuilder();
+        private readonly System.Text.StringBuilder workingStringBuilder = new System.Text.StringBuilder();
 
         public GameManager(GameChangePool gameChanges)
         {
             const int numberOfPlayers = 2;
-            this.Sandbox = new Sandbox();
-            this.Sandbox.Deck = new Deck();
-            this.Sandbox.Players = new Player[numberOfPlayers];
-            this.Sandbox.DiscardPile = new CardStack();
-
+            this.Sandbox = new Sandbox
+            {
+                Deck = new Deck(),
+                Players = new Player[numberOfPlayers],
+                DiscardPile = new CardStack(),
+            };
+        
             for (int index = 0; index < numberOfPlayers; ++index)
             {
                 this.Sandbox.Players[index] = new Player(index);

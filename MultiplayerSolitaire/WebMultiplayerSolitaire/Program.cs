@@ -16,7 +16,7 @@ namespace WebMultiplayerSolitaire
         {
             // Initialize game.
             GameProcess gp = GameProcess.Instance;
-            gp.InitializeGame(2, 5);
+            gp.InitializeGame();
 
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>

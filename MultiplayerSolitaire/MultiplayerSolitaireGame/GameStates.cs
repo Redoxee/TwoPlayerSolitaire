@@ -129,8 +129,7 @@
             int otherPlayerIndex = sandbox.OtherPlayerIndex();
             Player otherPlayer = sandbox.Players[otherPlayerIndex];
 
-            byte usedCards;
-            CardCombo combo = Combo.Compute(player.Board, out usedCards);
+            CardCombo combo = Combo.Compute(player.Board, out byte usedCards);
 
             if (combo != CardCombo.None)
             {

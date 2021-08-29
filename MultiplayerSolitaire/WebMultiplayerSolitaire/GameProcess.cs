@@ -93,15 +93,18 @@
         {
             MSG.Sandbox sandbox = this.gameManager.GetSandbox();
             MSG.Player player = sandbox.Players[playerIndex];
-            PlayerViewUpdate view = new PlayerViewUpdate();
-            view.PlayerIndex = playerIndex;
-            view.Score = player.Score;
-            view.Health = player.Health;
-            view.Shield = player.Shield;
-            view.PairBullets = player.PairBullets;
+            PlayerViewUpdate view = new PlayerViewUpdate
+            {
+                PlayerIndex = playerIndex,
+                Score = player.Score,
+                Health = player.Health,
+                Shield = player.Shield,
+                PairBullets = player.PairBullets,
 
-            view.Hand = new MSG.Card[player.Hand.Length];
-            view.Board = new MSG.Card[player.Board.Length];
+                Hand = new MSG.Card[player.Hand.Length],
+                Board = new MSG.Card[player.Board.Length]
+            };
+
             player.Hand.CopyTo(view.Hand, player.Hand.Length);
             player.Board.CopyTo(view.Board, player.Board.Length);
             
@@ -127,8 +130,6 @@
 
         public string GetSandboxJson()
         {
-            string result = string.Empty;
-
             Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
             System.IO.StringWriter stringWriter = new System.IO.StringWriter();
             Newtonsoft.Json.JsonTextWriter textWriter = new Newtonsoft.Json.JsonTextWriter(stringWriter);
@@ -137,15 +138,14 @@
 
             serializer.Serialize(textWriter, playerView);
             stringWriter.Close();
-            result = stringWriter.ToString();
-            return result;
+            return stringWriter.ToString();
         }
 
         public void HandleMessage(ConnectedClient client, string messageString)
         {
             System.IO.StringReader stringReader = new System.IO.StringReader(messageString);
             Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
-            JSONOrder order = null;
+            JSONOrder order;
             try
             {
                 order = (JSONOrder)serializer.Deserialize(stringReader, typeof(JSONOrder));
@@ -162,9 +162,6 @@
                 System.Console.WriteLine("Error while parsing socket message into json");
                 return;
             }
-
-            System.IO.StringWriter stringWriter = new System.IO.StringWriter();
-            Newtonsoft.Json.JsonTextWriter textWriter = new Newtonsoft.Json.JsonTextWriter(stringWriter);
 
             switch (order.OrderType)
             {
@@ -264,8 +261,11 @@
 
         private JSONResponse RequestAvailablePlayerSlots()
         {
-            AvailablePlayerSlot response = new AvailablePlayerSlot();
-            response.AvaialablePlayerSlots = new bool[this.clientByPlayerIndex.Length];
+            AvailablePlayerSlot response = new AvailablePlayerSlot
+            {
+                AvaialablePlayerSlots = new bool[this.clientByPlayerIndex.Length],
+            };
+
             for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
             {
                 response.AvaialablePlayerSlots[index] = this.clientByPlayerIndex[index] == null;

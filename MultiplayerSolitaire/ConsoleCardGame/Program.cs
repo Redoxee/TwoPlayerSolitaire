@@ -72,20 +72,17 @@ namespace ConsoleCardGame
 
             if (stringOrder == "play")
             {
-                int playerIndex;
-                int cardIndex;
-                int boardIndex;
-                if (!int.TryParse(input[1], out playerIndex))
+                if (!int.TryParse(input[1], out int playerIndex))
                 {
                     return null;
                 }
 
-                if (!int.TryParse(input[3], out cardIndex))
+                if (!int.TryParse(input[3], out int cardIndex))
                 {
                     return null;
                 }
 
-                if (!int.TryParse(input[5], out boardIndex))
+                if (!int.TryParse(input[5], out int boardIndex))
                 {
                     return null;
                 }
