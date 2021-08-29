@@ -4,11 +4,11 @@
     {
         private static GameProcess instance;
 
-        private MultiplayerSolitaireGame.GameManager gameManager;
+        private MSG.GameManager gameManager;
 
         ConnectedClient[] clientByPlayerIndex = null;
 
-        MultiplayerSolitaireGame.GameChangePool workingGameChanges;
+        MSG.GameChangePool workingGameChanges;
 
         public static GameProcess Instance
         {
@@ -29,8 +29,8 @@
 
         public void InitializeGame()
         {
-            this.workingGameChanges = new MultiplayerSolitaireGame.GameChangePool();
-            this.gameManager = new MultiplayerSolitaireGame.GameManager(this.workingGameChanges);
+            this.workingGameChanges = new MSG.GameChangePool();
+            this.gameManager = new MSG.GameManager(this.workingGameChanges);
 
             this.clientByPlayerIndex = new ConnectedClient[2];
             for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
@@ -39,7 +39,7 @@
             }
         }
 
-        public MultiplayerSolitaireGame.GameManager GetGameManager()
+        public MSG.GameManager GetGameManager()
         {
             return this.gameManager;
         }
@@ -91,8 +91,8 @@
 
         public PlayerViewUpdate GetPlayerView(int playerIndex)
         {
-            MultiplayerSolitaireGame.Sandbox sandbox = this.gameManager.GetSandbox();
-            MultiplayerSolitaireGame.Player player = sandbox.Players[playerIndex];
+            MSG.Sandbox sandbox = this.gameManager.GetSandbox();
+            MSG.Player player = sandbox.Players[playerIndex];
             PlayerViewUpdate view = new PlayerViewUpdate();
             view.PlayerIndex = playerIndex;
             view.Score = player.Score;
@@ -100,26 +100,26 @@
             view.Shield = player.Shield;
             view.PairBullets = player.PairBullets;
 
-            view.Hand = new MultiplayerSolitaireGame.Card[player.Hand.Length];
-            view.Board = new MultiplayerSolitaireGame.Card[player.Board.Length];
+            view.Hand = new MSG.Card[player.Hand.Length];
+            view.Board = new MSG.Card[player.Board.Length];
             player.Hand.CopyTo(view.Hand, player.Hand.Length);
             player.Board.CopyTo(view.Board, player.Board.Length);
             
-            view.DiscardPile = new MultiplayerSolitaireGame.Card[sandbox.DiscardPile.Count];
+            view.DiscardPile = new MSG.Card[sandbox.DiscardPile.Count];
             sandbox.DiscardPile.Data.CopyTo(view.DiscardPile, sandbox.DiscardPile.Count);
 
             view.GameStateID = this.gameManager.GetStateID();
             view.CurrentPlayer = sandbox.CurrentPlayer;
 
             int otherPlayerIndex = sandbox.OtherPlayerIndex();
-            MultiplayerSolitaireGame.Player otherPlayer = sandbox.Players[otherPlayerIndex];
+            MSG.Player otherPlayer = sandbox.Players[otherPlayerIndex];
             view.OtherPlayer.Index = otherPlayerIndex;
             view.OtherPlayer.Score = otherPlayer.Score;
             view.OtherPlayer.Health = otherPlayer.Health;
             view.OtherPlayer.Shield = otherPlayer.Shield;
             view.OtherPlayer.PairBullets = otherPlayer.PairBullets;
 
-            view.OtherPlayer.Board = new MultiplayerSolitaireGame.Card[otherPlayer.Board.Length];
+            view.OtherPlayer.Board = new MSG.Card[otherPlayer.Board.Length];
             otherPlayer.Board.CopyTo(view.OtherPlayer.Board, otherPlayer.Board.Length);
 
             return view;
@@ -178,7 +178,7 @@
                         
                         if (this.TryRegisterClient(client, order.PlayerIndex))
                         {
-                            OrderAcknowledgement acknowledgement = new OrderAcknowledgement() { OrderID = order.OrderID, FailureFlags = MultiplayerSolitaireGame.Failures.None };
+                            OrderAcknowledgement acknowledgement = new OrderAcknowledgement() { OrderID = order.OrderID, FailureFlags = MSG.Failures.None };
                             this.SendResponseToClient(acknowledgement, client);
 
                             PlayerViewUpdate playerView = this.GetPlayerView(client.PlayerIndex);
@@ -208,7 +208,7 @@
                         int cardIndex = order.CardIndex;
                         int boardIndex = order.BoardIndex;
 
-                        MultiplayerSolitaireGame.PlayCardOrder playOrder = new MultiplayerSolitaireGame.PlayCardOrder()
+                        MSG.PlayCardOrder playOrder = new MSG.PlayCardOrder()
                         {
                             PlayerIndex = playerIndex,
                             CardIndex = cardIndex,
@@ -216,7 +216,7 @@
                         };
 
                         this.workingGameChanges.Clear();
-                        MultiplayerSolitaireGame.Failures failures = this.gameManager.ProcessOrder(playOrder, this.workingGameChanges);
+                        MSG.Failures failures = this.gameManager.ProcessOrder(playOrder, this.workingGameChanges);
 
                         OrderAcknowledgement acknowledgement = new OrderAcknowledgement()
                         {
@@ -226,7 +226,7 @@
 
                         this.SendResponseToClient(acknowledgement, client);
 
-                        if (failures == MultiplayerSolitaireGame.Failures.None)
+                        if (failures == MSG.Failures.None)
                         {
                             SandboxChanges sandboxChanges = new SandboxChanges()
                             {
@@ -253,8 +253,8 @@
         {
             for (int index = 0; index < sandboxChanges.GameChanges.Length; ++index)
             {
-                if (sandboxChanges.GameChanges[index].ChangeType == MultiplayerSolitaireGame.GameChange.GameChangeType.GameStateChange &&
-                    sandboxChanges.GameChanges[index].GameState == MultiplayerSolitaireGame.GameStateID.Initialize)
+                if (sandboxChanges.GameChanges[index].ChangeType == MSG.GameChange.GameChangeType.GameStateChange &&
+                    sandboxChanges.GameChanges[index].GameState == MSG.GameStateID.Initialize)
                 {
                     sandboxChanges.PlayerViewUpdate = this.GetPlayerView(playerIndex);
                     return;

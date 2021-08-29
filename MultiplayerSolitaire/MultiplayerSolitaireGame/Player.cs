@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MultiplayerSolitaireGame
+namespace MSG
 {
     public class Player
     {

@@ -4,7 +4,7 @@
     {
         public override string MessageType => nameof(SandboxChanges);
 
-        public MultiplayerSolitaireGame.GameChange[] GameChanges;
+        public MSG.GameChange[] GameChanges;
         public PlayerViewUpdate PlayerViewUpdate;
     }
 }

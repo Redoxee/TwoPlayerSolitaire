@@ -1,4 +1,4 @@
-﻿namespace MultiplayerSolitaireGame
+﻿namespace MSG
 {
     [System.Serializable]
     public struct Card

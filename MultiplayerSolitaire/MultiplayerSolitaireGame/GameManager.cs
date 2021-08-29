@@ -1,4 +1,4 @@
-﻿namespace MultiplayerSolitaireGame
+﻿namespace MSG
 {
     public class GameManager
     {

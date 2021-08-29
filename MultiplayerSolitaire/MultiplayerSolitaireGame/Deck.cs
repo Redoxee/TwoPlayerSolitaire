@@ -1,4 +1,4 @@
-﻿namespace MultiplayerSolitaireGame
+﻿namespace MSG
 {
     using System;
     using System.Text;

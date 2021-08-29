@@ -1,4 +1,4 @@
-﻿using MultiplayerSolitaireGame;
+﻿using MSG;
 
 namespace ConsoleCardGame
 {
