@@ -8,7 +8,7 @@
 
         System.Text.StringBuilder workingStringBuilder = new System.Text.StringBuilder();
 
-        public GameManager(GameChangePool gameChanges = null)
+        public GameManager(GameChangePool gameChanges)
         {
             const int numberOfPlayers = 2;
             this.Sandbox = new Sandbox();
@@ -20,9 +20,6 @@
             {
                 this.Sandbox.Players[index] = new Player(index);
             }
-
-            this.Sandbox.CurrentPlayer = 0;
-            this.Sandbox.CurrentTurn = 0;
 
             this.stateMachine = new GameStateMachine(this);
             GameState firstState = new InitializeGameState();
@@ -53,11 +50,11 @@
         {
             this.workingStringBuilder.Clear();
             this.workingStringBuilder.Append(this.stateMachine.GetDebugString());
-            this.workingStringBuilder.AppendLine();
+            this.workingStringBuilder.AppendLine().Append(" Round : ").Append(this.Sandbox.RoundCount).AppendLine();
 
-            Player otherPlayer = this.Sandbox.Players[this.Sandbox.OtherPlayer()];
+            Player otherPlayer = this.Sandbox.Players[this.Sandbox.OtherPlayerIndex()];
             this.workingStringBuilder.Append("Other Player ").Append(otherPlayer.Index).AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).Append(" Shield : ").Append(otherPlayer.Shield).Append(" PairBullets : ").Append(otherPlayer.PairBullet).AppendLine();
+            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).Append(" Shield : ").Append(otherPlayer.Shield).Append(" PairBullets : ").Append(otherPlayer.PairBullets).AppendLine();
             this.workingStringBuilder.Append("Board : ");
             for (int index = 0; index < 3; ++index)
             {
@@ -76,7 +73,7 @@
             }
 
             this.workingStringBuilder.AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health).Append(" Shield : ").Append(currentPlayer.Shield).Append(" PairBullets : ").Append(currentPlayer.PairBullet);
+            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health).Append(" Shield : ").Append(currentPlayer.Shield).Append(" PairBullets : ").Append(currentPlayer.PairBullets);
             this.workingStringBuilder.AppendLine();
 
             this.workingStringBuilder.Append("Hand : ");

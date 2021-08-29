@@ -8,6 +8,7 @@
         {
             Sandbox sandbox = stateMachine.GameManager.Sandbox;
             sandbox.CurrentPlayer = 0;
+            sandbox.RoundCount = 0;
 
             stateMachine.SetNextState(new InitializeRoundState());
         }
@@ -34,7 +35,7 @@
             {
                 Player player = sandbox.Players[index];
                 player.Health = 2;
-                player.PairBullet = 0;
+                player.PairBullets = 0;
                 player.Shield = 0;
                 for (int cardIndex = 0; cardIndex < Player.BoardWidth; ++cardIndex)
                 {
@@ -125,7 +126,7 @@
         {
             Sandbox sandbox = stateMachine.GameManager.Sandbox;
             Player player = sandbox.Players[sandbox.CurrentPlayer];
-            int otherPlayerIndex = sandbox.OtherPlayer();
+            int otherPlayerIndex = sandbox.OtherPlayerIndex();
             Player otherPlayer = sandbox.Players[otherPlayerIndex];
 
             byte usedCards;
@@ -146,11 +147,16 @@
 
                 if (combo == CardCombo.Pair)
                 {
-                    player.PairBullet++;
+                    player.PairBullets++;
 
                     propertyChanged.PlayerProperty = GameChange.PlayerProperties.PairBullet;
-                    propertyChanged.NewValue = player.PairBullet;
+                    propertyChanged.NewValue = player.PairBullets;
                     propertyChanged.PlayerIndex = player.Index;
+
+                    if (player.PairBullets == 5)
+                    {
+                        otherPlayer.Health = 0;
+                    }
                 }
                 else if (combo == CardCombo.Flush)
                 {
@@ -197,7 +203,17 @@
 
             if (otherPlayer.Health <= 0)
             {
-                stateMachine.SetNextState(new EndGameState());
+                player.Score++;
+                sandbox.RoundCount++;
+                if (sandbox.RoundCount > 3)
+                {
+                    stateMachine.SetNextState(new EndGameState());
+                }
+                else
+                {
+                    sandbox.CurrentPlayer = otherPlayerIndex;
+                    stateMachine.SetNextState(new InitializeRoundState());
+                }
             }
             else
             {

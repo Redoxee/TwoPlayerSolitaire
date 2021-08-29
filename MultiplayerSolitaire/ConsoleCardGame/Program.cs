@@ -6,21 +6,26 @@ namespace ConsoleCardGame
     {
         static void Main(string[] _)
         {
-            Card[] cards = new Card[3];
-            Deck deck = new Deck();
-            for (int i = 0; i < 1000; ++i)
+            // Testing combo code
             {
-                deck.Refill();
-                deck.Shuffle();
-
-                for (int ci = 0; ci < 3; ++ci)
+                /*
+                Card[] cards = new Card[3];
+                Deck deck = new Deck();
+                for (int i = 0; i < 0; ++i)
                 {
-                    cards[ci] = deck.PickCard();
-                }
+                    deck.Refill();
+                    deck.Shuffle();
 
-                byte usedFlags;
-                CardCombo combo = Combo.Compute(cards, out usedFlags);
-                System.Console.WriteLine($"{cards[0]}{cards[1]}{cards[2]} : {combo} | {usedFlags}");
+                    for (int ci = 0; ci < 3; ++ci)
+                    {
+                        cards[ci] = deck.PickCard();
+                    }
+
+                    byte usedFlags;
+                    CardCombo combo = Combo.Compute(cards, out usedFlags);
+                    System.Console.WriteLine($"{cards[0]}{cards[1]}{cards[2]} : {combo} | {usedFlags}");
+                }
+                */
             }
 
             GameChangePool gameChanges = new GameChangePool();

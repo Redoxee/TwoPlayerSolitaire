@@ -13,7 +13,7 @@ namespace MultiplayerSolitaireGame
 
         public int Shield;
         public int Health;
-        public int PairBullet;
+        public int PairBullets;
 
         public int Score;
 

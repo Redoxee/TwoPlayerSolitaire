@@ -27,12 +27,12 @@
         {
         }
 
-        public void InitializeGame(int numberOfPlayer, int numberOfTurns)
+        public void InitializeGame()
         {
             this.workingGameChanges = new MultiplayerSolitaireGame.GameChangePool();
-            this.gameManager = new MultiplayerSolitaireGame.GameManager(numberOfPlayer, numberOfTurns);
+            this.gameManager = new MultiplayerSolitaireGame.GameManager(this.workingGameChanges);
 
-            this.clientByPlayerIndex = new ConnectedClient[numberOfPlayer];
+            this.clientByPlayerIndex = new ConnectedClient[2];
             for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
             {
                 this.clientByPlayerIndex[index] = null;
@@ -95,26 +95,32 @@
             MultiplayerSolitaireGame.Player player = sandbox.Players[playerIndex];
             PlayerViewUpdate view = new PlayerViewUpdate();
             view.PlayerIndex = playerIndex;
-            view.Hand = player.Hand.ToArray();
-            view.Bet = player.Bet;
             view.Score = player.Score;
+            view.Health = player.Health;
+            view.Shield = player.Shield;
+            view.PairBullets = player.PairBullets;
+
+            view.Hand = new MultiplayerSolitaireGame.Card[player.Hand.Length];
+            view.Board = new MultiplayerSolitaireGame.Card[player.Board.Length];
+            player.Hand.CopyTo(view.Hand, player.Hand.Length);
+            player.Board.CopyTo(view.Board, player.Board.Length);
+            
+            view.DiscardPile = new MultiplayerSolitaireGame.Card[sandbox.DiscardPile.Count];
+            sandbox.DiscardPile.Data.CopyTo(view.DiscardPile, sandbox.DiscardPile.Count);
+
             view.GameStateID = this.gameManager.GetStateID();
             view.CurrentPlayer = sandbox.CurrentPlayer;
-            view.TrumpCard = sandbox.TrumpCard;
 
-            if (view.GameStateID == MultiplayerSolitaireGame.GameStateID.Betting)
-            {
-                view.BetFailures = this.gameManager.GetBetFailures(playerIndex);
-            }
+            int otherPlayerIndex = sandbox.OtherPlayerIndex();
+            MultiplayerSolitaireGame.Player otherPlayer = sandbox.Players[otherPlayerIndex];
+            view.OtherPlayer.Index = otherPlayerIndex;
+            view.OtherPlayer.Score = otherPlayer.Score;
+            view.OtherPlayer.Health = otherPlayer.Health;
+            view.OtherPlayer.Shield = otherPlayer.Shield;
+            view.OtherPlayer.PairBullets = otherPlayer.PairBullets;
 
-            view.OtherPlayers = new PlayerViewUpdate.Player[sandbox.NumberOfPlayers];
-            for (int otherIndex = 0; otherIndex < view.OtherPlayers.Length; ++otherIndex)
-            {
-                ref PlayerViewUpdate.Player otherPlayer = ref view.OtherPlayers[otherIndex];
-                otherPlayer.NumberOfCards = sandbox.Players[otherIndex].Hand.Count;
-                otherPlayer.CurrentScore = sandbox.Players[otherIndex].Score;
-                otherPlayer.Bet = sandbox.Players[otherIndex].Bet;
-            }
+            view.OtherPlayer.Board = new MultiplayerSolitaireGame.Card[otherPlayer.Board.Length];
+            otherPlayer.Board.CopyTo(view.OtherPlayer.Board, otherPlayer.Board.Length);
 
             return view;
         }
@@ -196,46 +202,17 @@
                         break;
                     }
 
-                case "PlaceBet":
-                    {
-                        int playerIndex = client.PlayerIndex;
-                        int betValue = order.BetValue;
-
-                        MultiplayerSolitaireGame.PlaceBetOrder betOrder = new MultiplayerSolitaireGame.PlaceBetOrder()
-                        {
-                            PlayerIndex = playerIndex,
-                            BetValue = betValue,
-                        };
-
-                        this.workingGameChanges.Clear();
-                        MultiplayerSolitaireGame.Failures failures = this.gameManager.ProcessOrder(betOrder, this.workingGameChanges);
-
-                        OrderAcknowledgement acknowledgement = new OrderAcknowledgement()
-                        {
-                            OrderID = order.OrderID,
-                            FailureFlags = failures,
-                        };
-
-                        this.SendResponseToClient(acknowledgement, client);
-
-                        if (failures == MultiplayerSolitaireGame.Failures.None)
-                        {
-                            SandboxChanges sandboxChanges = new SandboxChanges();
-                            sandboxChanges.GameChanges = this.workingGameChanges.GetGameChanges();
-                            this.BroadCast(sandboxChanges);
-                        }
-
-                        break;
-                    }
                 case "PlayCard":
                     {
                         int playerIndex = client.PlayerIndex;
                         int cardIndex = order.CardIndex;
+                        int boardIndex = order.BoardIndex;
 
                         MultiplayerSolitaireGame.PlayCardOrder playOrder = new MultiplayerSolitaireGame.PlayCardOrder()
                         {
                             PlayerIndex = playerIndex,
                             CardIndex = cardIndex,
+                            BoardIndex = boardIndex,
                         };
 
                         this.workingGameChanges.Clear();

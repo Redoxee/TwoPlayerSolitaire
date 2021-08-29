@@ -12,21 +12,28 @@ namespace WebMultiplayerSolitaire
 
         public MultiplayerSolitaireGame.GameStateID GameStateID;
         public int PlayerIndex;
-        public MultiplayerSolitaireGame.Card TrumpCard;
+
         public MultiplayerSolitaireGame.Card[] Hand;
-        [Newtonsoft.Json.JsonProperty("BetFailures", ItemConverterType = typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public MultiplayerSolitaireGame.Failures[] BetFailures;
-        public int Bet;
-        public int PlayedCard;
+        public MultiplayerSolitaireGame.Card[] Board;
+
         public int Score;
-        public Player[] OtherPlayers;
+        public int Health;
+        public int Shield;
+        public int PairBullets;
+
+        public Player OtherPlayer;
         public int CurrentPlayer;
+        public int Round;
+        public MultiplayerSolitaireGame.Card[] DiscardPile;
 
         public struct Player
         {
-            public int Bet;
-            public int NumberOfCards;
-            public int CurrentScore;
+            public int Index;
+            public int Score;
+            public int Health;
+            public int Shield;
+            public int PairBullets;
+            public MultiplayerSolitaireGame.Card[] Board;
         }
     }
 }
