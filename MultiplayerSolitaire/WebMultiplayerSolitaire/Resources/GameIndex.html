@@ -89,7 +89,10 @@
             paragraph.appendChild(this.PlayerLabel);
             this.RootNode.appendChild(paragraph);
 
-            this.Hand = new Hand();
+            this.Board = new CardDisplay();
+            this.RootNode.appendChild(this.Board.RootNode);
+
+            this.Hand = new CardDisplay();
             this.RootNode.appendChild(this.Hand.RootNode);
 
             this.PlayedCard = new Card(0);
@@ -100,7 +103,8 @@
 
         Setup(gameData) {
             this.PlayerLabel.textContent = "Player " + (gameData.PlayerIndex + 1);
-            this.Hand.Setup(gameData.Hand);
+            this.Hand.SetupFromArray(gameData.Hand);
+            this.Board.SetupFromArray(gameData.Board);
         }
 
         PlayCard(cardIndex) {
@@ -185,8 +189,10 @@
             this.RootNode = createElementWithClass("table", "card");
             this.CardIndex = cardIndex;
             var row = document.createElement("tr");
+            this.ContentHolder = document.createElement("div");
+            row.appendChild(this.ContentHolder);
             this.CardLabel = document.createTextNode("? of ?");
-            row.appendChild(this.CardLabel);
+            this.ContentHolder.appendChild(this.CardLabel);
             this.RootNode.appendChild(row);
             row = document.createElement("tr");
             this.Button = document.createElement("button");
@@ -203,7 +209,13 @@
 
         Setup(cardData) {
             this.CardData = cardData;
-            this.CardLabel.textContent = ValueLabel[cardData.Value] + " of " + SigilSymbol[cardData.Sigil];
+            if (cardData.Value < 0) {
+                this.ContentHolder.style.display = "none";
+            }
+            else {
+                this.ContentHolder.style.display = "block";
+                this.CardLabel.textContent = ValueLabel[cardData.Value] + " of " + SigilSymbol[cardData.Sigil];
+            }
         }
 
         SetInteractable(interactable) {
@@ -298,13 +310,12 @@
     }
 
     class Opponent {
-        constructor(index) {
+        constructor() {
             this.RootNode = createElementWithClass("table", "otherPlayer");
-            this.OpponentIndex = index;
 
             var row = document.createElement("tr");
             this.RootNode.appendChild(row);
-            this.PlayerLabel = document.createTextNode("Player " + (index + 1));
+            this.PlayerLabel = document.createTextNode("Player ?");
             row.appendChild(this.PlayerLabel);
 
             row = document.createElement("tr");
@@ -312,48 +323,17 @@
             this.ScoreLabel = document.createTextNode("Score : ?");
             row.appendChild(this.ScoreLabel);
 
-            row = document.createElement("tr");
-            this.RootNode.appendChild(row);
 
             row = document.createElement("tr");
             this.RootNode.appendChild(row);
-            this.CardLabel = document.createTextNode("? Cards");
-            row.appendChild(this.CardLabel);
+            this.Board = new CardDisplay();
+            row.appendChild(this.Board.RootNode);
         }
 
         Setup(opponentData) {
-            this.ScoreLabel.textContent = "Score : " + opponentData.CurrentScore;
-            this.CardLabel.textContent = "Cards in hand : " + opponentData.NumberOfCards;
-        }
-    }
-
-    class OpponentsTable {
-        constructor() {
-            this.RootNode = document.createElement("table");
-            this.PoolSize = 10;
-            var row = document.createElement("tr");
-            this.RootNode.appendChild(row);
-
-            this.Opponents = [];
-            for (var index = 0; index < this.PoolSize; ++index) {
-                this.Opponents[index] = new Opponent(index);
-                var col = document.createElement("th");
-                row.appendChild(col);
-                col.appendChild(this.Opponents[index].RootNode);
-            }
-        }
-
-        Setup(opponentsData, indexToIgnore) {
-            var numberOfOpponents = opponentsData.length;
-            for (var index = 0; index < this.PoolSize; ++index) {
-                if (index >= numberOfOpponents || index == indexToIgnore) {
-                    this.Opponents[index].RootNode.hidden = true;
-                    continue;
-                }
-
-                this.Opponents[index].Setup(opponentsData[index]);
-                this.Opponents[index].RootNode.hidden = false;
-            }
+            this.PlayerLabel.textContent = "Player " + (opponentData.Index + 1);
+            this.ScoreLabel.textContent = "Health : " + opponentData.Health;
+            this.Board.SetupFromArray(opponentData.Board);
         }
     }
 
@@ -367,7 +347,7 @@
     var player = new Player();
     var playerSlots = new PlayerSlots();
     var gameInfo = new GameInfo();
-    var opponentsTable = new OpponentsTable();
+    var opponent = new Opponent();
 
     var otherPlayersParent = document.createElement("table");
     var otherPlayers = [];
@@ -571,10 +551,11 @@
                 gameInfo.Setup(localPlayerIndex, gameState);
                 playArea.appendChild(gameInfo.RootNode);
 
-                cd = new CardDisplay();
-                cd.SetupFromArray(gameState.Hand);
+                opponent.Setup(gameState.OtherPlayer);
+                playArea.appendChild(opponent.RootNode);
 
-                playArea.appendChild(cd.RootNode);
+                player.Setup(gameState);
+                playArea.appendChild(player.RootNode);
 
                 clientState = "Playing";
             }
