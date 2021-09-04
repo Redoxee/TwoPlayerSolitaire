@@ -23,18 +23,18 @@
         color: red;
     }
 
-    .bet {
-        text-align : center;
+    .card {
+        border: 1pt;
+        border-style: solid;
+        border-color: darkgray;
+        width:100pt;
+        height:120pt;
     }
 
-        .bet p {
-            margin: 0pt;
-        }
-
-    .card {
-        border : 1pt;
-        border-style : solid;
-        border-color : darkgray;
+    .deck {
+        border: 1pt;
+        border-style: solid;
+        border-color: darkgray;
     }
 
     .otherPlayer {
@@ -92,9 +92,6 @@
             this.Hand = new Hand();
             this.RootNode.appendChild(this.Hand.RootNode);
 
-            this.BetLabel = document.createTextNode("Betting ?");
-            this.RootNode.appendChild(this.BetLabel);
-
             this.PlayedCard = new Card(0);
             this.PlayedCard.SetInteractable(false);
             this.RootNode.appendChild(this.PlayedCard.RootNode);
@@ -103,18 +100,38 @@
 
         Setup(gameData) {
             this.PlayerLabel.textContent = "Player " + (gameData.PlayerIndex + 1);
-            this.BetLabel.textContent = "Betting " + gameData.Bet;
             this.Hand.Setup(gameData.Hand);
-        }
-
-        SetBetValue(betValue) {
-            this.BetLabel.textContent = "Betting " + betValue;
         }
 
         PlayCard(cardIndex) {
             this.PlayedCard.Setup(this.Hand.Cards[cardIndex].CardData);
             this.PlayedCard.RootNode.hidden = false;
             this.Hand.HideCard(cardIndex);
+        }
+    }
+
+    class CardDisplay {
+        constructor() {
+            this.RootNode = createElementWithClass("table", "cardDisplay");
+            var row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+            this.Slots = [3];
+            for (var index = 0; index < 3; ++index) {
+                this.Slots[index] = new CardSlot();
+                var col = document.createElement("th");
+                row.appendChild(col);
+                col.appendChild(this.Slots[index].RootNode);
+            }
+        }
+
+        SetupFromArray(cardArray) {
+            for (var index = 0; index < 3; ++index) {
+                var slot = this.Slots[index];
+                clearChilds(slot.CardReceptacle);
+                var card = new Card(index);
+                card.Setup(cardArray[index]);
+                slot.CardReceptacle.appendChild(card.RootNode);
+            }
         }
     }
 
@@ -156,6 +173,13 @@
         }
     }
 
+    class CardSlot {
+        constructor() {
+            this.RootNode = createElementWithClass("table", "cardSlot");
+            this.CardReceptacle = this.RootNode;
+        }
+    }
+
     class Card {
         constructor(cardIndex) {
             this.RootNode = createElementWithClass("table", "card");
@@ -184,6 +208,21 @@
 
         SetInteractable(interactable) {
             this.Button.hidden = !interactable;
+        }
+    }
+
+    class Deck {
+        constructor() {
+            this.RootNode = createElementWithClass("table", "deck");
+            this.NumberOfCards = 0;
+            var row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+            this.CardCountLabel = document.createTextNode("");
+            row.appendChild(this.CardCountLabel);
+        }
+
+        SetCardCount(cardCount) {
+            this.CardCountLabel.textContent = cardCount;
         }
     }
 
@@ -229,20 +268,28 @@
     class GameInfo {
         constructor() {
             this.RootNode = document.createElement("table");
+
+            var roundParagraph = document.createElement("p");
+            this.RootNode.appendChild(roundParagraph);
+            this.RoundMessage = "Round : ";
+            this.RoundLabel = document.createTextNode(this.RoundMessage);
+            roundParagraph.appendChild(this.RoundLabel);
+
             var playerParagraph = document.createElement("p");
             this.RootNode.appendChild(playerParagraph);
             this.CurrentPlayerMessage = "Current player : ";
             this.CurrentPlayerLabel = document.createTextNode(this.CurrentPlayerMessage);
             playerParagraph.appendChild(this.CurrentPlayerLabel);
 
-            this.Atout = new Card();
-            this.RootNode.appendChild(document.createTextNode("Atout"));
-            this.RootNode.appendChild(this.Atout.RootNode);
+            this.Deck = new Deck();
+            this.RootNode.appendChild(this.Deck.RootNode);
         }
 
-        Setup(playerIndex, atoutCardData) {
+        Setup(playerIndex, gameState) {
             this.CurrentPlayerLabel.textContent = this.CurrentPlayerMessage + (playerIndex + 1);
-            this.Atout.Setup(atoutCardData);
+            this.RoundMessage = "Round " + gameState.Round + 1;
+            this.RoundLabel.textContent = this.RoundMessage;
+            this.Deck.SetCardCount(gameState.CardsInDeck);
         }
 
         SetCurrentPlayer(currentPlayer) {
@@ -267,8 +314,6 @@
 
             row = document.createElement("tr");
             this.RootNode.appendChild(row);
-            this.BetLabel = document.createTextNode("Bet ?");
-            row.appendChild(this.BetLabel);
 
             row = document.createElement("tr");
             this.RootNode.appendChild(row);
@@ -278,13 +323,7 @@
 
         Setup(opponentData) {
             this.ScoreLabel.textContent = "Score : " + opponentData.CurrentScore;
-            this.BetLabel.textContent = "Bet : " + opponentData.Bet;
             this.CardLabel.textContent = "Cards in hand : " + opponentData.NumberOfCards;
-        }
-
-        SetBetValue(betValue) {
-            this.BetValue = betValue;
-            this.BetLabel.textContent = "Bet : " + betValue;
         }
     }
 
@@ -316,10 +355,6 @@
                 this.Opponents[index].RootNode.hidden = false;
             }
         }
-
-        SetOpponentBet(opponentIndex, betValue) {
-            this.Opponents[opponentIndex].SetBetValue(betValue);
-        }
     }
 
     var websocket = null;
@@ -337,7 +372,7 @@
     var otherPlayersParent = document.createElement("table");
     var otherPlayers = [];
 
-    var currentState = "None";
+    var clientState = "None";
     var localPlayerIndex = -1;
     var availableSlots = [];
     var nextOrderID = 0;
@@ -425,6 +460,7 @@
     {
         availableSlots = messageData.AvaialablePlayerSlots;
 
+        // are we searching for a player slot ?
         if (localPlayerIndex < 0) {
             clearPlayArea();
 
@@ -432,6 +468,7 @@
             playArea.appendChild(playerSlots.RootNode);
         }
         else {
+            // if not, how many are still open ?
             var numberOfAvailableSlots = 0;
             for (var index = 0; index < availableSlots.length; ++index) {
                 if (availableSlots[index]) {
@@ -439,6 +476,7 @@
                 }
             }
 
+            // we are waiting for the slots to be taken
             if (numberOfAvailableSlots > 0) {
                 clearPlayArea();
 
@@ -446,9 +484,10 @@
                 playArea.appendChild(p);
             }
             else {
-                if (currentState == "None") {
+                // we are ready to play, are we already playing ?
+                if (clientState == "None") {
                     if (gameState == null) {
-                        currentState = "WaitingForGameState";
+                        clientState = "WaitingForGameState";
                     }
                     else {
                         SetupFromGameState();
@@ -466,9 +505,11 @@
             gameState.GameStateID = GameStateID[gameState.GameStateID];
         }
 
-        if (currentState == "WaitingForGameState") {
+        if (clientState == "WaitingForGameState") {
             SetupFromGameState();
         }
+
+        writeToScreen("Game state = " + gameState.GameStateID);
     }
 
     function handleSandboxUpdate(messageData) {
@@ -484,20 +525,6 @@
                 }
                 else {
                     player.Hand.SetInteractable(false);
-                }
-
-                if (gameState.GameStateID == "Bet") {
-                    bettings.SetVisible(true);
-                }
-                else {
-                    bettings.SetVisible(false);
-                }
-            }
-            else if (gameChange.ChangeType == "PlayerBet") {
-                if (gameChange.PlayerIndex == localPlayerIndex) {
-                }
-                else {
-                    opponentsTable.SetOpponentBet(gameChange.PlayerIndex, gameChange.BetValue);
                 }
             }
 
@@ -531,21 +558,25 @@
     }
 
     function SetupFromGameState() {
-        clearPlayArea();
+        if (gameState == null) {
+            alert("GameState is null | clientState : " + clientState);
+            return;
+        }
 
-        if (gameState.GameStateID == "Betting" || gameState.GameStateID == "Fold") {
-            gameInfo.Setup(gameState.CurrentPlayer, gameState.TrumpCard)
-            playArea.appendChild(gameInfo.RootNode);
+        if (gameState.GameStateID == "Playing") {
+            if (clientState == "None") {
+                clearPlayArea();
 
-            opponentsTable.Setup(gameState.OtherPlayers, localPlayerIndex);
-            playArea.appendChild(opponentsTable.RootNode);
+                // Settuping the board.
+                gameInfo.Setup(localPlayerIndex, gameState);
+                playArea.appendChild(gameInfo.RootNode);
 
-            player.Setup(gameState);
-            playArea.appendChild(player.RootNode);
+                cd = new CardDisplay();
+                cd.SetupFromArray(gameState.Hand);
 
-            if (gameState.GameStateID == "Betting" && gameState.Bet == -1) {
-                bettings.Setup(gameState.BetFailures);
-                playArea.appendChild(bettings.RootNode);
+                playArea.appendChild(cd.RootNode);
+
+                clientState = "Playing";
             }
         }
     }
