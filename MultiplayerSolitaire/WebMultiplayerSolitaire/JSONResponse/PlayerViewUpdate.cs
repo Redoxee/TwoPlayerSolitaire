@@ -25,6 +25,7 @@ namespace WebMultiplayerSolitaire
         public int CurrentPlayer;
         public int Round;
         public MSG.Card[] DiscardPile;
+        public int CardsInDeck;
 
         public struct Player
         {

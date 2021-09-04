@@ -100,6 +100,7 @@
                 Health = player.Health,
                 Shield = player.Shield,
                 PairBullets = player.PairBullets,
+                CardsInDeck = sandbox.Deck.NumberOfCards,
 
                 Hand = new MSG.Card[player.Hand.Length],
                 Board = new MSG.Card[player.Board.Length]
