@@ -14,7 +14,7 @@
 
             (function (capturedButton, capturedIndex) {
                 capturedButton.addEventListener("click", function () {
-                    requestPlayerSlots(capturedIndex);
+                    RequestPlayerSlots(capturedIndex);
                 })
             })(this.Buttons[index], index);
         }

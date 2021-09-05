@@ -263,5 +263,31 @@ namespace WebCardGame.Properties {
                 return ResourceManager.GetString("PlayerSlots", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to function createWebSocket() {
+        ///    console.log(gameWebSocketUrl);
+        ///    websocket = new WebSocket(gameWebSocketUrl);
+        ///
+        ///    websocket.onopen = function (e) {
+        ///        isConnected = true;
+        ///        writeToScreen(&quot;CONNECTED&quot;);
+        ///        var requestPlayerSlots = &apos;{ &quot;OrderType&quot;: &quot;RequestPlayerSlots&quot; }&apos;;
+        ///        doSend(requestPlayerSlots);
+        ///    };
+        ///
+        ///    websocket.onclose = function (e) {
+        ///        writeToScreen(&quot;DISCONNECTED&quot;);
+        ///    };
+        ///
+        ///    websocket.onmessage = recieveWebSocketMessage;
+        ///
+        ///    websocket.onerror = [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string WebSocket {
+            get {
+                return ResourceManager.GetString("WebSocket", resourceCulture);
+            }
+        }
     }
 }

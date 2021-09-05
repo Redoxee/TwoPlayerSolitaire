@@ -145,4 +145,7 @@
   <data name="PlayerSlots" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\playerslots.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="WebSocket" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\websocket.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>
