@@ -116,22 +116,13 @@
             this.Hand = new CardDisplay();
             this.RootNode.appendChild(this.Hand.RootNode);
 
-            this.PlayedCard = new Card(0);
-            this.PlayedCard.SetInteractable(false);
-            this.RootNode.appendChild(this.PlayedCard.RootNode);
-            this.PlayedCard.RootNode.hidden = true;
+            this.SelectedCardIndex = -1;
         }
 
         Setup(gameData) {
             this.PlayerLabel.textContent = "Player " + (gameData.PlayerIndex + 1);
             this.Hand.SetupFromArray(gameData.Hand);
             this.Board.SetupFromArray(gameData.Board);
-        }
-
-        PlayCard(cardIndex) {
-            this.PlayedCard.Setup(this.Hand.Cards[cardIndex].CardData);
-            this.PlayedCard.RootNode.hidden = false;
-            this.Hand.HideCard(cardIndex);
         }
     }
 
@@ -140,68 +131,69 @@
             this.RootNode = createElementWithClass("table", "cardDisplay");
             var row = document.createElement("tr");
             this.RootNode.appendChild(row);
-            this.Slots = [3];
+            this.Slots = [3]; // Array of card slots.
             for (var index = 0; index < 3; ++index) {
-                this.Slots[index] = new CardSlot();
+                var slot = new CardSlot(index);
+                this.Slots[index] = slot;
                 var col = document.createElement("th");
                 row.appendChild(col);
                 col.appendChild(this.Slots[index].RootNode);
+
+                var card = new Card(index);
+                slot.AttachCard(card);
             }
         }
 
         SetupFromArray(cardArray) {
             for (var index = 0; index < 3; ++index) {
-                var slot = this.Slots[index];
-                clearChilds(slot.CardReceptacle);
-                var card = new Card(index);
-                card.Setup(cardArray[index]);
-                slot.CardReceptacle.appendChild(card.RootNode);
+                var slot = this.Slots[index].Card.Setup(cardArray[index]);
             }
-        }
-    }
-
-    class Hand {
-        constructor() {
-            this.RootNode = createElementWithClass("table", "playerHand");
-            this.Cards = [];
-
-            this.PoolSize = 27;
-
-            for (var index = 0; index < this.PoolSize; ++index) {
-                this.Cards[index] = new Card(index);
-                var col = document.createElement("th");
-                this.RootNode.appendChild(col);
-                col.appendChild(this.Cards[index].RootNode);
-            }
-        }
-
-        Setup(cards) {
-            for (var index = 0; index < this.PoolSize; ++index) {
-                if (index >= cards.length) {
-                    this.Cards[index].RootNode.hidden = true;
-                    continue;
-                }
-
-                this.Cards[index].hidden = false;
-                this.Cards[index].Setup(cards[index]);
-            }
-        }
-
-        SetInteractable(isInteractable) {
-            for (var index = 0; index < this.PoolSize; ++index) {
-                this.Cards[index].SetInteractable(isInteractable);
-            }
-        }
-
-        HideCard(cardIndex) {
-            this.Cards[cardIndex].RootNode.hidden = true;
         }
     }
 
     class CardSlot {
-        constructor() {
+        constructor(index) {
+            this.Index = index;
             this.RootNode = createElementWithClass("table", "cardSlot");
-            this.CardReceptacle = this.RootNode;
+            var row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+            this.CardReceptacle = row;
+            this.Card = null;
+
+            row = document.createElement("tr");
+            this.RootNode.appendChild(row);
+            this.Button = document.createElement("button");
+            row.appendChild(this.Button);
+            this.ButtonLabel = document.createTextNode("_");
+            this.Button.appendChild(this.ButtonLabel);
+
+            this.Button.hidden = true;
+            this.Action = function (index) { alert("unset"); };
+            var instance = this;
+            this.Button.addEventListener("click", function () {
+                if (instance.Action != null) {
+                    instance.Action(instance.Index);
+                }
+            });
+        }
+
+        AttachCard(card) {
+            clearChilds(this.CardReceptacle);
+
+            this.Card = card;
+            this.CardReceptacle.appendChild(card.RootNode);
+            this.SetNotInteractable();
+        }
+
+        SetInteractable(action, label) {
+            this.Button.hidden = false;
+            this.ButtonLabel.textContent = label;
+            this.Action = action;
+        }
+
+        SetNotInteractable() {
+            this.Action = null;
+            this.Button.hidden = true;
         }
     }
 
@@ -223,8 +215,12 @@
             this.RootNode.appendChild(row);
             this.Button.hidden = true;
 
+            this.Action = function (index) { alert("unset"); };
+            var instance = this;
             this.Button.addEventListener("click", function () {
-                requestPlayCard(cardIndex)
+                if (instance.Action != null) {
+                    instance.Action(instance.CardIndex);
+                }
             });
         }
 
@@ -239,8 +235,15 @@
             }
         }
 
-        SetInteractable(interactable) {
-            this.Button.hidden = !interactable;
+        SetInteractable(action, label) {
+            this.Button.hidden = false;
+            this.ButtonLabel.textContent = label;
+            this.Action = action;
+        }
+
+        SetNotInteractable() {
+            this.Action = null;
+            this.Button.hidden = true;
         }
     }
 
@@ -528,33 +531,82 @@
                     player.Hand.SetInteractable(false);
                 }
             }
-
-            else if (gameChange.ChangeType == "PlayedCard") {
-                var playerIndex = gameChange.PlayedCard.PlayerIndex;
-                var cardIndex = gameChange.PlayedCard.IndexInHand;
-                if (playerIndex == localPlayerIndex) {
-                    var nbCards = gameState.Hand.length;
-                    gameState.Hand[cardIndex] = null;
-                    for (var index = cardIndex + 1; index < nbCards; ++index) {
-                        gameState.Hand[cardIndex - 1] = gameState.Hand[cardIndex];
-                    }
-
-                    player.PlayCard(cardIndex);
-                }
-                else {
-                    gameState.OtherPlayers[playerIndex].NumberOfCards--;
-                    otherPlayerObject[playerIndex].NumberOfCardsLabel.textContent = "Number of cards " + gameState.OtherPlayers[playerIndex].NumberOfCards;
-                }
-            }
+            
             else if (gameChange.ChangeType == "NextPlayer") {
                 gameInfo.SetCurrentPlayer(gameChange.PlayerIndex);
             }
         }
     }
 
-    function setHandCardInteractable(interactable) {
-        for (var index = 0; index < playerObject.Hand.Cards.length; ++index) {
-            playerObject.Hand.Cards[index].Button.hidden = interactable;
+    function SelectCardInHand(cardIndex) {
+        if (clientState != "SelectHandCard") {
+            alert("Wrong client state " + clientState);
+            return;
+        }
+
+        player.SelectedCardIndex = cardIndex;
+
+        for (var index = 0; index < 3; ++index) {
+            var card = player.Hand.Slots[index].Card;
+            if (index == cardIndex) {
+                card.SetInteractable(UnselectCard, "X");
+            }
+            else {
+                card.SetNotInteractable();
+            }
+        }
+
+        PlayerBoardModeChooseSlot();
+
+        clientState = "SelectBoardSlot";
+    }
+
+    function UnselectCard(cardIndex) {
+        if (clientState != "SelectBoardSlot") {
+            alert("Wrong state " + clientState);
+        }
+
+        PlayerHandModeChooseCard();
+        PlayerBoardModeUninteractable();
+        clientState = "SelectHandCard";
+    }
+
+    function SelectBoardSlot(slotIndex) {
+        if (clientState != "SelectBoardSlot") {
+            alert("Wrong state " + clientState);
+        }
+
+        PlayerhandModeUninteractable();
+        PlayerBoardModeUninteractable();
+        clientState = "PlayedCard";
+        requestPlayCard(player.SelectedCardIndex, slotIndex);
+    }
+
+    function PlayerHandModeChooseCard() {
+        for (var index = 0; index < 3; ++index) {
+            var card = player.Hand.Slots[index].Card;
+            card.SetInteractable(SelectCardInHand, "Play");
+        }
+    }
+
+    function PlayerhandModeUninteractable() {
+        for (var index = 0; index < 3; ++index) {
+            var card = player.Hand.Slots[index].Card;
+            card.SetNotInteractable();
+        }
+    }
+
+    function PlayerBoardModeChooseSlot() {
+        for (var index = 0; index < 3; ++index) {
+            var slot = player.Board.Slots[index];
+            slot.SetInteractable(SelectBoardSlot, "Play");
+        }
+    }
+
+    function PlayerBoardModeUninteractable() {
+        for (var index = 0; index < 3; ++index) {
+            var slot = player.Board.Slots[index];
+            slot.SetNotInteractable();
         }
     }
 
@@ -578,7 +630,13 @@
                 player.Setup(gameState);
                 playArea.appendChild(player.RootNode);
 
-                clientState = "Playing";
+                if (gameState.CurrentPlayer == localPlayerIndex) {
+                    PlayerHandModeChooseCard();
+                    clientState = "SelectHandCard";
+                }
+                else {
+                    clientState = "OtherPlayer";
+                }
             }
         }
     }
@@ -605,7 +663,7 @@
 
     function requestPlayCard(cardIndex, boardIndex) {
         var orderID = nextOrderID++;
-        var playOrder = '{"OrderType":"PlayCard", "CardIndex": ' + cardIndex + ', OrderID : ' + orderID + '}';
+        var playOrder = '{"OrderType":"PlayCard", "CardIndex": ' + cardIndex + ', "BoardIndex": ' + boardIndex + ', "OrderID": ' + orderID + '}';
         pendingOrders[orderID] = function (responseData) { };
 
         doSend(playOrder);
