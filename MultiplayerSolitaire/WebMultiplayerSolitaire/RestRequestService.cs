@@ -5,6 +5,8 @@ namespace WebMultiplayerSolitaire
 {
     public class RestRequestService
     {
+        private static ResourceManager ResourceManager = new ResourceManager("WebCardGame.Properties.Resources", typeof(Program).Assembly);
+
         public static string HandleRestRequest(HttpContext context)
         {
             return GetIndexPage();
@@ -12,13 +14,22 @@ namespace WebMultiplayerSolitaire
 
         public static string GetIndexPage()
         {
-            ResourceManager resourceManager = new ResourceManager("WebCardGame.Properties.Resources", typeof(Program).Assembly);
-            string indexFile = resourceManager.GetString("GameIndex");
+            return RestRequestService.ResourceManager.GetString("GameIndex");
+        }
 
-            string insert = string.Empty;
-            string response = indexFile;
+        public static bool TryGetFile(string name, out string fileContent)
+        {
+            fileContent = string.Empty;
+            
+            string[] splitted = name.Split("/");
+            string lastComponent = splitted[splitted.Length - 1].Trim();
+            if (!string.IsNullOrEmpty(lastComponent))
+            {
+                fileContent = RestRequestService.ResourceManager.GetString(lastComponent);
+                return !string.IsNullOrEmpty(fileContent);
+            }
 
-            return response;
+            return false;
         }
     }
 }

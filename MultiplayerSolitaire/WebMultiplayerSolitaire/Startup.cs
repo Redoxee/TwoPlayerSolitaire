@@ -12,6 +12,7 @@ namespace WebMultiplayerSolitaire
         {
             // register our custom middleware since we use the IMiddleware factory approach
             services.AddTransient<WebSocketMiddleware>();
+            services.AddTransient<RestMiddleware>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -25,6 +26,7 @@ namespace WebMultiplayerSolitaire
 
             // add our custom middleware to the pipeline
             app.UseMiddleware<WebSocketMiddleware>();
+            app.UseMiddleware<RestMiddleware>();
         }
     }
 }
