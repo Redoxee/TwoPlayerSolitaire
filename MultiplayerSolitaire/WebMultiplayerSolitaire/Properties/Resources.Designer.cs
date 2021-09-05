@@ -61,9 +61,103 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to class Card {
+        ///    constructor(cardIndex) {
+        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;card&quot;);
+        ///        this.CardIndex = cardIndex;
+        ///        var row = document.createElement(&quot;tr&quot;);
+        ///        this.ContentHolder = document.createElement(&quot;div&quot;);
+        ///        row.appendChild(this.ContentHolder);
+        ///        this.CardLabel = document.createTextNode(&quot;? of ?&quot;);
+        ///        this.ContentHolder.appendChild(this.CardLabel);
+        ///        this.RootNode.appendChild(row);
+        ///        row = document.createElement(&quot;tr&quot;);
+        ///      [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Card {
+            get {
+                return ResourceManager.GetString("Card", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to class CardDisplay {
+        ///    constructor() {
+        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;cardDisplay&quot;);
+        ///        var row = document.createElement(&quot;tr&quot;);
+        ///        this.RootNode.appendChild(row);
+        ///        this.Slots = [3]; // Array of card slots.
+        ///        for (var index = 0; index &lt; 3; ++index) {
+        ///            var slot = new CardSlot(index);
+        ///            this.Slots[index] = slot;
+        ///            var col = document.createElement(&quot;th&quot;);
+        ///            row.appendChild(col);
+        ///            col.appendChild(this. [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CardDisplay {
+            get {
+                return ResourceManager.GetString("CardDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to class CardSlot {
+        ///    constructor(index) {
+        ///        this.Index = index;
+        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;cardSlot&quot;);
+        ///        var row = document.createElement(&quot;tr&quot;);
+        ///        this.RootNode.appendChild(row);
+        ///        this.CardReceptacle = row;
+        ///        this.Card = null;
+        ///
+        ///        row = document.createElement(&quot;tr&quot;);
+        ///        this.RootNode.appendChild(row);
+        ///        this.Button = document.createElement(&quot;button&quot;);
+        ///        row.appendChild(this.Button);
+        ///        this.ButtonLabel = docum [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CardSlot {
+            get {
+                return ResourceManager.GetString("CardSlot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to class Deck {
+        ///    constructor() {
+        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;deck&quot;);
+        ///        this.NumberOfCards = 0;
+        ///        var row = document.createElement(&quot;tr&quot;);
+        ///        this.RootNode.appendChild(row);
+        ///        this.CardCountLabel = document.createTextNode(&quot;&quot;);
+        ///        row.appendChild(this.CardCountLabel);
+        ///    }
+        ///
+        ///    SetCardCount(cardCount) {
+        ///        this.CardCountLabel.textContent = cardCount;
+        ///    }
+        ///}.
+        /// </summary>
+        internal static string Deck {
+            get {
+                return ResourceManager.GetString("Deck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!doctype html&gt;
         ///&lt;meta charset=&quot;utf-8&quot;&gt;
         ///&lt;style&gt;
+        ///    #mainTable {
+        ///        text-align:left;
+        ///        vertical-align:top;
+        ///        width:100%;
+        ///    }
+        ///
+        ///        #mainTable &gt; tbody &gt; tr &gt; th {
+        ///            vertical-align: top;
+        ///        }
+        ///
         ///    #output {
         ///        overflow: auto;
         ///        float: right;
@@ -78,24 +172,95 @@ namespace WebCardGame.Properties {
         ///        overflow-wrap: break-word;
         ///    }
         ///
-        ///    #output span {
-        ///        color: blue;
-        ///    }
-        ///
-        ///    #output span.error {
-        ///        color: red;
-        ///    }
-        ///
-        ///    .bet {
-        ///        text-align : center;
-        ///    }
-        ///
-        ///        .bet p {
-        ///            marg [rest of string was truncated]&quot;;.
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameIndex {
             get {
                 return ResourceManager.GetString("GameIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to class GameInfo {
+        ///    constructor() {
+        ///        this.RootNode = document.createElement(&quot;table&quot;);
+        ///
+        ///        var roundParagraph = document.createElement(&quot;p&quot;);
+        ///        this.RootNode.appendChild(roundParagraph);
+        ///        this.RoundMessage = &quot;Round : &quot;;
+        ///        this.RoundLabel = document.createTextNode(this.RoundMessage);
+        ///        roundParagraph.appendChild(this.RoundLabel);
+        ///
+        ///        var playerParagraph = document.createElement(&quot;p&quot;);
+        ///        this.RootNode.appendChild(playerParagraph);
+        ///        this.CurrentP [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string GameInfo {
+            get {
+                return ResourceManager.GetString("GameInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to     class Opponent {
+        ///        constructor() {
+        ///            this.RootNode = createElementWithClass(&quot;table&quot;, &quot;otherPlayer&quot;);
+        ///
+        ///            var row = document.createElement(&quot;tr&quot;);
+        ///            this.RootNode.appendChild(row);
+        ///            this.PlayerLabel = document.createTextNode(&quot;Player ?&quot;);
+        ///            row.appendChild(this.PlayerLabel);
+        ///
+        ///            row = document.createElement(&quot;tr&quot;);
+        ///            this.RootNode.appendChild(row);
+        ///            this.ScoreLabel = document.createTextNode(&quot;Score : ?&quot;);
+        ///       [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Opponent {
+            get {
+                return ResourceManager.GetString("Opponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to class Player {
+        ///    constructor() {
+        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;player&quot;);
+        ///        this.PlayerLabel = document.createTextNode(&quot;Player &quot; + localPlayerIndex);
+        ///        var paragraph = document.createElement(&quot;p&quot;);
+        ///        paragraph.appendChild(this.PlayerLabel);
+        ///        this.RootNode.appendChild(paragraph);
+        ///
+        ///        this.Board = new CardDisplay();
+        ///        this.RootNode.appendChild(this.Board.RootNode);
+        ///
+        ///        this.Hand = new CardDisplay();
+        ///        this.RootNode.appendChi [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Player {
+            get {
+                return ResourceManager.GetString("Player", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to class PlayerSlots {
+        ///    constructor() {
+        ///        this.RootNode = document.createElement(&quot;table&quot;);
+        ///        this.Buttons = [];
+        ///        var row = document.createElement(&quot;tr&quot;);
+        ///        this.RootNode.appendChild(row);
+        ///
+        ///        this.PoolSize = 10;
+        ///        for (var index = 0; index &lt; this.PoolSize; ++index) {
+        ///            this.Buttons[index] = document.createElement(&quot;button&quot;);
+        ///            var label = document.createTextNode(&quot;Player &quot; + (index + 1));
+        ///            this.Buttons[index].appendChild(label);
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string PlayerSlots {
+            get {
+                return ResourceManager.GetString("PlayerSlots", resourceCulture);
             }
         }
     }
