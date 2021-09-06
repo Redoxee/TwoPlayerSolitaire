@@ -34,15 +34,20 @@
                     {
                         Console.WriteLine("Sending HTML to client.");
                         string response = RestRequestService.HandleRestRequest(context);
+                        context.Response.ContentType = "text/html";
                         await context.Response.WriteAsync(response);
                     }
                     else 
                     {
-                        if(RestRequestService.TryGetFile(context.Request.Path.ToUriComponent(), out string stringResponse))
+                        string uri = context.Request.Path.ToUriComponent();
+                        if (uri.EndsWith(".js"))
                         {
-                            await context.Response.WriteAsync(stringResponse);
+                            context.Response.ContentType = "application/javascript";
+                            if (RestRequestService.TryGetFile(uri, out string stringResponse))
+                            {
+                                await context.Response.WriteAsync(stringResponse);
+                            }
                         }
-
                         // ignore other requests (such as favicon)
                         // potentially other middleware will handle it (see finally block)
                     }
