@@ -32,6 +32,11 @@
         this.SetNotInteractable();
     }
 
+    DetatchCard() {
+        clearChilds(this.CardReceptacle);
+        this.Card = null;
+    }
+
     SetInteractable(action, label) {
         this.Button.hidden = false;
         this.ButtonLabel.textContent = label;

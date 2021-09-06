@@ -43,6 +43,16 @@
         vertical-align:central;
     }
 
+    .cardSlot {
+        border: 1pt;
+        border-style: solid;
+        border-color: darkgray;
+        width: 102pt;
+        height: 122pt;
+        text-align: center;
+        vertical-align: central;
+    }
+
     .deck {
         border: 1pt;
         border-style: solid;
@@ -127,9 +137,6 @@
     var playerSlots = new PlayerSlots();
     var gameInfo = new GameInfo();
     var opponent = new Opponent();
-
-    var otherPlayersParent = document.createElement("table");
-    var otherPlayers = [];
 
     var clientState = "None";
     var localPlayerIndex = -1;
@@ -229,17 +236,39 @@
     function handleSandboxUpdate(messageData) {
         for (var changeIndex = 0; changeIndex < messageData.GameChanges.length; ++changeIndex) {
             var gameChange = messageData.GameChanges[changeIndex];
+            var changeType = gameChange.ChangeType;
+            if (changeType == "PlayedCard") {
+                if (gameState.CurrentPlayer != gameChange.PlayerIndex) {
+                    alert("Desync between local player and playing player.");
+                    return;
+                }
+
+                var card = new Card(gameChange.IndexOnBoard);
+                card.Setup(gameChange.Card);
+
+                if (gameChange.PlayerIndex == localPlayerIndex) {
+                    if (!AssertClientState("PlayedCard")) {
+                        return;
+                    }
+
+                    PlayerhandModeUninteractable();
+                    PlayerBoardModeUninteractable();
+                    player.Hand.Slots[gameChange.IndexInHand].DetatchCard();
+                    player.Board.Slots[gameChange.IndexOnBoard].AttachCard(card);
+                }
+                else {
+                    if (!AssertClientState("OtherPlayerTurn")) {
+                        return;
+                    }
+
+                    opponent.Board.Slots[gameChange.IndexOnBoard].AttachCard(card);
+                }
+            }
+
             if (gameChange.ChangeType == "GameStateChange") {
                 gameState.GameStateID = gameChange.GameState;
 
                 gameInfo.SetCurrentPlayer(gameChange.PlayerIndex);
-
-                if (gameState.GameStateID == "Fold") {
-                    player.Hand.SetInteractable(true);
-                }
-                else {
-                    player.Hand.SetInteractable(false);
-                }
             }
             
             else if (gameChange.ChangeType == "NextPlayer") {
@@ -249,8 +278,7 @@
     }
 
     function SelectCardInHand(cardIndex) {
-        if (clientState != "SelectHandCard") {
-            alert("Wrong client state " + clientState);
+        if (!AssertClientState("SelectHandCard")){
             return;
         }
 
@@ -272,8 +300,8 @@
     }
 
     function UnselectCard(cardIndex) {
-        if (clientState != "SelectBoardSlot") {
-            alert("Wrong state " + clientState);
+        if (!AssertClientState("SelectBoardSlot")) {
+            return;
         }
 
         PlayerHandModeChooseCard();
@@ -282,8 +310,8 @@
     }
 
     function SelectBoardSlot(slotIndex) {
-        if (clientState != "SelectBoardSlot") {
-            alert("Wrong state " + clientState);
+        if (!AssertClientState("SelectBoardSlot")) {
+            return;
         }
 
         PlayerhandModeUninteractable();
@@ -345,7 +373,7 @@
                     clientState = "SelectHandCard";
                 }
                 else {
-                    clientState = "OtherPlayer";
+                    clientState = "OtherPlayerTurn";
                 }
             }
         }
@@ -395,6 +423,15 @@
         var el = document.createElement(element);
         el.className = className;
         return el;
+    }
+
+    function AssertClientState(expectedState) {
+        if (clientState != expectedState) {
+            alert("Unexpected state " + clientState + " expecting " + expectedState);
+            return false;
+        }
+
+        return true;
     }
 
 </script>
