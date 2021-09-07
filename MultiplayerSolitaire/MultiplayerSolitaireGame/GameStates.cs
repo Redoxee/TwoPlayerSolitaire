@@ -109,6 +109,7 @@
             ref GameChange pickedCard = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PickedCard);
             pickedCard.PlayerIndex = playCardOrder.PlayerIndex;
             pickedCard.IndexOnBoard = -1;
+            pickedCard.IndexInHand = playCardOrder.CardIndex;
             pickedCard.Card = player.Hand[playCardOrder.CardIndex];
 
             stateMachine.SetNextState(new ResolveTurnState());

@@ -264,15 +264,12 @@
                     opponent.Board.Slots[gameChange.IndexOnBoard].AttachCard(card);
                 }
             }
-
-            if (gameChange.ChangeType == "GameStateChange") {
-                gameState.GameStateID = gameChange.GameState;
-
-                gameInfo.SetCurrentPlayer(gameChange.PlayerIndex);
-            }
-            
-            else if (gameChange.ChangeType == "NextPlayer") {
-                gameInfo.SetCurrentPlayer(gameChange.PlayerIndex);
+            else if (changeType == "PickedCard") {
+                if (gameChange.PlayerIndex == localPlayerIndex) {
+                    var newCard = new Card(gameChange.IndexInHand);
+                    newCard.Setup(gameChange.Card);
+                    player.Hand.Slots[gameChange.IndexInHand].AttachCard(newCard);
+                }
             }
         }
     }
