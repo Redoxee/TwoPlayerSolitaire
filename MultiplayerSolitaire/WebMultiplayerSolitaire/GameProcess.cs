@@ -252,7 +252,7 @@
             for (int index = 0; index < sandboxChanges.GameChanges.Length; ++index)
             {
                 if (sandboxChanges.GameChanges[index].ChangeType == MSG.GameChange.GameChangeType.GameStateChange &&
-                    sandboxChanges.GameChanges[index].GameState == MSG.GameStateID.Initialize)
+                    sandboxChanges.GameChanges[index].GameStateID == MSG.GameStateID.Initialize)
                 {
                     sandboxChanges.PlayerViewUpdate = this.GetPlayerView(playerIndex);
                     return;

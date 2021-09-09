@@ -134,8 +134,6 @@
 
             if (combo != CardCombo.None)
             {
-                ref GameChange propertyChanged = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerPropertyChanged);
-
                 for (int index = 0; index < player.Board.Length; ++index)
                 {
                     if ((usedCards & 1 << index) != 0)
@@ -144,6 +142,13 @@
                         player.Board[index].Value = Card.None;
                     }
                 }
+
+                ref GameChange comboChanges = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerCombo);
+                comboChanges.PlayerIndex = player.Index;
+                comboChanges.CardCombo = combo;
+                comboChanges.UsedCards = usedCards;
+
+                ref GameChange propertyChanged = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerPropertyChanged);
 
                 if (combo == CardCombo.Pair)
                 {

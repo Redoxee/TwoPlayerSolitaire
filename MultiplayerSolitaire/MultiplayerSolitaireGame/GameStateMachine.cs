@@ -74,7 +74,7 @@
                 {
                     ref GameChange gameChange = ref gameChanges.AllocateGameChange();
                     gameChange.ChangeType = GameChange.GameChangeType.GameStateChange;
-                    gameChange.GameState = this.currentState.StateID;
+                    gameChange.GameStateID = this.currentState.StateID;
                     gameChange.PlayerIndex = this.GameManager.Sandbox.CurrentPlayer;
                 }
 
