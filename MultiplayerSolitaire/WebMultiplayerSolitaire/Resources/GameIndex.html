@@ -11,6 +11,10 @@
             vertical-align: top;
         }
 
+    #infoParagraph {
+
+    }
+
     #output {
         overflow: auto;
         float: right;
@@ -286,6 +290,29 @@
                             opponent.Board.Slots[index].DetatchCard();
                         }
                     }
+                }
+            }
+            else if (changeType == "PlayerPropertyChanged")
+            {
+                var target = player;
+                if (gameChange.PlayerIndex != localPlayerIndex) {
+                    target = opponent;
+                }
+
+                if (gameChange.PlayerProperty == "Score") {
+                    target.ScoreLabel.textContent = "Score " + gameChange.NewValue;
+                }
+
+                if (gameChange.PlayerProperty == "Health") {
+                    target.HealthLabel.textContent = "Health " + gameChange.NewValue;
+                }
+
+                if (gameChange.PlayerProperty == "Shield") {
+                    target.ShieldLabel.textContent = "Shield " + gameChange.NewValue;
+                }
+
+                if (gameChange.PlayerProperty == "PairBullets") {
+                    target.PairBulletLabel.textContent = "Pair Bullets " + gameChange.NewValue;
                 }
             }
 

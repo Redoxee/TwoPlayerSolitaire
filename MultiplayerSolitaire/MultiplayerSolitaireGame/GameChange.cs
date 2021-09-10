@@ -13,6 +13,7 @@
         public CardCombo CardCombo;
         public int UsedCards;
         public Card Card;
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public PlayerProperties PlayerProperty;
         public int NewValue;
 
@@ -31,7 +32,8 @@
         { 
             Health,
             Shield,
-            PairBullet,
+            PairBullets,
+            Score,
         }
     }
 }

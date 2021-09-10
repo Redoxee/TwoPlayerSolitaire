@@ -154,7 +154,7 @@
                 {
                     player.PairBullets++;
 
-                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.PairBullet;
+                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.PairBullets;
                     propertyChanged.NewValue = player.PairBullets;
                     propertyChanged.PlayerIndex = player.Index;
 
