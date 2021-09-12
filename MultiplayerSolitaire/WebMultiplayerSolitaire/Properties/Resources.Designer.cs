@@ -196,6 +196,49 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to const GameStateID = [
+        ///    &quot;Initialize&quot;,
+        ///    &quot;Playing&quot;,
+        ///    &quot;Transitioning&quot;,
+        ///    &quot;EndGame&quot;,
+        ///    &quot;Unkown&quot;];
+        ///
+        ///const SigilLabel = [
+        ///    &quot;Spade&quot;,
+        ///    &quot;Club&quot;,
+        ///    &quot;Heart&quot;,
+        ///    &quot;Diamond&quot;];
+        ///
+        ///const SigilSymbol = [
+        ///    &apos;\u2660&apos;,
+        ///    &apos;\u2663&apos;,
+        ///    &apos;\u2661&apos;,
+        ///    &apos;\u2662&apos;];
+        ///
+        ///const ValueLabel = [
+        ///    &quot;Ace&quot;,
+        ///    &quot;2&quot;,
+        ///    &quot;3&quot;,
+        ///    &quot;4&quot;,
+        ///    &quot;5&quot;,
+        ///    &quot;6&quot;,
+        ///    &quot;7&quot;,
+        ///    &quot;8&quot;,
+        ///    &quot;9&quot;,
+        ///    &quot;10&quot;,
+        ///];
+        ///
+        ///var websocket = null;
+        ///var isConnected = false;
+        ///var gameWebSocketUrl = document.URL.replace(&quot;http: [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MultiplayerSolitaire {
+            get {
+                return ResourceManager.GetString("MultiplayerSolitaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to     class Opponent {
         ///        constructor() {
         ///            this.RootNode = createElementWithClass(&quot;table&quot;, &quot;otherPlayer&quot;);
