@@ -2,17 +2,13 @@
 <meta charset="utf-8">
 <style>
     #mainTable {
-        text-align:left;
-        vertical-align:top;
-        width:100%;
+        text-align: left;
+        vertical-align: top;
+        width: 100%;
     }
 
-        #mainTable > tbody > tr > th {
-            vertical-align: top;
-        }
-
-    #infoParagraph {
-
+    #mainTable > tbody > tr > th {
+        vertical-align: top;
     }
 
     #output {
@@ -55,6 +51,11 @@
         height: 122pt;
         text-align: center;
         vertical-align: central;
+    }
+
+    .Stats table th {
+        padding-left: 10pt;
+        padding-right: 10pt;
     }
 
     .deck {
@@ -148,9 +149,10 @@
     var nextOrderID = 0;
 
     var pendingOrders = [];
-    var messageHandles = [];
     var gameState = null;
 
+
+    var messageHandles = [];
     messageHandles["AvailablePlayerSlots"] = handleAvailablePlayerSlots;
     messageHandles["OrderAcknowledgement"] = handleOrderAcknowledgement;
     messageHandles["PlayerViewUpdate"] = handlePlayerViewUpdate;
@@ -328,6 +330,43 @@
                         clientState = "OtherPlayerTurn";
                     }
                 }
+                if (gameState.GameStateID == "Initialize") {
+                    gameState = messageData.PlayerViewUpdate;
+                }
+                if (gameState.GameStateID == "Playing") {
+                    SetupFromGameState();
+                }
+            }
+        }
+    }
+
+    function SetupFromGameState() {
+        if (gameState == null) {
+            alert("GameState is null | clientState : " + clientState);
+            return;
+        }
+
+        if (gameState.GameStateID == "Playing") {
+            if (clientState == "None") {
+                clearPlayArea();
+
+                // Settuping the board.
+                gameInfo.Setup(localPlayerIndex, gameState);
+                playArea.appendChild(gameInfo.RootNode);
+
+                opponent.Setup(gameState.OtherPlayer);
+                playArea.appendChild(opponent.RootNode);
+
+                player.Setup(gameState);
+                playArea.appendChild(player.RootNode);
+
+                if (gameState.CurrentPlayer == localPlayerIndex) {
+                    PlayerHandModeChooseCard();
+                    clientState = "SelectHandCard";
+                }
+                else {
+                    clientState = "OtherPlayerTurn";
+                }
             }
         }
     }
@@ -400,37 +439,6 @@
         for (var index = 0; index < 3; ++index) {
             var slot = player.Board.Slots[index];
             slot.SetNotInteractable();
-        }
-    }
-
-    function SetupFromGameState() {
-        if (gameState == null) {
-            alert("GameState is null | clientState : " + clientState);
-            return;
-        }
-
-        if (gameState.GameStateID == "Playing") {
-            if (clientState == "None") {
-                clearPlayArea();
-
-                // Settuping the board.
-                gameInfo.Setup(localPlayerIndex, gameState);
-                playArea.appendChild(gameInfo.RootNode);
-
-                opponent.Setup(gameState.OtherPlayer);
-                playArea.appendChild(opponent.RootNode);
-
-                player.Setup(gameState);
-                playArea.appendChild(player.RootNode);
-
-                if (gameState.CurrentPlayer == localPlayerIndex) {
-                    PlayerHandModeChooseCard();
-                    clientState = "SelectHandCard";
-                }
-                else {
-                    clientState = "OtherPlayerTurn";
-                }
-            }
         }
     }
 

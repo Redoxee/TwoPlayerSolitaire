@@ -7,18 +7,31 @@
             this.PlayerLabel = document.createTextNode("Player ?");
             row.appendChild(this.PlayerLabel);
 
-            var row = createElementWithClass("tr", "Stats");
-            this.RootNode.appendChild(row);
             this.ScoreLabel = document.createTextNode("Score : ");
             this.HealthLabel = document.createTextNode("Health : ");
             this.ShieldLabel = document.createTextNode("Shield : ");
             this.PairBulletLabel = document.createTextNode("Pair Bullet : ");
-            row.appendChild(this.ScoreLabel);
-            row.appendChild(this.HealthLabel);
-            row.appendChild(this.ShieldLabel);
-            row.appendChild(this.PairBulletLabel);
 
-            row = document.createElement("tr");
+            var statsParagraph = createElementWithClass("tr", "Stats");
+            this.RootNode.appendChild(statsParagraph);
+            var statsTable = document.createElement("table");
+            statsParagraph.appendChild(statsTable);
+
+            var statsHeader = document.createElement("th");
+            statsTable.appendChild(statsHeader);
+            statsHeader.appendChild(this.ScoreLabel);
+            statsHeader = document.createElement("th");
+            statsTable.appendChild(statsHeader);
+            statsHeader.appendChild(this.HealthLabel);
+            statsHeader = document.createElement("th");
+            statsTable.appendChild(statsHeader);
+            statsHeader.appendChild(this.ShieldLabel);
+            statsHeader = document.createElement("th");
+            statsTable.appendChild(statsHeader);
+            statsHeader.appendChild(this.PairBulletLabel);
+
+
+            var row = document.createElement("tr");
             this.RootNode.appendChild(row);
             this.Board = new CardDisplay();
             row.appendChild(this.Board.RootNode);

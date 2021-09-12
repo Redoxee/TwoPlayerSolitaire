@@ -12,17 +12,28 @@
         this.Hand = new CardDisplay();
         this.RootNode.appendChild(this.Hand.RootNode);
 
-        var infoParagraph = createElementWithClass("tr", "Stats");
-        this.RootNode.appendChild(infoParagraph);
         this.ScoreLabel = document.createTextNode("Score : ");
         this.HealthLabel = document.createTextNode("Health : ");
         this.ShieldLabel = document.createTextNode("Shield : ");
         this.PairBulletLabel = document.createTextNode("Pair Bullet : ");
 
-        infoParagraph.appendChild(this.ScoreLabel);
-        infoParagraph.appendChild(this.HealthLabel);
-        infoParagraph.appendChild(this.ShieldLabel);
-        infoParagraph.appendChild(this.PairBulletLabel);
+        var statsParagraph = createElementWithClass("tr", "Stats");
+        this.RootNode.appendChild(statsParagraph);
+        var statsTable = document.createElement("table");
+        statsParagraph.appendChild(statsTable);
+
+        var statsHeader = document.createElement("th");
+        statsTable.appendChild(statsHeader);
+        statsHeader.appendChild(this.ScoreLabel);
+        statsHeader = document.createElement("th");
+        statsTable.appendChild(statsHeader);
+        statsHeader.appendChild(this.HealthLabel);
+        statsHeader = document.createElement("th");
+        statsTable.appendChild(statsHeader);
+        statsHeader.appendChild(this.ShieldLabel);
+        statsHeader = document.createElement("th");
+        statsTable.appendChild(statsHeader);
+        statsHeader.appendChild(this.PairBulletLabel);
 
         this.SelectedCardIndex = -1;
     }
