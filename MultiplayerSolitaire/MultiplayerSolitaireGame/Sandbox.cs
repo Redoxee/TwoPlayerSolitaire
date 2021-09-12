@@ -8,7 +8,12 @@
         public Player[] Players;
         public int CurrentPlayer;
 
-        public int RoundCount;
+        public int RoundIndex;
+
+        public int PairComboSize = 3;
+        public int HealthBaseValue = 2;
+        public int MaxShield = 2;
+        public int NumberOfRounds = 3;
 
         public int OtherPlayerIndex()
         {

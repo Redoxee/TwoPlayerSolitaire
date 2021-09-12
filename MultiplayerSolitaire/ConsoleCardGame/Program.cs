@@ -29,7 +29,7 @@ namespace ConsoleCardGame
             }
 
             GameChangePool gameChanges = new GameChangePool();
-            GameManager gameManager = new GameManager(gameChanges);
+            GameManager gameManager = new GameManager(GameManager.GameParameters.Default(), gameChanges);
             bool quit = false;
             do
             {

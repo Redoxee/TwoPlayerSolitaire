@@ -30,7 +30,7 @@
         public void InitializeGame()
         {
             this.workingGameChanges = new MSG.GameChangePool();
-            this.gameManager = new MSG.GameManager(this.workingGameChanges);
+            this.gameManager = new MSG.GameManager(MSG.GameManager.GameParameters.Default(), this.workingGameChanges);
 
             this.clientByPlayerIndex = new ConnectedClient[2];
             for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
@@ -96,24 +96,21 @@
             PlayerViewUpdate view = new PlayerViewUpdate
             {
                 PlayerIndex = playerIndex,
-                Score = player.Score,
-                Health = player.Health,
-                Shield = player.Shield,
-                PairBullets = player.PairBullets,
                 CardsInDeck = sandbox.Deck.NumberOfCards,
-
-                Hand = new MSG.Card[player.Hand.Length],
-                Board = new MSG.Card[player.Board.Length]
+                CardsInDiscardPile = sandbox.DiscardPile.Count,
             };
 
-            player.Hand.CopyTo(view.Hand, 0);
-            player.Board.CopyTo(view.Board, 0);
             
-            view.DiscardPile = new MSG.Card[sandbox.DiscardPile.Count];
-            System.Array.Copy(sandbox.DiscardPile.Data, 0, view.DiscardPile, 0, sandbox.DiscardPile.Count);
+            
+            player.Hand.CopyTo(view.CurrentPlayer.Hand, 0);
+            player.Board.CopyTo(view.CurrentPlayer.Board, 0);
+            view.CurrentPlayer.Health = player.Health;
+            view.CurrentPlayer.Shield = player.Shield;
+            view.CurrentPlayer.PairCombo = player.PairCombo;
+            view.CurrentPlayer.Score = player.Score;
+            view.CurrentPlayer.Index = player.Index;
 
             view.GameStateID = this.gameManager.GetStateID();
-            view.CurrentPlayer = sandbox.CurrentPlayer;
 
             int otherPlayerIndex = sandbox.OtherPlayerIndex();
             MSG.Player otherPlayer = sandbox.Players[otherPlayerIndex];
@@ -121,25 +118,12 @@
             view.OtherPlayer.Score = otherPlayer.Score;
             view.OtherPlayer.Health = otherPlayer.Health;
             view.OtherPlayer.Shield = otherPlayer.Shield;
-            view.OtherPlayer.PairBullets = otherPlayer.PairBullets;
+            view.OtherPlayer.PairCombo = otherPlayer.PairCombo;
 
             view.OtherPlayer.Board = new MSG.Card[otherPlayer.Board.Length];
             otherPlayer.Board.CopyTo(view.OtherPlayer.Board, 0);
 
             return view;
-        }
-
-        public string GetSandboxJson()
-        {
-            Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
-            System.IO.StringWriter stringWriter = new System.IO.StringWriter();
-            Newtonsoft.Json.JsonTextWriter textWriter = new Newtonsoft.Json.JsonTextWriter(stringWriter);
-
-            PlayerViewUpdate playerView = this.GetPlayerView(0);
-
-            serializer.Serialize(textWriter, playerView);
-            stringWriter.Close();
-            return stringWriter.ToString();
         }
 
         public void HandleMessage(ConnectedClient client, string messageString)
@@ -251,11 +235,13 @@
         {
             for (int index = 0; index < sandboxChanges.GameChanges.Length; ++index)
             {
-                if (sandboxChanges.GameChanges[index].ChangeType == MSG.GameChange.GameChangeType.GameStateChange &&
-                    sandboxChanges.GameChanges[index].GameStateID == MSG.GameStateID.Initialize)
-                {
-                    sandboxChanges.PlayerViewUpdate = this.GetPlayerView(playerIndex);
-                    return;
+                if (sandboxChanges.GameChanges[index].ChangeType == MSG.GameChange.GameChangeType.GameStateChange)
+                { 
+                     if(sandboxChanges.GameChanges[index].GameStateID == MSG.GameStateID.Initialize)
+                    {
+                        sandboxChanges.PlayerViewUpdate = this.GetPlayerView(playerIndex);
+                        return;
+                    }
                 }
             }
         }

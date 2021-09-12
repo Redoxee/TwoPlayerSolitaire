@@ -8,7 +8,7 @@
         {
             Sandbox sandbox = stateMachine.GameManager.Sandbox;
             sandbox.CurrentPlayer = 0;
-            sandbox.RoundCount = 0;
+            sandbox.RoundIndex = 0;
 
             stateMachine.SetNextState(new InitializeRoundState());
         }
@@ -34,13 +34,17 @@
             for (int index = 0; index < sandbox.Players.Length; ++index)
             {
                 Player player = sandbox.Players[index];
-                player.Health = 2;
-                player.PairBullets = 0;
+                player.Health = sandbox.HealthBaseValue;
+                player.PairCombo = 0;
                 player.Shield = 0;
                 for (int cardIndex = 0; cardIndex < Player.BoardWidth; ++cardIndex)
                 {
-                    player.Hand[cardIndex] = sandbox.Deck.PickCard();
                     player.Board[cardIndex].Value = Card.None;
+                }
+
+                for (int cardIndex = 0; cardIndex < Player.HandSize; ++cardIndex)
+                {
+                    player.Hand[cardIndex] = sandbox.Deck.PickCard();
                 }
             }
 
@@ -152,20 +156,23 @@
 
                 if (combo == CardCombo.Pair)
                 {
-                    player.PairBullets++;
+                    player.PairCombo++;
 
                     propertyChanged.PlayerProperty = GameChange.PlayerProperties.PairBullets;
-                    propertyChanged.NewValue = player.PairBullets;
+                    propertyChanged.NewValue = player.PairCombo;
                     propertyChanged.PlayerIndex = player.Index;
 
-                    if (player.PairBullets == 5)
+                    if (player.PairCombo == sandbox.PairComboSize)
                     {
                         otherPlayer.Health = 0;
                     }
                 }
                 else if (combo == CardCombo.Flush)
                 {
-                    player.Shield++;
+                    if(player.Shield < sandbox.MaxShield)
+                    {
+                        player.Shield++;
+                    }
                 
                     propertyChanged.PlayerProperty = GameChange.PlayerProperties.Shield;
                     propertyChanged.NewValue = player.Shield;
@@ -209,8 +216,14 @@
             if (otherPlayer.Health <= 0)
             {
                 player.Score++;
-                sandbox.RoundCount++;
-                if (sandbox.RoundCount > 3)
+                
+                ref GameChange scoreChanged = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerPropertyChanged);
+                scoreChanged.PlayerProperty = GameChange.PlayerProperties.Score;
+                scoreChanged.NewValue = player.Score;
+                scoreChanged.PlayerIndex = player.Index;
+
+                sandbox.RoundIndex++;
+                if (sandbox.RoundIndex > 3)
                 {
                     stateMachine.SetNextState(new EndGameState());
                 }

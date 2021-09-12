@@ -13,19 +13,15 @@ namespace WebMultiplayerSolitaire
         public MSG.GameStateID GameStateID;
         public int PlayerIndex;
 
-        public MSG.Card[] Hand;
-        public MSG.Card[] Board;
-
-        public int Score;
-        public int Health;
-        public int Shield;
-        public int PairBullets;
-
+        public Player CurrentPlayer;
         public Player OtherPlayer;
-        public int CurrentPlayer;
-        public int Round;
-        public MSG.Card[] DiscardPile;
+
+        public int RoundIndex;
         public int CardsInDeck;
+        public int CardsInDiscardPile;
+
+        public int PairComboSize;
+        public int NumberOfRounds;
 
         public struct Player
         {
@@ -33,7 +29,8 @@ namespace WebMultiplayerSolitaire
             public int Score;
             public int Health;
             public int Shield;
-            public int PairBullets;
+            public int PairCombo;
+            public MSG.Card[] Hand;
             public MSG.Card[] Board;
         }
     }

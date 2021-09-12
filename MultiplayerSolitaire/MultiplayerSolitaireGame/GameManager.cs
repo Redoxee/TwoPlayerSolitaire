@@ -8,7 +8,7 @@
 
         private readonly System.Text.StringBuilder workingStringBuilder = new System.Text.StringBuilder();
 
-        public GameManager(GameChangePool gameChanges)
+        public GameManager(GameParameters gameParameters, GameChangePool gameChanges)
         {
             const int numberOfPlayers = 2;
             this.Sandbox = new Sandbox
@@ -16,6 +16,9 @@
                 Deck = new Deck(),
                 Players = new Player[numberOfPlayers],
                 DiscardPile = new CardStack(),
+                NumberOfRounds = gameParameters.NumberOfRounds,
+                HealthBaseValue = gameParameters.StaringHealth,
+                PairComboSize = gameParameters.PairComboSize,
             };
         
             for (int index = 0; index < numberOfPlayers; ++index)
@@ -52,11 +55,11 @@
         {
             this.workingStringBuilder.Clear();
             this.workingStringBuilder.Append(this.stateMachine.GetDebugString());
-            this.workingStringBuilder.AppendLine().Append(" Round : ").Append(this.Sandbox.RoundCount).AppendLine();
+            this.workingStringBuilder.AppendLine().Append(" Round : ").Append(this.Sandbox.RoundIndex).AppendLine();
 
             Player otherPlayer = this.Sandbox.Players[this.Sandbox.OtherPlayerIndex()];
             this.workingStringBuilder.Append("Other Player ").Append(otherPlayer.Index).AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).Append(" Shield : ").Append(otherPlayer.Shield).Append(" PairBullets : ").Append(otherPlayer.PairBullets).AppendLine();
+            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).Append(" Shield : ").Append(otherPlayer.Shield).Append(" PairBullets : ").Append(otherPlayer.PairCombo).AppendLine();
             this.workingStringBuilder.Append("Board : ");
             for (int index = 0; index < 3; ++index)
             {
@@ -75,7 +78,7 @@
             }
 
             this.workingStringBuilder.AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health).Append(" Shield : ").Append(currentPlayer.Shield).Append(" PairBullets : ").Append(currentPlayer.PairBullets);
+            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health).Append(" Shield : ").Append(currentPlayer.Shield).Append(" PairBullets : ").Append(currentPlayer.PairCombo);
             this.workingStringBuilder.AppendLine();
 
             this.workingStringBuilder.Append("Hand : ");
@@ -85,6 +88,25 @@
             }
 
             return this.workingStringBuilder.ToString();
+        }
+
+        public struct GameParameters
+        {
+            public int NumberOfRounds;
+            public int PairComboSize;
+            public int StaringHealth;
+
+            public static GameParameters Default()
+            {
+                GameParameters parameters = new GameParameters
+                {
+                    NumberOfRounds = 3,
+                    PairComboSize = 3,
+                    StaringHealth = 2,
+                };
+
+                return parameters;
+            }
         }
     }
 }
