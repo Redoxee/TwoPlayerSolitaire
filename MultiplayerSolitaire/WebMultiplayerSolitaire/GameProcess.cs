@@ -95,14 +95,15 @@
             MSG.Player player = sandbox.Players[playerIndex];
             PlayerViewUpdate view = new PlayerViewUpdate
             {
-                PlayerIndex = playerIndex,
                 CardsInDeck = sandbox.Deck.NumberOfCards,
                 CardsInDiscardPile = sandbox.DiscardPile.Count,
+                PlayerTurn = sandbox.CurrentPlayer,
             };
 
-            
-            
+
+            view.CurrentPlayer.Hand = new MSG.Card[player.Hand.Length];
             player.Hand.CopyTo(view.CurrentPlayer.Hand, 0);
+            view.CurrentPlayer.Board = new MSG.Card[player.Board.Length];
             player.Board.CopyTo(view.CurrentPlayer.Board, 0);
             view.CurrentPlayer.Health = player.Health;
             view.CurrentPlayer.Shield = player.Shield;

@@ -52,10 +52,10 @@ var gameState = null;
 
 
 var messageHandles = [];
-messageHandles["AvailablePlayerSlots"] = handleAvailablePlayerSlots;
-messageHandles["OrderAcknowledgement"] = handleOrderAcknowledgement;
-messageHandles["PlayerViewUpdate"] = handlePlayerViewUpdate;
-messageHandles["SandboxChanges"] = handleSandboxUpdate;
+messageHandles["AvailablePlayerSlots"] = HandleAvailablePlayerSlots;
+messageHandles["OrderAcknowledgement"] = HandleOrderAcknowledgement;
+messageHandles["PlayerViewUpdate"] = HandlePlayerViewUpdate;
+messageHandles["SandboxChanges"] = HandleSandboxUpdate;
 
 writeToScreen("WS URI " + gameWebSocketUrl);
 
@@ -65,7 +65,7 @@ function writeToScreen(message) {
     output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
 }
 
-function handleOrderAcknowledgement(messageData) {
+function HandleOrderAcknowledgement(messageData) {
     if (pendingOrders[messageData.OrderID] != null) {
         pendingOrders[messageData.OrderID](messageData);
         pendingOrders[messageData.OrderID] = null;
@@ -82,7 +82,7 @@ function handleOrderAcknowledgement(messageData) {
     }
 }
 
-function handleAvailablePlayerSlots(messageData) {
+function HandleAvailablePlayerSlots(messageData) {
     availableSlots = messageData.AvaialablePlayerSlots;
 
     // are we searching for a player slot ?
@@ -122,7 +122,7 @@ function handleAvailablePlayerSlots(messageData) {
     }
 }
 
-function handlePlayerViewUpdate(messageData) {
+function HandlePlayerViewUpdate(messageData) {
     gameState = messageData;
 
     if (GameStateID[gameState.GameStateID] != null) {
@@ -136,12 +136,12 @@ function handlePlayerViewUpdate(messageData) {
     writeToScreen("Game state = " + gameState.GameStateID);
 }
 
-function handleSandboxUpdate(messageData) {
+function HandleSandboxUpdate(messageData) {
     for (var changeIndex = 0; changeIndex < messageData.GameChanges.length; ++changeIndex) {
         var gameChange = messageData.GameChanges[changeIndex];
         var changeType = gameChange.ChangeType;
         if (changeType == "PlayedCard") {
-            if (gameState.CurrentPlayer != gameChange.PlayerIndex) {
+            if (gameState.PlayerTurn != gameChange.PlayerIndex) {
                 alert("Desync between local player and playing player.");
                 return;
             }
@@ -217,8 +217,8 @@ function handleSandboxUpdate(messageData) {
         else if (changeType == "GameStateChange") {
             gameState.GameStateID = gameChange.GameStateID;
             if (gameState.GameStateID == "Transitioning") {
-                gameState.CurrentPlayer = gameChange.PlayerIndex;
-                if (gameState.CurrentPlayer == localPlayerIndex) {
+                gameState.PlayerTurn = gameChange.PlayerIndex;
+                if (gameState.PlayerTurn == localPlayerIndex) {
                     PlayerHandModeChooseCard();
                     clientState = "SelectHandCard";
                 }
@@ -253,10 +253,10 @@ function SetupFromGameState() {
             opponent.Setup(gameState.OtherPlayer);
             playArea.appendChild(opponent.RootNode);
 
-            player.Setup(gameState);
+            player.Setup(gameState.CurrentPlayer);
             playArea.appendChild(player.RootNode);
 
-            if (gameState.CurrentPlayer == localPlayerIndex) {
+            if (gameState.PlayerTurn == localPlayerIndex) {
                 PlayerHandModeChooseCard();
                 clientState = "SelectHandCard";
             }

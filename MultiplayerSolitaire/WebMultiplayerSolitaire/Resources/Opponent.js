@@ -44,6 +44,6 @@
             this.ScoreLabel.textContent = "Score : " + opponentData.Score;
             this.HealthLabel.textContent = "Health : " + opponentData.Health;
             this.ShieldLabel.textContent = "Shield : " + opponentData.Shield;
-            this.PairBulletLabel.textContent = "Pair Bullet : " + opponentData.PairBullets;
+            this.PairBulletLabel.textContent = "Pair Combo : " + opponentData.PairCombo;
         }
     }

@@ -11,11 +11,11 @@ namespace WebMultiplayerSolitaire
         public override string MessageType => "PlayerViewUpdate";
 
         public MSG.GameStateID GameStateID;
-        public int PlayerIndex;
 
         public Player CurrentPlayer;
         public Player OtherPlayer;
 
+        public int PlayerTurn;
         public int RoundIndex;
         public int CardsInDeck;
         public int CardsInDiscardPile;

@@ -20,7 +20,7 @@
         }
     }
 
-    Setup(availableSlost) {
+    Setup(availableSlots) {
         for (var index = 0; index < this.PoolSize; ++index) {
             if (index >= availableSlots.length) {
                 this.Buttons[index].hidden = true;

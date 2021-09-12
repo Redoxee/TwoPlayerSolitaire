@@ -38,14 +38,14 @@
         this.SelectedCardIndex = -1;
     }
 
-    Setup(gameData) {
-        this.PlayerLabel.textContent = "Player " + (gameData.PlayerIndex + 1);
-        this.Hand.SetupFromArray(gameData.Hand);
-        this.Board.SetupFromArray(gameData.Board);
+    Setup(playerObject) {
+        this.PlayerLabel.textContent = "Player " + (playerObject.Index + 1);
+        this.Hand.SetupFromArray(playerObject.Hand);
+        this.Board.SetupFromArray(playerObject.Board);
 
-        this.ScoreLabel.textContent = "Score : " + gameData.Score;
-        this.HealthLabel.textContent = "Health : " + gameData.Health;
-        this.ShieldLabel.textContent = "Shield : " + gameData.Shield;
-        this.PairBulletLabel.textContent = "Pair Bullet : " + gameData.PairBullets;
+        this.ScoreLabel.textContent = "Score : " + playerObject.Score;
+        this.HealthLabel.textContent = "Health : " + playerObject.Health;
+        this.ShieldLabel.textContent = "Shield : " + playerObject.Shield;
+        this.PairBulletLabel.textContent = "Pair Combo : " + playerObject.PairCombo;
     }
 }
