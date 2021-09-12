@@ -147,32 +147,26 @@ namespace WebCardGame.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;!doctype html&gt;
         ///&lt;meta charset=&quot;utf-8&quot;&gt;
-        ///&lt;style&gt;
-        ///    #mainTable {
-        ///        text-align:left;
-        ///        vertical-align:top;
-        ///        width:100%;
-        ///    }
+        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;Style.css&quot; /&gt;
         ///
-        ///        #mainTable &gt; tbody &gt; tr &gt; th {
-        ///            vertical-align: top;
-        ///        }
+        ///&lt;h2&gt;Two Players Solitaire&lt;/h2&gt;
+        ///&lt;table id=mainTable&gt;
+        ///    &lt;tr&gt;
+        ///        &lt;th&gt;
+        ///            &lt;div id=playArea&gt;&lt;/div&gt;
+        ///        &lt;/th&gt;
+        ///        &lt;th&gt;
+        ///            &lt;div id=output&gt;&lt;/div&gt;
+        ///        &lt;/th&gt;
+        ///    &lt;/tr&gt;
+        ///&lt;/table&gt;
         ///
-        ///    #output {
-        ///        overflow: auto;
-        ///        float: right;
-        ///        border: 1pt;
-        ///        border-color: black;
-        ///        border-style: solid;
-        ///        min-width: 300pt;
-        ///        max-width: 50%;
-        ///    }
+        ///&lt;div id=&quot;signature&quot;&gt;
+        ///    Made by &lt;a href=&quot;https://antonmakesgames.itch.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;AntonMakesGames&lt;/a&gt;
+        ///&lt;/div&gt;
         ///
-        ///    #output &gt; p {
-        ///        overflow-wrap: break-word;
-        ///    }
-        ///
-        ///   [rest of string was truncated]&quot;;.
+        ///&lt;script src=&quot;Card.js&quot;&gt;&lt;/script&gt;
+        ///&lt;script s [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameIndex {
             get {
@@ -211,10 +205,9 @@ namespace WebCardGame.Properties {
         ///            this.PlayerLabel = document.createTextNode(&quot;Player ?&quot;);
         ///            row.appendChild(this.PlayerLabel);
         ///
-        ///            row = document.createElement(&quot;tr&quot;);
-        ///            this.RootNode.appendChild(row);
-        ///            this.ScoreLabel = document.createTextNode(&quot;Score : ?&quot;);
-        ///       [rest of string was truncated]&quot;;.
+        ///            this.ScoreLabel = document.createTextNode(&quot;Score : &quot;);
+        ///            this.HealthLabel = document.createTextNode(&quot;Health : &quot;);
+        ///            this.ShieldLabel =  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Opponent {
             get {
@@ -265,7 +258,51 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to function createWebSocket() {
+        ///   Looks up a localized string similar to #mainTable {
+        ///    text-align: left;
+        ///    vertical-align: top;
+        ///    width: 100%;
+        ///}
+        ///
+        ///#mainTable &gt; tbody &gt; tr &gt; th {
+        ///    vertical-align: top;
+        ///}
+        ///
+        ///#output {
+        ///    overflow: auto;
+        ///    float: right;
+        ///    border: 1pt;
+        ///    border-color: black;
+        ///    border-style: solid;
+        ///    min-width: 300pt;
+        ///    max-width: 50%;
+        ///}
+        ///
+        ///#output &gt; p {
+        ///    overflow-wrap: break-word;
+        ///}
+        ///
+        ///#output span {
+        ///    color: blue;
+        ///}
+        ///
+        ///#output span.error {
+        ///    color: red;
+        ///}
+        ///
+        ///.card {
+        ///    border: 1pt;
+        ///    border-style: solid;
+        ///    b [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Style {
+            get {
+                return ResourceManager.GetString("Style", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to function CreateWebSocket() {
         ///    console.log(gameWebSocketUrl);
         ///    websocket = new WebSocket(gameWebSocketUrl);
         ///
@@ -273,14 +310,14 @@ namespace WebCardGame.Properties {
         ///        isConnected = true;
         ///        writeToScreen(&quot;CONNECTED&quot;);
         ///        var requestPlayerSlots = &apos;{ &quot;OrderType&quot;: &quot;RequestPlayerSlots&quot; }&apos;;
-        ///        doSend(requestPlayerSlots);
+        ///        DoSend(requestPlayerSlots);
         ///    };
         ///
         ///    websocket.onclose = function (e) {
         ///        writeToScreen(&quot;DISCONNECTED&quot;);
         ///    };
         ///
-        ///    websocket.onmessage = recieveWebSocketMessage;
+        ///    websocket.onmessage = RecieveWebSocketMessage;
         ///
         ///    websocket.onerror = [rest of string was truncated]&quot;;.
         /// </summary>

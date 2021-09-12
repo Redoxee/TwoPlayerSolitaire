@@ -22,7 +22,7 @@ namespace WebMultiplayerSolitaire
             fileContent = string.Empty;
             
             string[] splitted = name.Split("/");
-            string lastComponent = splitted[splitted.Length - 1].Trim().Replace(".js","");
+            string lastComponent = splitted[splitted.Length - 1].Trim().Replace(".js","").Replace(".css","");
             if (!string.IsNullOrEmpty(lastComponent))
             {
                 fileContent = RestRequestService.ResourceManager.GetString(lastComponent);

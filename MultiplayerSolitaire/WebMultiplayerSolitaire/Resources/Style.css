@@ -1,0 +1,68 @@
+﻿#mainTable {
+    text-align: left;
+    vertical-align: top;
+    width: 100%;
+}
+
+#mainTable > tbody > tr > th {
+    vertical-align: top;
+}
+
+#output {
+    overflow: auto;
+    float: right;
+    border: 1pt;
+    border-color: black;
+    border-style: solid;
+    min-width: 300pt;
+    max-width: 50%;
+}
+
+#output > p {
+    overflow-wrap: break-word;
+}
+
+#output span {
+    color: blue;
+}
+
+#output span.error {
+    color: red;
+}
+
+.card {
+    border: 1pt;
+    border-style: solid;
+    border-color: darkgray;
+    width: 100pt;
+    height: 120pt;
+    text-align: center;
+    vertical-align: central;
+}
+
+.cardSlot {
+    border: 1pt;
+    border-style: solid;
+    border-color: darkgray;
+    width: 102pt;
+    height: 122pt;
+    text-align: center;
+    vertical-align: central;
+}
+
+.Stats table th {
+    padding-left: 10pt;
+    padding-right: 10pt;
+}
+
+.deck {
+    border: 1pt;
+    border-style: solid;
+    border-color: darkgray;
+}
+
+.otherPlayer {
+    border: 1pt;
+    border-style: solid;
+    border-color: black;
+}
