@@ -10,15 +10,14 @@
             var col = document.createElement("th");
             row.appendChild(col);
             col.appendChild(this.Slots[index].RootNode);
-
-            var card = new Card(index);
-            slot.AttachCard(card);
         }
     }
 
     SetupFromArray(cardArray) {
         for (var index = 0; index < 3; ++index) {
-            var slot = this.Slots[index].Card.Setup(cardArray[index]);
+            var card = new Card(index);
+            card.Setup(cardArray[index]);
+            var slot = this.Slots[index].AttachCard(card);
         }
     }
 }

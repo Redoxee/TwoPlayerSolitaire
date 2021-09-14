@@ -98,6 +98,7 @@
             if (player.Board[playCardOrder.BoardIndex].IsValide())
             {
                 sandbox.Deck.AddCardUnder(player.Board[playCardOrder.BoardIndex]);
+                sandbox.Deck.Shuffle();
             }
 
             player.Board[playCardOrder.BoardIndex] = player.Hand[playCardOrder.CardIndex];

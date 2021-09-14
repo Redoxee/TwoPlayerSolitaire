@@ -228,6 +228,7 @@ function HandleSandboxUpdate(messageData) {
             }
             if (gameState.GameStateID == "Initialize") {
                 gameState = messageData.PlayerViewUpdate;
+                clientState = "None";
             }
             if (gameState.GameStateID == "Playing") {
                 SetupFromGameState();

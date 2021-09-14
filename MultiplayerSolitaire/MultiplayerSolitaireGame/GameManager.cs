@@ -102,7 +102,7 @@
                 {
                     NumberOfRounds = 3,
                     PairComboSize = 3,
-                    StaringHealth = 2,
+                    StaringHealth = 1,
                 };
 
                 return parameters;

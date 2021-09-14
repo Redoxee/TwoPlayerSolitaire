@@ -26,6 +26,10 @@
 
     AttachCard(card) {
         clearChilds(this.CardReceptacle);
+        if (card == null || card.Value < 0) {
+            this.Card = null;
+            return;
+        }
 
         this.Card = card;
         this.CardReceptacle.appendChild(card.RootNode);

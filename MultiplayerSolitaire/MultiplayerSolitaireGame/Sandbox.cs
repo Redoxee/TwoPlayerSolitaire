@@ -19,5 +19,10 @@
         {
             return (this.CurrentPlayer + 1) % this.Players.Length;
         }
+
+        public int OtherPlayerIndex(int lookingPlayerIndex)
+        {
+            return (lookingPlayerIndex + 1) % this.Players.Length;
+        }
     }
 }

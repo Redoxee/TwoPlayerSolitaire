@@ -113,7 +113,7 @@
 
             view.GameStateID = this.gameManager.GetStateID();
 
-            int otherPlayerIndex = sandbox.OtherPlayerIndex();
+            int otherPlayerIndex = sandbox.OtherPlayerIndex(playerIndex);
             MSG.Player otherPlayer = sandbox.Players[otherPlayerIndex];
             view.OtherPlayer.Index = otherPlayerIndex;
             view.OtherPlayer.Score = otherPlayer.Score;
