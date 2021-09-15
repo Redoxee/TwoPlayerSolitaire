@@ -10,6 +10,8 @@ namespace WebMultiplayerSolitaire
     {
         public override string MessageType => "PlayerViewUpdate";
 
+        public bool IsNextRoundState = false;
+
         public MSG.GameStateID GameStateID;
 
         public Player CurrentPlayer;

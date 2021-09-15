@@ -216,7 +216,19 @@
                                 GameChanges = this.workingGameChanges.GetGameChanges(),
                             };
 
-                            this.AddPlayerViewIfNecessary(sandboxChanges, client.PlayerIndex);
+                            if (this.DoNeedUpdatePlayerView(sandboxChanges))
+                            {
+                                for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
+                                {
+                                    ConnectedClient connectedClient = this.clientByPlayerIndex[index];
+                                    if (connectedClient != null)
+                                    {
+                                        PlayerViewUpdate playerViewUpdate = this.GetPlayerView(connectedClient.PlayerIndex);
+                                        playerViewUpdate.IsNextRoundState = true;
+                                        this.SendResponseToClient(playerViewUpdate, connectedClient);
+                                    }
+                                }
+                            }
 
                             this.BroadCast(sandboxChanges);
                         }
@@ -232,19 +244,20 @@
             }
         }
 
-        private void AddPlayerViewIfNecessary(SandboxChanges sandboxChanges, int playerIndex)
+        private bool DoNeedUpdatePlayerView(SandboxChanges sandboxChanges)
         {
             for (int index = 0; index < sandboxChanges.GameChanges.Length; ++index)
             {
                 if (sandboxChanges.GameChanges[index].ChangeType == MSG.GameChange.GameChangeType.GameStateChange)
-                { 
-                     if(sandboxChanges.GameChanges[index].GameStateID == MSG.GameStateID.Initialize)
+                {
+                    if (sandboxChanges.GameChanges[index].GameStateID == MSG.GameStateID.Initialize)
                     {
-                        sandboxChanges.PlayerViewUpdate = this.GetPlayerView(playerIndex);
-                        return;
+                        return true;
                     }
                 }
             }
+
+            return false;
         }
 
         private JSONResponse RequestAvailablePlayerSlots()

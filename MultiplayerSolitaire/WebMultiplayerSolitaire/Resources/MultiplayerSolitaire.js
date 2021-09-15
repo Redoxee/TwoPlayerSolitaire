@@ -49,7 +49,7 @@ var nextOrderID = 0;
 
 var pendingOrders = [];
 var gameState = null;
-
+var nextRoundState = null;
 
 var messageHandles = [];
 messageHandles["AvailablePlayerSlots"] = HandleAvailablePlayerSlots;
@@ -123,6 +123,11 @@ function HandleAvailablePlayerSlots(messageData) {
 }
 
 function HandlePlayerViewUpdate(messageData) {
+    if (messageData.IsNextRoundState) {
+        nextRoundState = messageData;
+        return;
+    }
+
     gameState = messageData;
 
     if (GameStateID[gameState.GameStateID] != null) {
@@ -227,7 +232,8 @@ function HandleSandboxUpdate(messageData) {
                 }
             }
             if (gameState.GameStateID == "Initialize") {
-                gameState = messageData.PlayerViewUpdate;
+                gameState = nextRoundState;
+                nextRoundState = null;
                 clientState = "None";
             }
             if (gameState.GameStateID == "Playing") {

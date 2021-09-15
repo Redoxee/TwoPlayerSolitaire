@@ -19,7 +19,7 @@ namespace WebMultiplayerSolitaire
         private static int SocketCounter = 0;
 
         // The key is a socket id
-        private static ConcurrentDictionary<int, ConnectedClient> Clients = new ConcurrentDictionary<int, ConnectedClient>();
+        private static ConcurrentDictionary<int, ConnectedClient> clients = new ConcurrentDictionary<int, ConnectedClient>();
 
         public static CancellationTokenSource SocketLoopTokenSource = new CancellationTokenSource();
 
@@ -47,7 +47,7 @@ namespace WebMultiplayerSolitaire
                         var socket = await context.WebSockets.AcceptWebSocketAsync();
                         var completion = new TaskCompletionSource<object>();
                         var client = new ConnectedClient(socketId, socket, completion);
-                        WebSocketMiddleware.Clients.TryAdd(socketId, client);
+                        WebSocketMiddleware.clients.TryAdd(socketId, client);
                         Console.WriteLine($"Socket {socketId}: New connection.");
 
                         // TaskCompletionSource<> is used to keep the middleware pipeline alive;
@@ -80,7 +80,7 @@ namespace WebMultiplayerSolitaire
         public static void Broadcast(string message)
         {
             Console.WriteLine($"Broadcasting a message : {message}");
-            foreach (var kvp in WebSocketMiddleware.Clients)
+            foreach (var kvp in WebSocketMiddleware.clients)
             {
                 kvp.Value.MessageQueue.Add(message);
             }
@@ -97,11 +97,11 @@ namespace WebMultiplayerSolitaire
         {
             // We can't dispose the sockets until the processing loops are terminated,
             // but terminating the loops will abort the sockets, preventing graceful closing.
-            var disposeQueue = new List<WebSocket>(WebSocketMiddleware.Clients.Count);
+            var disposeQueue = new List<WebSocket>(WebSocketMiddleware.clients.Count);
 
-            while (WebSocketMiddleware.Clients.Count > 0)
+            while (WebSocketMiddleware.clients.Count > 0)
             {
-                var client = WebSocketMiddleware.Clients.ElementAt(0).Value;
+                var client = WebSocketMiddleware.clients.ElementAt(0).Value;
                 Console.WriteLine($"Closing Socket {client.SocketId}");
 
                 Console.WriteLine("... ending broadcast loop");
@@ -126,7 +126,7 @@ namespace WebMultiplayerSolitaire
                     }
                 }
 
-                if (WebSocketMiddleware.Clients.TryRemove(client.SocketId, out _))
+                if (WebSocketMiddleware.clients.TryRemove(client.SocketId, out _))
                 {
                     // only safe to Dispose once, so only add it if this loop can't process it again
                     disposeQueue.Add(client.Socket);
@@ -204,7 +204,7 @@ namespace WebMultiplayerSolitaire
                     client.Socket.Abort();
 
                 // by this point the socket is closed or aborted, the ConnectedClient object is useless
-                if (WebSocketMiddleware.Clients.TryRemove(client.SocketId, out _))
+                if (WebSocketMiddleware.clients.TryRemove(client.SocketId, out _))
                     socket.Dispose();
 
                 // signal to the middleware pipeline that this task has completed

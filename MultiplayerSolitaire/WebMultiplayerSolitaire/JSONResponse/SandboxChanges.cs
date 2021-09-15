@@ -5,6 +5,5 @@
         public override string MessageType => nameof(SandboxChanges);
 
         public MSG.GameChange[] GameChanges;
-        public PlayerViewUpdate PlayerViewUpdate;
     }
 }
