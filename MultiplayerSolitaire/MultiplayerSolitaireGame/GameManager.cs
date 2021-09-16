@@ -101,8 +101,8 @@
                 GameParameters parameters = new GameParameters
                 {
                     ScoreTarget = 1,
-                    PairComboSize = 1,
-                    StaringHealth = 1,
+                    PairComboSize = 4,
+                    StaringHealth = 2,
                 };
 
                 return parameters;

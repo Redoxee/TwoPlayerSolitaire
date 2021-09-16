@@ -131,25 +131,25 @@
         public override void StartState(GameStateMachine stateMachine, GameChangePool gameChanges)
         {
             Sandbox sandbox = stateMachine.GameManager.Sandbox;
-            Player player = sandbox.Players[sandbox.CurrentPlayer];
+            Player playingPlayer = sandbox.Players[sandbox.CurrentPlayer];
             int otherPlayerIndex = sandbox.OtherPlayerIndex();
             Player otherPlayer = sandbox.Players[otherPlayerIndex];
 
-            CardCombo combo = Combo.Compute(player.Board, out byte usedCards);
+            CardCombo combo = Combo.Compute(playingPlayer.Board, out byte usedCards);
 
             if (combo != CardCombo.None)
             {
-                for (int index = 0; index < player.Board.Length; ++index)
+                for (int index = 0; index < playingPlayer.Board.Length; ++index)
                 {
                     if ((usedCards & 1 << index) != 0)
                     {
-                        sandbox.DiscardPile.AddCard(player.Board[index]);
-                        player.Board[index].Value = Card.None;
+                        sandbox.DiscardPile.AddCard(playingPlayer.Board[index]);
+                        playingPlayer.Board[index].Value = Card.None;
                     }
                 }
 
                 ref GameChange comboChanges = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerCombo);
-                comboChanges.PlayerIndex = player.Index;
+                comboChanges.PlayerIndex = playingPlayer.Index;
                 comboChanges.CardCombo = combo;
                 comboChanges.UsedCards = usedCards;
 
@@ -157,27 +157,27 @@
 
                 if (combo == CardCombo.Pair)
                 {
-                    player.PairCombo++;
+                    playingPlayer.PairCombo++;
 
                     propertyChanged.PlayerProperty = GameChange.PlayerProperties.PairBullets;
-                    propertyChanged.NewValue = player.PairCombo;
-                    propertyChanged.PlayerIndex = player.Index;
+                    propertyChanged.NewValue = playingPlayer.PairCombo;
+                    propertyChanged.PlayerIndex = playingPlayer.Index;
 
-                    if (player.PairCombo == sandbox.PairComboSize)
+                    if (playingPlayer.PairCombo == sandbox.PairComboSize)
                     {
                         otherPlayer.Health = 0;
                     }
                 }
                 else if (combo == CardCombo.Flush)
                 {
-                    if(player.Shield < sandbox.MaxShield)
+                    if(playingPlayer.Shield < sandbox.MaxShield)
                     {
-                        player.Shield++;
+                        playingPlayer.Shield++;
                     }
                 
                     propertyChanged.PlayerProperty = GameChange.PlayerProperties.Shield;
-                    propertyChanged.NewValue = player.Shield;
-                    propertyChanged.PlayerIndex = player.Index;
+                    propertyChanged.NewValue = playingPlayer.Shield;
+                    propertyChanged.PlayerIndex = playingPlayer.Index;
                 }
                 else if (combo == CardCombo.Chain)
                 {
@@ -216,29 +216,57 @@
 
             if (otherPlayer.Health <= 0)
             {
-                player.Score++;
-                
+                playingPlayer.Score++;
+
                 ref GameChange scoreChanged = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerPropertyChanged);
                 scoreChanged.PlayerProperty = GameChange.PlayerProperties.Score;
-                scoreChanged.NewValue = player.Score;
-                scoreChanged.PlayerIndex = player.Index;
+                scoreChanged.NewValue = playingPlayer.Score;
+                scoreChanged.PlayerIndex = playingPlayer.Index;
 
                 sandbox.RoundIndex++;
-                if (player.Score >= sandbox.ScoreTarget)
+                if (playingPlayer.Score >= sandbox.ScoreTarget)
                 {
                     stateMachine.SetNextState(new EndGameState());
+                    return;
                 }
-                else
-                {
-                    sandbox.CurrentPlayer = otherPlayerIndex;
-                    stateMachine.SetNextState(new InitializeRoundState());
-                }
-            }
-            else
-            {
+
                 sandbox.CurrentPlayer = otherPlayerIndex;
-                stateMachine.SetNextState(new PlayTurnState());
+                stateMachine.SetNextState(new InitializeRoundState());
             }
+
+            if (sandbox.Deck.NumberOfCards == 0)
+            {
+                int bestPlayerGrade = -1;
+                int bestPlayerIndex = -1;
+                bool even = false;
+
+                for (int playerIndex = 0; playerIndex < sandbox.Players.Length; ++playerIndex)
+                {
+                    int playerGrad = 0;
+                    Player player = sandbox.Players[playerIndex];
+                    playerGrad += player.Shield * 1000;
+                    playerGrad += player.Health * 100;
+                    playerGrad += player.PairCombo;
+
+                    if (playerGrad > bestPlayerGrade)
+                    {
+                        bestPlayerGrade = playerGrad;
+                        bestPlayerIndex = playerIndex;
+                    }
+                    else if (playerGrad == bestPlayerGrade)
+                    {
+                        even = true;
+                        break;
+                    }
+                }
+
+                sandbox.CurrentPlayer = even ? -1 : bestPlayerIndex;
+                stateMachine.SetNextState(new EndGameState());
+                return;
+            }
+
+            sandbox.CurrentPlayer = otherPlayerIndex;
+            stateMachine.SetNextState(new PlayTurnState());
         }
 
         public override Failures ProcessOrder(GameStateMachine stateMachine, GameOrder order, GameChangePool gameChanges)
