@@ -1,16 +1,16 @@
 ﻿#mainTable {
     text-align: left;
     vertical-align: top;
+    table-layout: fixed;
     width: 100%;
 }
 
-#mainTable > tbody > tr > th {
-    vertical-align: top;
-}
+    #mainTable > tbody > tr > th {
+        vertical-align: top;
+        width: 50%;
+    }
 
 #output {
-    overflow: auto;
-    float: right;
     border: 1pt;
     border-color: black;
     border-style: solid;
