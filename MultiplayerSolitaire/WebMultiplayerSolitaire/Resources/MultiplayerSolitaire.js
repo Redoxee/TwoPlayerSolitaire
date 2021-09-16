@@ -41,6 +41,7 @@ var player = new Player();
 var playerSlots = new PlayerSlots();
 var gameInfo = new GameInfo();
 var opponent = new Opponent();
+var endGame = new EndGame();
 
 var clientState = "None";
 var localPlayerIndex = -1;
@@ -231,13 +232,18 @@ function HandleSandboxUpdate(messageData) {
                     clientState = "OtherPlayerTurn";
                 }
             }
-            if (gameState.GameStateID == "Initialize") {
+            else if (gameState.GameStateID == "Initialize") {
                 gameState = nextRoundState;
                 nextRoundState = null;
                 clientState = "None";
             }
-            if (gameState.GameStateID == "Playing") {
+            else if (gameState.GameStateID == "Playing") {
                 SetupFromGameState();
+            }
+            else if (gameState.GameStateID == "EndGame") {
+                clearPlayArea();
+                playArea.appendChild(endGame.RootNode);
+                endGame.Setup(gameState.PlayerTurn);
             }
         }
     }

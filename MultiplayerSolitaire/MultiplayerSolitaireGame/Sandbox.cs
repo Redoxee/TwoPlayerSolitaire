@@ -13,7 +13,7 @@
         public int PairComboSize = 3;
         public int HealthBaseValue = 2;
         public int MaxShield = 2;
-        public int NumberOfRounds = 3;
+        public int ScoreTarget = 2;
 
         public int OtherPlayerIndex()
         {

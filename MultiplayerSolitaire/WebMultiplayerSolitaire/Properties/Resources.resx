@@ -130,6 +130,9 @@
   <data name="Deck" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\deck.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="EndGame" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\endgame.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="GameIndex" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\gameindex.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

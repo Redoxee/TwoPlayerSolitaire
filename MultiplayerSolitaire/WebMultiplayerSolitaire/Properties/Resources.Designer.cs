@@ -145,6 +145,27 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to class EndGame {
+        ///    constructor() {
+        ///        this.RootNode = createElementWithClass(&quot;table&quot;,&quot;EndGame&quot;);
+        ///
+        ///        this.EndGameLabel = document.createTextNode(&quot;Game Ended&quot;);
+        ///        var col = document.createElement(&quot;th&quot;);
+        ///        var row = document.createElement(&quot;tr&quot;);
+        ///        col.appendChild(row);
+        ///        row.appendChild(this.EndGameLabel);
+        ///        this.RootNode.appendChild(col);
+        ///        this.WinningPlayerLabel = document.createTextNode(&quot;Player ? Win&quot;);
+        ///        row = document.createElement(&quot;tr&quot;);
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string EndGame {
+            get {
+                return ResourceManager.GetString("EndGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!doctype html&gt;
         ///&lt;meta charset=&quot;utf-8&quot;&gt;
         ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;Style.css&quot; /&gt;

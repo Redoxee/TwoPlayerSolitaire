@@ -16,7 +16,7 @@
                 Deck = new Deck(),
                 Players = new Player[numberOfPlayers],
                 DiscardPile = new CardStack(),
-                NumberOfRounds = gameParameters.NumberOfRounds,
+                ScoreTarget = gameParameters.ScoreTarget,
                 HealthBaseValue = gameParameters.StaringHealth,
                 PairComboSize = gameParameters.PairComboSize,
             };
@@ -92,7 +92,7 @@
 
         public struct GameParameters
         {
-            public int NumberOfRounds;
+            public int ScoreTarget;
             public int PairComboSize;
             public int StaringHealth;
 
@@ -100,8 +100,8 @@
             {
                 GameParameters parameters = new GameParameters
                 {
-                    NumberOfRounds = 3,
-                    PairComboSize = 3,
+                    ScoreTarget = 1,
+                    PairComboSize = 1,
                     StaringHealth = 1,
                 };
 

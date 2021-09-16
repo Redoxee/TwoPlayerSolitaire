@@ -224,7 +224,7 @@
                 scoreChanged.PlayerIndex = player.Index;
 
                 sandbox.RoundIndex++;
-                if (sandbox.RoundIndex > 3)
+                if (player.Score >= sandbox.ScoreTarget)
                 {
                     stateMachine.SetNextState(new EndGameState());
                 }
