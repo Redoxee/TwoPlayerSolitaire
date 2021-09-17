@@ -162,12 +162,23 @@ function HandleSandboxUpdate(messageData) {
 
                 PlayerhandModeUninteractable();
                 PlayerBoardModeUninteractable();
+
+                if (player.Board.Slots[gameChange.IndexOnBoard].Card == null) {
+                    gameState.CardsInDeck--;
+                    gameInfo.Deck.Setup(gameState);
+                }
+
                 player.Hand.Slots[gameChange.IndexInHand].DetatchCard();
                 player.Board.Slots[gameChange.IndexOnBoard].AttachCard(card);
             }
             else {
                 if (!AssertClientState("OtherPlayerTurn")) {
                     return;
+                }
+
+                if (opponent.Board.Slots[gameChange.IndexOnBoard].Card == null) {
+                    gameState.CardsInDeck--;
+                    gameInfo.Deck.Setup(gameState);
                 }
 
                 opponent.Board.Slots[gameChange.IndexOnBoard].AttachCard(card);
@@ -185,6 +196,8 @@ function HandleSandboxUpdate(messageData) {
             if (gameChange.PlayerIndex == localPlayerIndex) {
                 for (var index = 0; index < 3; ++index) {
                     if ((gameChange.UsedCards & 1 << index) != 0) {
+                        gameState.CardsInDiscardPile++;
+                        gameInfo.DiscardPile.Setup(gameState);
                         player.Board.Slots[index].DetatchCard();
                     }
                 }
@@ -258,6 +271,8 @@ function SetupFromGameState() {
     if (gameState.GameStateID == "Playing") {
         if (clientState == "None") {
             clearPlayArea();
+
+            gameInfo.Setup(gameState.PlayerTurn, gameState);
 
             // Settuping the board.
             gameInfo.Setup(localPlayerIndex, gameState);

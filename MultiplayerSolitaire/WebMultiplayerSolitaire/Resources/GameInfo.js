@@ -4,8 +4,7 @@
 
         var roundParagraph = document.createElement("p");
         this.RootNode.appendChild(roundParagraph);
-        this.RoundMessage = "Round : ";
-        this.RoundLabel = document.createTextNode(this.RoundMessage);
+        this.RoundLabel = document.createTextNode("");
         roundParagraph.appendChild(this.RoundLabel);
 
         var playerParagraph = document.createElement("p");
@@ -16,13 +15,16 @@
 
         this.Deck = new Deck();
         this.RootNode.appendChild(this.Deck.RootNode);
+
+        this.DiscardPile = new DiscardPile();
+        this.RootNode.appendChild(this.DiscardPile.RootNode);
     }
 
     Setup(playerIndex, gameState) {
         this.CurrentPlayerLabel.textContent = this.CurrentPlayerMessage + (playerIndex + 1);
-        this.RoundMessage = "Round " + gameState.Round + 1;
-        this.RoundLabel.textContent = this.RoundMessage;
-        this.Deck.SetCardCount(gameState.CardsInDeck);
+        this.RoundLabel.textContent = "Round " + gameState.RoundIndex + 1;
+        this.Deck.Setup(gameState);
+        this.DiscardPile.Setup(gameState);
     }
 
     SetCurrentPlayer(currentPlayer) {

@@ -15,9 +15,11 @@
 
     SetupFromArray(cardArray) {
         for (var index = 0; index < 3; ++index) {
-            var card = new Card(index);
-            card.Setup(cardArray[index]);
-            var slot = this.Slots[index].AttachCard(card);
+            if (cardArray[index].Value > -1) {
+                var card = new Card(index);
+                card.Setup(cardArray[index]);
+                var slot = this.Slots[index].AttachCard(card);
+            }
         }
     }
 }

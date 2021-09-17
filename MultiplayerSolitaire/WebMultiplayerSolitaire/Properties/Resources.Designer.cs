@@ -134,13 +134,22 @@ namespace WebCardGame.Properties {
         ///    }
         ///
         ///    SetCardCount(cardCount) {
-        ///        this.CardCountLabel.textContent = cardCount;
+        ///        this.CardCountLabel.textContent = &quot;Cards in deck &quot; + cardCount;
         ///    }
         ///}.
         /// </summary>
         internal static string Deck {
             get {
                 return ResourceManager.GetString("Deck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string DiscardPile {
+            get {
+                return ResourceManager.GetString("DiscardPile", resourceCulture);
             }
         }
         
@@ -202,13 +211,13 @@ namespace WebCardGame.Properties {
         ///
         ///        var roundParagraph = document.createElement(&quot;p&quot;);
         ///        this.RootNode.appendChild(roundParagraph);
-        ///        this.RoundMessage = &quot;Round : &quot;;
-        ///        this.RoundLabel = document.createTextNode(this.RoundMessage);
+        ///        this.RoundLabel = document.createTextNode(&quot;&quot;);
         ///        roundParagraph.appendChild(this.RoundLabel);
         ///
         ///        var playerParagraph = document.createElement(&quot;p&quot;);
         ///        this.RootNode.appendChild(playerParagraph);
-        ///        this.CurrentP [rest of string was truncated]&quot;;.
+        ///        this.CurrentPlayerMessage = &quot;Current player : &quot;;
+        ///        this.Curren [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameInfo {
             get {
@@ -325,16 +334,16 @@ namespace WebCardGame.Properties {
         ///   Looks up a localized string similar to #mainTable {
         ///    text-align: left;
         ///    vertical-align: top;
+        ///    table-layout: fixed;
         ///    width: 100%;
         ///}
         ///
-        ///#mainTable &gt; tbody &gt; tr &gt; th {
-        ///    vertical-align: top;
-        ///}
+        ///    #mainTable &gt; tbody &gt; tr &gt; th {
+        ///        vertical-align: top;
+        ///        width: 50%;
+        ///    }
         ///
         ///#output {
-        ///    overflow: auto;
-        ///    float: right;
         ///    border: 1pt;
         ///    border-color: black;
         ///    border-style: solid;
@@ -356,8 +365,7 @@ namespace WebCardGame.Properties {
         ///
         ///.card {
         ///    border: 1pt;
-        ///    border-style: solid;
-        ///    b [rest of string was truncated]&quot;;.
+        ///    border-s [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Style {
             get {

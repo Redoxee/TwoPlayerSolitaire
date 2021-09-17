@@ -61,6 +61,12 @@
     border-color: darkgray;
 }
 
+.discardPile {
+    border: 1pt;
+    border-style: solid;
+    border-color: darkgray;
+}
+
 .otherPlayer {
     border: 1pt;
     border-style: solid;

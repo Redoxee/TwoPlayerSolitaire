@@ -8,7 +8,7 @@
         row.appendChild(this.CardCountLabel);
     }
 
-    SetCardCount(cardCount) {
-        this.CardCountLabel.textContent = cardCount;
+    Setup(gameState) {
+        this.CardCountLabel.textContent = "Cards in deck " + gameState.CardsInDeck;
     }
 }
