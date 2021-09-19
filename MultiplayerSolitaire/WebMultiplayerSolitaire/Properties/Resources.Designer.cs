@@ -133,8 +133,8 @@ namespace WebCardGame.Properties {
         ///        row.appendChild(this.CardCountLabel);
         ///    }
         ///
-        ///    SetCardCount(cardCount) {
-        ///        this.CardCountLabel.textContent = &quot;Cards in deck &quot; + cardCount;
+        ///    Setup(gameState) {
+        ///        this.CardCountLabel.textContent = &quot;Cards in deck &quot; + gameState.CardsInDeck;
         ///    }
         ///}.
         /// </summary>
@@ -145,7 +145,17 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to class DiscardPile {
+        ///    constructor() {
+        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;discardPile&quot;);
+        ///        this.Label = document.createTextNode(&quot;Cards in discard pile : ?&quot;);
+        ///        this.RootNode.appendChild(this.Label);
+        ///    }
+        ///
+        ///    Setup(gameState) {
+        ///        this.Label.textContent = &quot;Cards in discard Pile : &quot; + gameState.CardsInDiscardPile;
+        ///    }
+        ///}.
         /// </summary>
         internal static string DiscardPile {
             get {
@@ -327,6 +337,15 @@ namespace WebCardGame.Properties {
         internal static string PlayerSlots {
             get {
                 return ResourceManager.GetString("PlayerSlots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string PooledLogTable {
+            get {
+                return ResourceManager.GetString("PooledLogTable", resourceCulture);
             }
         }
         

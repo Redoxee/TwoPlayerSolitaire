@@ -30,7 +30,6 @@
             statsTable.appendChild(statsHeader);
             statsHeader.appendChild(this.PairBulletLabel);
 
-
             var row = document.createElement("tr");
             this.RootNode.appendChild(row);
             this.Board = new CardDisplay();
