@@ -15,7 +15,7 @@
         this.ScoreLabel = document.createTextNode("Score : ");
         this.HealthLabel = document.createTextNode("Health : ");
         this.ShieldLabel = document.createTextNode("Shield : ");
-        this.PairBulletLabel = document.createTextNode("Pair Bullet : ");
+        this.PairBulletLabel = document.createTextNode("Pair Combo : ");
 
         var statsParagraph = createElementWithClass("tr", "Stats");
         this.RootNode.appendChild(statsParagraph);

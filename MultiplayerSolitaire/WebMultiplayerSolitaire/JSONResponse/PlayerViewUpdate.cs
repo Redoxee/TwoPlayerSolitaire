@@ -23,7 +23,7 @@ namespace WebMultiplayerSolitaire
         public int CardsInDiscardPile;
 
         public int PairComboSize;
-        public int NumberOfRounds;
+        public int ScoreTarget;
 
         public struct Player
         {

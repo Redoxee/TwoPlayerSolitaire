@@ -1,21 +1,24 @@
-﻿#mainTable {
-    text-align: left;
-    vertical-align: top;
-    table-layout: fixed;
-    width: 100%;
+﻿#debugArea {
+    position: absolute;
+    top: 0pt;
+    right: 0pt;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    text-align: right;
 }
 
-    #mainTable > tbody > tr > th {
-        vertical-align: top;
-        width: 50%;
-    }
-
-#output {
+#debugOutput {
     border: 1pt;
     border-color: black;
     border-style: solid;
     min-width: 300pt;
     max-width: 50%;
+    text-align: left;
+    display:none;
+    background-color:white;
+
 }
 
 #output > p {
@@ -28,6 +31,18 @@
 
 #output span.error {
     color: red;
+}
+
+#mainContainer {
+    display:flex;
+    flex-flow:column;
+    justify-content:center;
+    text-align:center;
+}
+
+#playArea{
+    width: 500pt;
+    display: contents;
 }
 
 .card {

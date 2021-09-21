@@ -98,6 +98,8 @@
                 CardsInDeck = sandbox.Deck.NumberOfCards,
                 CardsInDiscardPile = sandbox.DiscardPile.Count,
                 PlayerTurn = sandbox.CurrentPlayer,
+                ScoreTarget = sandbox.ScoreTarget,
+                PairComboSize = sandbox.PairComboSize,
             };
 
 

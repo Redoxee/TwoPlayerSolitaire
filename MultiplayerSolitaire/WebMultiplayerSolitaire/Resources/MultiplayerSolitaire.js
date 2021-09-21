@@ -34,7 +34,7 @@ var websocket = null;
 var isConnected = false;
 var gameWebSocketUrl = document.URL.replace("http://", "ws://");
 
-var output = document.querySelector("#output");
+var output = document.querySelector("#debugOutput");
 var playArea = document.querySelector("#playArea");
 
 var player = new Player();
@@ -64,6 +64,15 @@ CreateWebSocket();
 
 function writeToScreen(message) {
     output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
+}
+
+function toggleDebug() {
+    if (output.style.display == "none" || output.style.display == "") {
+        output.style.display = "block";
+    }
+    else {
+        output.style.display = "none";
+    }
 }
 
 function HandleOrderAcknowledgement(messageData) {
@@ -229,7 +238,7 @@ function HandleSandboxUpdate(messageData) {
             }
 
             if (gameChange.PlayerProperty == "PairBullets") {
-                target.PairBulletLabel.textContent = "Pair Bullets " + gameChange.NewValue;
+                target.PairBulletLabel.textContent = "Pair Combo " + gameChange.NewValue + "/" + gameState.PairComboSize;
             }
         }
 
