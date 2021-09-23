@@ -61,6 +61,7 @@ messageHandles["SandboxChanges"] = HandleSandboxUpdate;
 writeToScreen("WS URI " + gameWebSocketUrl);
 
 CreateWebSocket();
+writeToScreen('\u261a');
 
 function writeToScreen(message) {
     output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
@@ -163,11 +164,14 @@ function HandleSandboxUpdate(messageData) {
 
             var card = new Card(gameChange.IndexOnBoard);
             card.Setup(gameChange.Card);
+            var cardMini = new CardMini(gameChange.Card);
 
             if (gameChange.PlayerIndex == localPlayerIndex) {
                 if (!AssertClientState("PlayedCard")) {
                     return;
                 }
+
+                player.Log("played " + cardMini.Label.textContent);
 
                 PlayerhandModeUninteractable();
                 PlayerBoardModeUninteractable();
@@ -185,6 +189,8 @@ function HandleSandboxUpdate(messageData) {
                     return;
                 }
 
+                opponent.Log("played " + cardMini.Label.textContent);
+
                 if (opponent.Board.Slots[gameChange.IndexOnBoard].Card == null) {
                     gameState.CardsInDeck--;
                     gameInfo.Deck.Setup(gameState);
@@ -197,12 +203,15 @@ function HandleSandboxUpdate(messageData) {
             if (gameChange.PlayerIndex == localPlayerIndex) {
                 var newCard = new Card(gameChange.IndexInHand);
                 newCard.Setup(gameChange.Card);
+                player.Log("picked " + newCard.CardLabel.textContent);
                 player.Hand.Slots[gameChange.IndexInHand].AttachCard(newCard);
             }
         }
 
         else if (changeType == "PlayerCombo") {
             if (gameChange.PlayerIndex == localPlayerIndex) {
+                player.Log("Combo " + gameChange.CardCombo);
+
                 for (var index = 0; index < 3; ++index) {
                     if ((gameChange.UsedCards & 1 << index) != 0) {
                         gameState.CardsInDiscardPile++;
@@ -212,6 +221,7 @@ function HandleSandboxUpdate(messageData) {
                 }
             }
             else {
+                player.Log("Combo " + gameChange.CardCombo);
                 for (var index = 0; index < 3; ++index) {
                     if ((gameChange.UsedCards & 1 << index) != 0) {
                         opponent.Board.Slots[index].DetatchCard();

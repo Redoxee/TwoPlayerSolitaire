@@ -101,6 +101,26 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to class CardMini {
+        ///    constructor(card) {
+        ///        this.RootNode = createElementWithClass(div, &quot;CardMini&quot;);
+        ///        this.Label = document.createTextNode();
+        ///        this.RootNode.appendChild(this.Label);
+        ///        this.Setup(card);
+        ///    }
+        ///
+        ///    Setup(card) {
+        ///        this.Label.textContent = ValueLabel[cardData.Value] + SigilSymbol[cardData.Sigil];
+        ///    }
+        ///}.
+        /// </summary>
+        internal static string CardMini {
+            get {
+                return ResourceManager.GetString("CardMini", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to class CardSlot {
         ///    constructor(index) {
         ///        this.Index = index;
@@ -189,24 +209,23 @@ namespace WebCardGame.Properties {
         ///&lt;meta charset=&quot;utf-8&quot;&gt;
         ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;Style.css&quot; /&gt;
         ///
-        ///&lt;h2&gt;Two Players Solitaire&lt;/h2&gt;
-        ///&lt;table id=mainTable&gt;
-        ///    &lt;tr&gt;
-        ///        &lt;th&gt;
-        ///            &lt;div id=playArea&gt;&lt;/div&gt;
-        ///        &lt;/th&gt;
-        ///        &lt;th&gt;
-        ///            &lt;div id=output&gt;&lt;/div&gt;
-        ///        &lt;/th&gt;
-        ///    &lt;/tr&gt;
-        ///&lt;/table&gt;
+        ///
+        ///&lt;div id=mainContainer&gt;
+        ///    &lt;h2&gt;Two Players Solitaire&lt;/h2&gt;
+        ///    &lt;div id=playArea&gt;&lt;/div&gt;
+        ///&lt;/div&gt;
+        ///
+        ///&lt;div id=debugArea&gt;
+        ///    &lt;button onclick=&quot;toggleDebug()&quot;&gt; &lt;/button&gt;
+        ///    &lt;div id=debugOutput&gt;&lt;/div&gt;
+        ///&lt;/div&gt;
         ///
         ///&lt;div id=&quot;signature&quot;&gt;
         ///    Made by &lt;a href=&quot;https://antonmakesgames.itch.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;AntonMakesGames&lt;/a&gt;
         ///&lt;/div&gt;
         ///
         ///&lt;script src=&quot;Card.js&quot;&gt;&lt;/script&gt;
-        ///&lt;script s [rest of string was truncated]&quot;;.
+        ///&lt;script src=&quot;Ca [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameIndex {
             get {
@@ -341,7 +360,23 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to class PooledLogTable {
+        ///    constructor() {
+        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;LogTable&quot;);
+        ///        this.PoolSize = 10;
+        ///        this.Pool = [];
+        ///        for (var index = 0; index &lt; this.PoolSize; ++index)
+        ///        {
+        ///            this.Pool[index] = document.createElement(&quot;tr&quot;);
+        ///            this.Pool[index].Label = document.createTextNode(&quot;&quot;);
+        ///            this.Pool[index].appendChild(this.Pool[index].Label);
+        ///        }
+        ///
+        ///        this.Count = 0;
+        ///    }
+        ///
+        ///    Clear() {
+        ///        clear [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PooledLogTable {
             get {
@@ -350,24 +385,27 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #mainTable {
-        ///    text-align: left;
-        ///    vertical-align: top;
-        ///    table-layout: fixed;
-        ///    width: 100%;
+        ///   Looks up a localized string similar to #debugArea {
+        ///    position: absolute;
+        ///    top: 0pt;
+        ///    right: 0pt;
+        ///    text-align: right;
+        ///    display: flex;
+        ///    flex-direction: column;
+        ///    align-items: end;
+        ///    text-align: right;
         ///}
         ///
-        ///    #mainTable &gt; tbody &gt; tr &gt; th {
-        ///        vertical-align: top;
-        ///        width: 50%;
-        ///    }
-        ///
-        ///#output {
+        ///#debugOutput {
         ///    border: 1pt;
         ///    border-color: black;
         ///    border-style: solid;
         ///    min-width: 300pt;
         ///    max-width: 50%;
+        ///    text-align: left;
+        ///    display:none;
+        ///    background-color:white;
+        ///
         ///}
         ///
         ///#output &gt; p {
@@ -378,13 +416,7 @@ namespace WebCardGame.Properties {
         ///    color: blue;
         ///}
         ///
-        ///#output span.error {
-        ///    color: red;
-        ///}
-        ///
-        ///.card {
-        ///    border: 1pt;
-        ///    border-s [rest of string was truncated]&quot;;.
+        ///#output span.erro [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Style {
             get {

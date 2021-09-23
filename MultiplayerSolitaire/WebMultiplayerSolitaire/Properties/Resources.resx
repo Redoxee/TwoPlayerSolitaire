@@ -124,6 +124,9 @@
   <data name="CardDisplay" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\carddisplay.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="CardMini" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\cardmini.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="CardSlot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cardslot.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

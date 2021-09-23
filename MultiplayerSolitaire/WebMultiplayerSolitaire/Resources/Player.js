@@ -48,4 +48,8 @@
         this.ShieldLabel.textContent = "Shield : " + playerObject.Shield;
         this.PairBulletLabel.textContent = "Pair Combo : " + playerObject.PairCombo;
     }
+
+    Log(message) {
+        writeToScreen(message);
+    }
 }

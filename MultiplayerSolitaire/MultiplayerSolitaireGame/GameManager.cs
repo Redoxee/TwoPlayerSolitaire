@@ -100,7 +100,7 @@
             {
                 GameParameters parameters = new GameParameters
                 {
-                    ScoreTarget = 1,
+                    ScoreTarget = 2,
                     PairComboSize = 4,
                     StaringHealth = 2,
                 };
