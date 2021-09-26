@@ -87,3 +87,20 @@
     border-style: solid;
     border-color: black;
 }
+
+.Face {
+}
+
+.Face pre {
+    margin: 0pt;
+}
+
+.FaceGalery {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+
+.FaceGalery > * {
+    margin : 10pt;
+}

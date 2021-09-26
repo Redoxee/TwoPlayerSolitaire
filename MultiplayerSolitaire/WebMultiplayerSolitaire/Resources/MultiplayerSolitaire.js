@@ -102,6 +102,15 @@ function HandleAvailablePlayerSlots(messageData) {
 
         playerSlots.Setup(availableSlots);
         playArea.appendChild(playerSlots.RootNode);
+
+        var faceGalery = createElementWithClass("div", "FaceGalery");
+        for (var index = 0; index < FacesData.length;  ++index) {
+            var f = new Face();
+            f.Setup(index, 0);
+            faceGalery.appendChild(f.RootNode);
+        }
+
+        playArea.appendChild(faceGalery);
     }
     else {
         // if not, how many are still open ?
