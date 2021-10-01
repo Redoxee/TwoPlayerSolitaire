@@ -186,6 +186,50 @@
 
                         break;
                     }
+                case "SelectPlayerFace":
+                    {
+                        if (order.FaceIndex < 0)
+                        {
+                            System.Console.WriteLine("Missing FaceIndex");
+                            return;
+                        }
+
+                        if (client.PlayerFace > -1)
+                        {
+                            System.Console.WriteLine("Client has already a face selected");
+                            return;
+                        }
+                        
+                        int availableIndex = -1;
+                        for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
+                        {
+                            if(this.clientByPlayerIndex[index] == null)
+                            {
+                                availableIndex = index;
+                                break;
+                            }
+                        }
+
+                        if (availableIndex < 0)
+                        {
+                            System.Console.WriteLine("No available player index");
+                            return;
+                        }
+
+                        this.TryRegisterClient(client, availableIndex);
+                        client.PlayerFace = order.FaceIndex;
+
+                        OrderAcknowledgement acknowledgement = new OrderAcknowledgement() { OrderID = order.OrderID, FailureFlags = MSG.Failures.None };
+                        this.SendResponseToClient(acknowledgement, client);
+
+                        PlayerViewUpdate playerView = this.GetPlayerView(client.PlayerIndex);
+                        this.SendResponseToClient(playerView, client);
+
+                        JSONResponse availableFaces = this.RequestAvailableFaces();
+                        this.BroadCast(availableFaces);
+
+                        break;
+                    }
 
                 case "PlayCard":
                     {
@@ -272,6 +316,33 @@
             for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
             {
                 response.AvaialablePlayerSlots[index] = this.clientByPlayerIndex[index] == null;
+            }
+
+            return response;
+        }
+
+        private JSONResponse RequestAvailableFaces()
+        {
+            AvailableFaces response = new AvailableFaces
+            {
+                Faces = new bool[4],
+            };
+
+            for (int index = 0; index < response.Faces.Length; ++index)
+            {
+                response.Faces[index] = true;
+            }
+
+            for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
+            {
+                if (this.clientByPlayerIndex[index] != null)
+                {
+                    int faceIndex = this.clientByPlayerIndex[index].PlayerFace;
+                    if (faceIndex > -1)
+                    {
+                        response.Faces[faceIndex] = false;
+                    }
+                }
             }
 
             return response;

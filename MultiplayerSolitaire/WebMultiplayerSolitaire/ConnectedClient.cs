@@ -10,6 +10,7 @@ namespace WebMultiplayerSolitaire
     public class ConnectedClient
     {
         public int PlayerIndex = -1;
+        public int PlayerFace = -1;
 
         System.Collections.Generic.List<byte> workingByteList = new System.Collections.Generic.List<byte>();
 
