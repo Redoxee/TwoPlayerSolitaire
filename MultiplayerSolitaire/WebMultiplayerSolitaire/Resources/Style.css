@@ -95,12 +95,12 @@
     margin: 0pt;
 }
 
-.FaceGalery {
+.FaceCollection {
     display: flex;
     flex-flow: row;
     justify-content: center;
 }
 
-.FaceGalery > * {
+.FaceCollection > * {
     margin : 10pt;
 }

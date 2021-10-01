@@ -56,6 +56,15 @@
                                 await context.Response.WriteAsync(stringResponse);
                             }
                         }
+                        else if (uri.EndsWith(".json"))
+                        {
+                            context.Response.ContentType = "text/css";
+                            if (RestRequestService.TryGetFile(uri, out string stringResponse))
+                            {
+                                await context.Response.WriteAsync(stringResponse);
+                            }
+                        }
+
                         // ignore other requests (such as favicon)
                         // potentially other middleware will handle it (see finally block)
                     }

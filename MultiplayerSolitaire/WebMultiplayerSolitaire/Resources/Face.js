@@ -29,23 +29,22 @@ FacesData = [
 class Face {
     constructor() {
         this.RootNode = createElementWithClass("div", "Face");
-        var content = document.createElement("button");
-        this.RootNode.appendChild(content);
+        this.Content = document.createElement("button");
+        this.RootNode.appendChild(this.Content);
         this.Rows = [];
         for (var index = 0; index < 8; ++index) {
             var pre = document.createElement("pre");
-            content.appendChild(pre);
+            this.Content.appendChild(pre);
 
             this.Rows[index] = document.createTextNode("");
             pre.appendChild(this.Rows[index]);
         }
-
-        this.Setup(1, 0);
     }
 
-    Setup(faceIndex, expressionIndex) {
+    Setup(faceData, faceIndex, expressionIndex) {
+        this.Index = faceIndex;
         for (var index = 0; index < 8; ++index) {
-            this.Rows[index].textContent = FacesData[faceIndex][expressionIndex][index];
+            this.Rows[index].textContent = faceData[expressionIndex][index];
         }
     }
 }
