@@ -130,6 +130,9 @@
   <data name="CardSlot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cardslot.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="Config" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\config.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="Deck" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\deck.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -144,9 +147,6 @@
   </data>
   <data name="FaceCollection" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\facecollection.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Faces" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\faces.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="GameIndex" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\gameindex.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

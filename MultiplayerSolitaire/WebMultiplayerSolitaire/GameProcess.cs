@@ -6,9 +6,11 @@
 
         private MSG.GameManager gameManager;
 
-        ConnectedClient[] clientByPlayerIndex = null;
+        private ConnectedClient[] clientByPlayerIndex = null;
 
-        MSG.GameChangePool workingGameChanges;
+        private MSG.GameChangePool workingGameChanges;
+
+        private int NumberOfFaces;
 
         public static GameProcess Instance
         {
@@ -25,10 +27,6 @@
 
         private GameProcess()
         {
-        }
-
-        public void InitializeGame()
-        {
             this.workingGameChanges = new MSG.GameChangePool();
             this.gameManager = new MSG.GameManager(MSG.GameManager.GameParameters.Default(), this.workingGameChanges);
 
@@ -37,6 +35,15 @@
             {
                 this.clientByPlayerIndex[index] = null;
             }
+
+            // Faces
+            System.Resources.ResourceManager resourceManager = new System.Resources.ResourceManager("WebCardGame.Properties.Resources", typeof(Program).Assembly);
+            string faceConfigFile = resourceManager.GetString("Config");
+
+            System.IO.StringReader stringReader = new System.IO.StringReader(faceConfigFile);
+            Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
+            JSONConfig config = (JSONConfig)serializer.Deserialize(stringReader, typeof(JSONConfig));
+            this.NumberOfFaces = config.FacesData.Length;
         }
 
         public MSG.GameManager GetGameManager()
@@ -325,7 +332,7 @@
         {
             AvailableFaces response = new AvailableFaces
             {
-                Faces = new bool[4],
+                Faces = new bool[this.NumberOfFaces],
             };
 
             for (int index = 0; index < response.Faces.Length; ++index)

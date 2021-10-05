@@ -143,6 +143,42 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;FacesData&quot;: [
+        ///    [
+        ///      [
+        ///        &quot; ~~~~~~~~~ &quot;,
+        ///        &quot;/ ~~~~~~~ \\&quot;,
+        ///        &quot;|          |&quot;,
+        ///        &quot;|   O   O  |&quot;,
+        ///        &quot;|     U    |&quot;,
+        ///        &quot;|   \\___/  |&quot;,
+        ///        &quot;\\         /&quot;,
+        ///        &quot; ¯¯¯¯¯¯¯¯¯ &quot;
+        ///      ]
+        ///    ],
+        ///    [
+        ///      [
+        ///        &quot; ~~~~~~~~~ &quot;,
+        ///        &quot;/~~~      \\&quot;,
+        ///        &quot;|~~        |&quot;,
+        ///        &quot;|~  O   O  |&quot;,
+        ///        &quot;|   ¯ V ¯  |&quot;,
+        ///        &quot;|# |____| #|&quot;,
+        ///        &quot;\\#########/&quot;,
+        ///        &quot;  ¯¯¯¯¯¯¯¯  &quot;
+        ///      ]
+        ///    ]
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string Config {
+            get {
+                return ResourceManager.GetString("Config", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to class Deck {
         ///    constructor() {
         ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;deck&quot;);
@@ -242,55 +278,19 @@ namespace WebCardGame.Properties {
         ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;FaceCollection&quot;);
         ///
         ///        const xmlhttp = new XMLHttpRequest();
+        ///        let instance = this;
         ///        xmlhttp.onload = function () {
-        ///            alert(`Loaded: ${xmlhttp.status} ${xmlhttp.response}`);
         ///            const myObj = JSON.parse(xmlhttp.responseText);
-        ///            this.FacesData = myObj.FacesData;
-        ///            this.OnFaceLoaded();
+        ///            instance.FacesData = myObj.FacesData;
+        ///            instance.OnFaceLoaded();
         ///        }
         ///
-        ///        xmlhttp.open(&quot;POST&quot;, &quot;Faces.json&quot;);
-        ///        xmlhttp.setRequestHeader(&quot;C [rest of string was truncated]&quot;;.
+        ///        xmlhttp.open(&quot;POST&quot;, &quot;Config.json&quot;);
+        ///        xmlhttp.setRequestHeader(&quot;Content-type&quot;, &quot;application/x-w [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FaceCollection {
             get {
                 return ResourceManager.GetString("FaceCollection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {
-        ///  &quot;FacesData&quot;: [
-        ///    [
-        ///      [
-        ///        &quot; ~~~~~~~~~ &quot;,
-        ///        &quot;/ ~~~~~~~ \\&quot;,
-        ///        &quot;|          |&quot;,
-        ///        &quot;|   O   O  |&quot;,
-        ///        &quot;|     U    |&quot;,
-        ///        &quot;|   \\___/  |&quot;,
-        ///        &quot;\\         /&quot;,
-        ///        &quot; ¯¯¯¯¯¯¯¯¯ &quot;
-        ///      ]
-        ///    ],
-        ///    [
-        ///      [
-        ///        &quot; ~~~~~~~~~ &quot;,
-        ///        &quot;/~~~      \\&quot;,
-        ///        &quot;|~~        |&quot;,
-        ///        &quot;|~  O   O  |&quot;,
-        ///        &quot;|   ¯ V ¯  |&quot;,
-        ///        &quot;|# |____| #|&quot;,
-        ///        &quot;\\#########/&quot;,
-        ///        &quot;  ¯¯¯¯¯¯¯¯  &quot;
-        ///      ]
-        ///    ]
-        ///  ]
-        ///}.
-        /// </summary>
-        internal static string Faces {
-            get {
-                return ResourceManager.GetString("Faces", resourceCulture);
             }
         }
         
