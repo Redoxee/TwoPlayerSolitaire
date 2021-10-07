@@ -4,13 +4,13 @@
     {
         private static GameProcess instance;
 
-        private MSG.GameManager gameManager;
+        private readonly MSG.GameManager gameManager;
 
-        private ConnectedClient[] clientByPlayerIndex = null;
+        private readonly ConnectedClient[] clientByPlayerIndex = null;
 
-        private MSG.GameChangePool workingGameChanges;
+        private readonly MSG.GameChangePool workingGameChanges;
 
-        private int NumberOfFaces;
+        private readonly int numberOfFaces;
 
         public static GameProcess Instance
         {
@@ -43,7 +43,7 @@
             System.IO.StringReader stringReader = new System.IO.StringReader(faceConfigFile);
             Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
             JSONConfig config = (JSONConfig)serializer.Deserialize(stringReader, typeof(JSONConfig));
-            this.NumberOfFaces = config.FacesData.Length;
+            this.numberOfFaces = config.FacesData.Length;
         }
 
         public MSG.GameManager GetGameManager()
@@ -119,6 +119,7 @@
             view.CurrentPlayer.PairCombo = player.PairCombo;
             view.CurrentPlayer.Score = player.Score;
             view.CurrentPlayer.Index = player.Index;
+            view.CurrentPlayer.FaceIndex = this.clientByPlayerIndex[playerIndex].FaceIndex;
 
             view.GameStateID = this.gameManager.GetStateID();
 
@@ -129,6 +130,10 @@
             view.OtherPlayer.Health = otherPlayer.Health;
             view.OtherPlayer.Shield = otherPlayer.Shield;
             view.OtherPlayer.PairCombo = otherPlayer.PairCombo;
+            if (this.clientByPlayerIndex[otherPlayerIndex] != null)
+            {
+                view.OtherPlayer.FaceIndex = this.clientByPlayerIndex[otherPlayerIndex].FaceIndex;
+            }
 
             view.OtherPlayer.Board = new MSG.Card[otherPlayer.Board.Length];
             otherPlayer.Board.CopyTo(view.OtherPlayer.Board, 0);
@@ -186,6 +191,7 @@
 
                         break;
                     }
+
                 case "RequestPlayerSlots":
                     {
                         JSONResponse response = this.RequestAvailablePlayerSlots();
@@ -193,6 +199,7 @@
 
                         break;
                     }
+
                 case "SelectPlayerFace":
                     {
                         if (order.FaceIndex < 0)
@@ -201,7 +208,7 @@
                             return;
                         }
 
-                        if (client.PlayerFace > -1)
+                        if (client.FaceIndex > -1)
                         {
                             System.Console.WriteLine("Client has already a face selected");
                             return;
@@ -224,9 +231,9 @@
                         }
 
                         this.TryRegisterClient(client, availableIndex);
-                        client.PlayerFace = order.FaceIndex;
+                        client.FaceIndex = order.FaceIndex;
 
-                        OrderAcknowledgement acknowledgement = new OrderAcknowledgement() { OrderID = order.OrderID, FailureFlags = MSG.Failures.None };
+                        OrderAcknowledgement acknowledgement = new OrderAcknowledgement() { OrderID = order.OrderID, FailureFlags = MSG.Failures.None, PlayerIndex = availableIndex };
                         this.SendResponseToClient(acknowledgement, client);
 
                         PlayerViewUpdate playerView = this.GetPlayerView(client.PlayerIndex);
@@ -234,6 +241,14 @@
 
                         JSONResponse availableFaces = this.RequestAvailableFaces();
                         this.BroadCast(availableFaces);
+
+                        break;
+                    }
+
+                case "RequestPlayerFaces":
+                    {
+                        JSONResponse response = this.RequestAvailableFaces();
+                        this.SendResponseToClient(response, client);
 
                         break;
                     }
@@ -332,7 +347,8 @@
         {
             AvailableFaces response = new AvailableFaces
             {
-                Faces = new bool[this.NumberOfFaces],
+                Faces = new bool[this.numberOfFaces],
+                ReadyToPlay = true,
             };
 
             for (int index = 0; index < response.Faces.Length; ++index)
@@ -344,11 +360,15 @@
             {
                 if (this.clientByPlayerIndex[index] != null)
                 {
-                    int faceIndex = this.clientByPlayerIndex[index].PlayerFace;
+                    int faceIndex = this.clientByPlayerIndex[index].FaceIndex;
                     if (faceIndex > -1)
                     {
                         response.Faces[faceIndex] = false;
                     }
+                }
+                else
+                {
+                    response.ReadyToPlay = false;
                 }
             }
 

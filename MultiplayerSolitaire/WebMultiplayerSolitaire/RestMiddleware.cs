@@ -33,7 +33,7 @@
                     if (context.Request.Headers["Accept"][0].Contains("text/html"))
                     {
                         Console.WriteLine("Sending HTML to client.");
-                        string response = RestRequestService.HandleRestRequest(context);
+                        string response = RestRequestService.HandleRestRequest();
                         context.Response.ContentType = "text/html";
                         await context.Response.WriteAsync(response);
                     }

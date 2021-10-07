@@ -5,8 +5,8 @@
     websocket.onopen = function (e) {
         isConnected = true;
         writeToScreen("CONNECTED");
-        var requestPlayerSlots = '{ "OrderType": "RequestPlayerSlots" }';
-        DoSend(requestPlayerSlots);
+        var requestFaces = '{ "OrderType": "RequestPlayerFaces" }';
+        DoSend(requestFaces);
     };
 
     websocket.onclose = function (e) {

@@ -19,7 +19,7 @@ namespace WebMultiplayerSolitaire
         private static int SocketCounter = 0;
 
         // The key is a socket id
-        private static ConcurrentDictionary<int, ConnectedClient> clients = new ConcurrentDictionary<int, ConnectedClient>();
+        private static readonly ConcurrentDictionary<int, ConnectedClient> clients = new ConcurrentDictionary<int, ConnectedClient>();
 
         public static CancellationTokenSource SocketLoopTokenSource = new CancellationTokenSource();
 

@@ -34,6 +34,7 @@ namespace WebMultiplayerSolitaire
             public int PairCombo;
             public MSG.Card[] Hand;
             public MSG.Card[] Board;
+            public int FaceIndex;
         }
     }
 }

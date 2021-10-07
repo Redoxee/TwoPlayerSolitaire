@@ -55,6 +55,7 @@ var nextRoundState = null;
 
 var messageHandles = [];
 messageHandles["AvailablePlayerSlots"] = HandleAvailablePlayerSlots;
+messageHandles["AvailableFaces"] = HandleAvailableFaces;
 messageHandles["OrderAcknowledgement"] = HandleOrderAcknowledgement;
 messageHandles["PlayerViewUpdate"] = HandlePlayerViewUpdate;
 messageHandles["SandboxChanges"] = HandleSandboxUpdate;
@@ -62,7 +63,6 @@ messageHandles["SandboxChanges"] = HandleSandboxUpdate;
 writeToScreen("WS URI " + gameWebSocketUrl);
 
 CreateWebSocket();
-writeToScreen('\u261a');
 
 function writeToScreen(message) {
     output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
@@ -130,6 +130,36 @@ function HandleAvailablePlayerSlots(messageData) {
                 else {
                     SetupFromGameState();
                 }
+            }
+        }
+    }
+}
+
+function HandleAvailableFaces(messageData) {
+    availableFaces = messageData.Faces;
+
+    // are we searching for a player slot ?
+    if (localPlayerIndex < 0) {
+        clearPlayArea();
+
+        for (var index = 0; index < availableFaces.length; ++index) {
+            faceCollection.SetFaceVisibility(index, availableFaces[index]);
+        }
+
+        playArea.appendChild(faceCollection.RootNode);
+    } else if (!messageData.ReadyToPlay) {
+        clearPlayArea();
+        var p = document.createElement("p").appendChild(document.createTextNode("Waiting for opponent."));
+        playArea.appendChild(p);
+    }
+    else {
+        // we are ready to play, are we already playing ?
+        if (clientState == "None") {
+            if (gameState == null) {
+                clientState = "WaitingForGameState";
+            }
+            else {
+                SetupFromGameState();
             }
         }
     }
@@ -386,6 +416,7 @@ function PlayerBoardModeUninteractable() {
         slot.SetNotInteractable();
     }
 }
+
 function RequestPlayerFace(requestedIndex) {
     if (localPlayerIndex >= 0) {
         return;

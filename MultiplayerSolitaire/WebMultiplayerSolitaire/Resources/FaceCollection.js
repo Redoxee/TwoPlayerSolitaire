@@ -33,7 +33,7 @@
         }
     }
 
-    HideFace(index) {
-        this.Faces[index].Content.hidden = true;
+    SetFaceVisibility(index, visible) {
+        this.Faces[index].Content.hidden = !visible;
     }
 }
