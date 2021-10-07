@@ -51,9 +51,14 @@
     border-color: darkgray;
     width: 100pt;
     height: 120pt;
-    text-align: center;
-    vertical-align: central;
+    display: table-cell;
+    vertical-align: middle;
 }
+
+    .card > * {
+        width: 100%;
+        height: 100%;
+    }
 
 .cardSlot {
     border: 1pt;
