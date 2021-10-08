@@ -19,6 +19,7 @@
                 ScoreTarget = gameParameters.ScoreTarget,
                 HealthBaseValue = gameParameters.StaringHealth,
                 PairComboSize = gameParameters.PairComboSize,
+                MaxHealth = gameParameters.MaxHealth,
             };
         
             for (int index = 0; index < numberOfPlayers; ++index)
@@ -59,7 +60,7 @@
 
             Player otherPlayer = this.Sandbox.Players[this.Sandbox.OtherPlayerIndex()];
             this.workingStringBuilder.Append("Other Player ").Append(otherPlayer.Index).AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).Append(" Shield : ").Append(otherPlayer.Shield).Append(" PairBullets : ").Append(otherPlayer.PairCombo).AppendLine();
+            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).Append(" PairBullets : ").Append(otherPlayer.PairCombo).AppendLine();
             this.workingStringBuilder.Append("Board : ");
             for (int index = 0; index < 3; ++index)
             {
@@ -78,7 +79,7 @@
             }
 
             this.workingStringBuilder.AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health).Append(" Shield : ").Append(currentPlayer.Shield).Append(" PairBullets : ").Append(currentPlayer.PairCombo);
+            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health).Append(" PairBullets : ").Append(currentPlayer.PairCombo);
             this.workingStringBuilder.AppendLine();
 
             this.workingStringBuilder.Append("Hand : ");
@@ -95,6 +96,7 @@
             public int ScoreTarget;
             public int PairComboSize;
             public int StaringHealth;
+            public int MaxHealth;
 
             public static GameParameters Default()
             {
@@ -103,6 +105,7 @@
                     ScoreTarget = 2,
                     PairComboSize = 4,
                     StaringHealth = 2,
+                    MaxHealth = 5,
                 };
 
                 return parameters;

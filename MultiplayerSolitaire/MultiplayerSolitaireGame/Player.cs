@@ -12,7 +12,6 @@ namespace MSG
         public Card[] Hand = new Card[Player.BoardWidth];
         public Card[] Board = new Card[Player.BoardWidth];
 
-        public int Shield;
         public int Health;
         public int PairCombo;
 

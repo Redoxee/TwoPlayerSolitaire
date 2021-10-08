@@ -31,7 +31,6 @@
         public enum PlayerProperties
         { 
             Health,
-            Shield,
             PairBullets,
             Score,
         }

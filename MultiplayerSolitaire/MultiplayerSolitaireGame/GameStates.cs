@@ -36,7 +36,6 @@
                 Player player = sandbox.Players[index];
                 player.Health = sandbox.HealthBaseValue;
                 player.PairCombo = 0;
-                player.Shield = 0;
                 for (int cardIndex = 0; cardIndex < Player.BoardWidth; ++cardIndex)
                 {
                     player.Board[cardIndex].Value = Card.None;
@@ -170,47 +169,30 @@
                 }
                 else if (combo == CardCombo.Flush)
                 {
-                    if(playingPlayer.Shield < sandbox.MaxShield)
+                    if (playingPlayer.Health < sandbox.MaxHealth)
                     {
-                        playingPlayer.Shield++;
+                        playingPlayer.Health++;
                     }
-                
-                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.Shield;
-                    propertyChanged.NewValue = playingPlayer.Shield;
+
+                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.Health;
+                    propertyChanged.NewValue = playingPlayer.Health;
                     propertyChanged.PlayerIndex = playingPlayer.Index;
                 }
                 else if (combo == CardCombo.Chain)
                 {
-                    if (otherPlayer.Shield > 0)
-                    {
-                        otherPlayer.Shield--;
+                    otherPlayer.Health--;
 
-                        propertyChanged.PlayerProperty = GameChange.PlayerProperties.Shield;
-                        propertyChanged.NewValue = otherPlayer.Shield;
-                        propertyChanged.PlayerIndex = otherPlayerIndex;
-                    }
-                    else
-                    {
-                        otherPlayer.Health--;
-
-                        propertyChanged.PlayerProperty = GameChange.PlayerProperties.Health;
-                        propertyChanged.NewValue = otherPlayer.Health;
-                        propertyChanged.PlayerIndex = otherPlayerIndex;
-                    }
+                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.Health;
+                    propertyChanged.NewValue = otherPlayer.Health;
+                    propertyChanged.PlayerIndex = otherPlayerIndex;
                 }
                 else if (combo == CardCombo.Royal)
                 {
-                    otherPlayer.Shield = 0;
-                    otherPlayer.Health--;
+                    otherPlayer.Health-=2;
 
-                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.Shield;
-                    propertyChanged.NewValue = otherPlayer.Shield;
+                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.Health;
+                    propertyChanged.NewValue = otherPlayer.Health;
                     propertyChanged.PlayerIndex = otherPlayerIndex;
-
-                    ref GameChange otherPropertyChange = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerPropertyChanged);
-                    otherPropertyChange.PlayerProperty = GameChange.PlayerProperties.Health;
-                    otherPropertyChange.NewValue = otherPlayer.Health;
-                    otherPropertyChange.PlayerIndex = otherPlayerIndex;
                 }
             }
 
@@ -244,7 +226,6 @@
                 {
                     int playerGrad = 0;
                     Player player = sandbox.Players[playerIndex];
-                    playerGrad += player.Shield * 1000;
                     playerGrad += player.Health * 100;
                     playerGrad += player.PairCombo;
 
