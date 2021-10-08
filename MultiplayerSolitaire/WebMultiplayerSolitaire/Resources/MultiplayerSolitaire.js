@@ -275,10 +275,6 @@ function HandleSandboxUpdate(messageData) {
                 target.HealthLabel.textContent = "Health " + gameChange.NewValue;
             }
 
-            if (gameChange.PlayerProperty == "Shield") {
-                target.ShieldLabel.textContent = "Shield " + gameChange.NewValue;
-            }
-
             if (gameChange.PlayerProperty == "PairBullets") {
                 target.PairBulletLabel.textContent = "Pair Combo " + gameChange.NewValue + "/" + gameState.PairComboSize;
             }

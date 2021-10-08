@@ -9,7 +9,6 @@
 
             this.ScoreLabel = document.createTextNode("Score : ");
             this.HealthLabel = document.createTextNode("Health : ");
-            this.ShieldLabel = document.createTextNode("Shield : ");
             this.PairBulletLabel = document.createTextNode("Pair Bullet : ");
 
             var statsParagraph = createElementWithClass("tr", "Stats");
@@ -23,9 +22,6 @@
             statsHeader = document.createElement("th");
             statsTable.appendChild(statsHeader);
             statsHeader.appendChild(this.HealthLabel);
-            statsHeader = document.createElement("th");
-            statsTable.appendChild(statsHeader);
-            statsHeader.appendChild(this.ShieldLabel);
             statsHeader = document.createElement("th");
             statsTable.appendChild(statsHeader);
             statsHeader.appendChild(this.PairBulletLabel);
@@ -42,7 +38,6 @@
 
             this.ScoreLabel.textContent = "Score : " + opponentData.Score;
             this.HealthLabel.textContent = "Health : " + opponentData.Health;
-            this.ShieldLabel.textContent = "Shield : " + opponentData.Shield;
             this.PairBulletLabel.textContent = "Pair Combo : " + opponentData.PairCombo;
         }
 

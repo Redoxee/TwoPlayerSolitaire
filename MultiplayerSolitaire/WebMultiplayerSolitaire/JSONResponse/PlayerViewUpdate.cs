@@ -30,7 +30,6 @@ namespace WebMultiplayerSolitaire
             public int Index;
             public int Score;
             public int Health;
-            public int Shield;
             public int PairCombo;
             public MSG.Card[] Hand;
             public MSG.Card[] Board;

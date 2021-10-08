@@ -14,7 +14,6 @@
 
         this.ScoreLabel = document.createTextNode("Score : ");
         this.HealthLabel = document.createTextNode("Health : ");
-        this.ShieldLabel = document.createTextNode("Shield : ");
         this.PairBulletLabel = document.createTextNode("Pair Combo : ");
 
         var statsParagraph = createElementWithClass("tr", "Stats");
@@ -30,9 +29,6 @@
         statsHeader.appendChild(this.HealthLabel);
         statsHeader = document.createElement("th");
         statsTable.appendChild(statsHeader);
-        statsHeader.appendChild(this.ShieldLabel);
-        statsHeader = document.createElement("th");
-        statsTable.appendChild(statsHeader);
         statsHeader.appendChild(this.PairBulletLabel);
 
         this.SelectedCardIndex = -1;
@@ -45,7 +41,6 @@
 
         this.ScoreLabel.textContent = "Score : " + playerObject.Score;
         this.HealthLabel.textContent = "Health : " + playerObject.Health;
-        this.ShieldLabel.textContent = "Shield : " + playerObject.Shield;
         this.PairBulletLabel.textContent = "Pair Combo : " + playerObject.PairCombo;
     }
 
