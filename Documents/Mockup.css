@@ -51,6 +51,13 @@
 .GeneralInfoContainer{
     grid-column-start: 2;
     grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 9;
+
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    gap: 30pt;
 }
 
 .cardSlot {
@@ -60,10 +67,9 @@
     width: 102pt;
     height: 122pt;
     text-align: center;
-    vertical-align: central;
 }
 
-    .cardSlot > button {
+    .cardSlot > * {
         width: 100%;
         height: 100%;
     }
@@ -72,31 +78,32 @@
     border: 1pt;
     border-style: solid;
     border-color: darkgray;
-    width: 100pt;
-    height: 120pt;
-    display: table-cell;
-    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 
     .card > * {
         width: 100%;
         height: 100%;
     }
-.Stats table th {
-    padding-left: 10pt;
-    padding-right: 10pt;
-}
 
-.deck {
+.Deck {
     border: 1pt;
     border-style: solid;
     border-color: darkgray;
+    width: 102pt;
+    height: 122pt;
+    text-align: center;
 }
 
-.discardPile {
+.DiscardPile {
     border: 1pt;
     border-style: solid;
     border-color: darkgray;
+    width: 102pt;
+    height: 122pt;
+    text-align: center;
 }
 
 .otherPlayer {
