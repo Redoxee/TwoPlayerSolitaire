@@ -1,5 +1,8 @@
 ﻿class Player {
-    constructor() {
+    constructor(id, labelName) {
+        this.Header = new PlayerHeader(id, labelName);
+        this.Header.Face.SetInteractable(false);
+
         this.RootNode = createElementWithClass("table", "player");
         this.PlayerLabel = document.createTextNode("Player " + localPlayerIndex);
         var paragraph = document.createElement("p");
@@ -34,6 +37,10 @@
         this.SelectedCardIndex = -1;
     }
 
+    Attach(node) {
+        node.appendChild(this.Header.RootNode);
+    }
+
     Setup(playerObject) {
         this.PlayerLabel.textContent = "Player " + (playerObject.Index + 1);
         this.Hand.SetupFromArray(playerObject.Hand);
@@ -46,5 +53,15 @@
 
     Log(message) {
         writeToScreen(message);
+    }
+}
+
+class PlayerHeader {
+    constructor(id, labelName) {
+        this.RootNode = createElementWithClassAndId("div", "PlayerHeader", id);
+        this.Label = document.createTextNode(labelName);
+        this.RootNode.appendChild(this.Label);
+        this.Face = new Face();
+        this.RootNode.appendChild(this.Face.RootNode);
     }
 }

@@ -37,7 +37,7 @@ var gameWebSocketUrl = document.URL.replace("http://", "ws://");
 var output = document.querySelector("#debugOutput");
 var playArea = document.querySelector("#playArea");
 
-var player = new Player();
+var player = new Player("LocalPlayer", "You");
 var playerSlots = new PlayerSlots();
 var gameInfo = new GameInfo();
 var opponent = new Opponent();
@@ -319,6 +319,9 @@ function SetupFromGameState() {
         if (clientState == "None") {
             clearPlayArea();
 
+            player.Attach(playArea);
+            player.Header.Face.Setup(faceCollection.FacesData, gameState.CurrentPlayer.FaceIndex, 0);
+
             gameInfo.Setup(gameState.PlayerTurn, gameState);
 
             // Settuping the board.
@@ -459,9 +462,7 @@ function RequestPlayCard(cardIndex, boardIndex) {
 }
 
 function clearChilds(node) {
-    while (node.firstChild) {
-        node.removeChild(node.firstChild);
-    }
+    node.innerHTML = "";
 }
 
 function clearPlayArea() {
@@ -473,6 +474,13 @@ function clearPlayArea() {
 function createElementWithClass(element, className) {
     var el = document.createElement(element);
     el.className = className;
+    return el;
+}
+
+function createElementWithClassAndId(element, className, id) {
+    var el = document.createElement(element);
+    el.className = className;
+    el.id = id;
     return el;
 }
 

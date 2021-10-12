@@ -20,7 +20,7 @@
 
         for (var index = 0; index < this.FacesData.length; ++index) {
             var f = new Face();
-            f.Setup(this.FacesData[index],index , 0);
+            f.Setup(this.FacesData,index , 0);
             this.RootNode.appendChild(f.RootNode);
             this.Faces[index] = f;
 
@@ -29,11 +29,11 @@
                 capturedButton.addEventListener("click", function () {
                     RequestPlayerFace(capturedIndex);
                 })
-            })(this.Faces[index].Content, index);
+            })(this.Faces[index].Button, index);
         }
     }
 
     SetFaceVisibility(index, visible) {
-        this.Faces[index].Content.hidden = !visible;
+        this.Faces[index].SetVisible(visible);
     }
 }
