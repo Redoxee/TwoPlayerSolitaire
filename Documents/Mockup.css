@@ -1,17 +1,17 @@
 #mainContainer {
-    display:flex;
-    flex-flow:column;
-    justify-content:center;
-    text-align:center;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    text-align: center;
 }
 
-#playArea{
+#playArea {
     width: 500pt;
     display: inline-grid;
 }
 
-.PlayerHeader{
-    display:flex;
+.PlayerHeader {
+    display: flex;
     flex-direction: row;
     grid-column-start: 1;
     grid-column-end: 1;
@@ -19,41 +19,37 @@
     justify-content: center;
 }
 
-.PlayerStats{
+.PlayerStats {
     grid-column-start: 1;
     grid-column-end: 1;
-
-    display:flex;
+    display: flex;
     flex-direction: row;
     align-items: center;
-    gap:15pt;
+    gap: 15pt;
     justify-content: center;
 }
 
-.PlayerBoard{
+.PlayerBoard {
     grid-column-start: 1;
     grid-column-end: 1;
-    
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.PlayerHand{
+.PlayerHand {
     grid-column-start: 1;
     grid-column-end: 1;
-    
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.GeneralInfoContainer{
+.GeneralInfoContainer {
     grid-column-start: 2;
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 9;
-
     display: flex;
     flex-direction: column;
     place-content: center;
@@ -112,13 +108,9 @@
     border-color: black;
 }
 
-.Face {
-    line-height: 5pt;
-}
-
-.Face pre {
-    margin: 0pt;
-}
+    .Face pre {
+        margin: 0pt;
+    }
 
 .FaceCollection {
     display: flex;
@@ -126,6 +118,40 @@
     justify-content: center;
 }
 
-.FaceCollection > * {
-    margin : 10pt;
+    .FaceCollection > * {
+        margin: 10pt;
+    }
+
+#debugArea {
+    position: absolute;
+    top: 0pt;
+    right: 0pt;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    text-align: right;
 }
+
+#debugOutput {
+    border: 1pt;
+    border-color: black;
+    border-style: solid;
+    min-width: 300pt;
+    max-width: 50%;
+    text-align: left;
+    display: none;
+    background-color: white;
+}
+
+#output > p {
+    overflow-wrap: break-word;
+}
+
+#output span {
+    color: blue;
+}
+
+    #output span.error {
+        color: red;
+    }
