@@ -1,11 +1,18 @@
 ﻿class DiscardPile {
     constructor() {
-        this.RootNode = createElementWithClass("table", "discardPile");
-        this.Label = document.createTextNode("Cards in discard pile : ?");
-        this.RootNode.appendChild(this.Label);
+        this.RootNode = createElementWithClass("div", "Deck");
+        var div = createElementWithClass("div");
+        var label = document.createTextNode("Discard");
+        div.appendChild(label);
+        this.RootNode.appendChild(div);
+
+        div = createElementWithClass("div")
+        this.CardCountLabel = document.createTextNode("");
+        div.appendChild(this.CardCountLabel);
+        this.RootNode.appendChild(div);
     }
 
     Setup(gameState) {
-        this.Label.textContent = "Cards in discard Pile : " + gameState.CardsInDiscardPile;
+        this.CardCountLabel.textContent = gameState.CardsInDiscardPile;
     }
 }

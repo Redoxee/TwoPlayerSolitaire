@@ -37,10 +37,10 @@ var gameWebSocketUrl = document.URL.replace("http://", "ws://");
 var output = document.querySelector("#debugOutput");
 var playArea = document.querySelector("#playArea");
 
-var player = new Player("LocalPlayer", "You");
 var playerSlots = new PlayerSlots();
 var gameInfo = new GameInfo();
-var opponent = new Opponent();
+var player = new Player("LocalPlayer", "You");
+var opponent = new Player("Opponent","Opponent");
 var endGame = new EndGame();
 var faceCollection = new FaceCollection();
 
@@ -268,15 +268,15 @@ function HandleSandboxUpdate(messageData) {
             }
 
             if (gameChange.PlayerProperty == "Score") {
-                target.ScoreLabel.textContent = "Score " + gameChange.NewValue;
+                target.PlayerStats.SetScore(gameChange.NewValue);
             }
 
             if (gameChange.PlayerProperty == "Health") {
-                target.HealthLabel.textContent = "Health " + gameChange.NewValue;
+                target.PlayerStats.SetHealth(gameChange.NewValue);
             }
 
-            if (gameChange.PlayerProperty == "PairBullets") {
-                target.PairBulletLabel.textContent = "Pair Combo " + gameChange.NewValue + "/" + gameState.PairComboSize;
+            if (gameChange.PlayerProperty == "PairCombo") {
+                target.PlayerStats.SetPairCombo(gameChange.NewValue);
             }
         }
 
@@ -319,8 +319,16 @@ function SetupFromGameState() {
         if (clientState == "None") {
             clearPlayArea();
 
-            player.Attach(playArea);
+            player.PlayerStats.SetPairComboSize(gameState.PairComboSize);
+            opponent.PlayerStats.SetPairComboSize(gameState.PairComboSize);
+
+            player.Attach(playArea, true);
             player.Header.Face.Setup(faceCollection.FacesData, gameState.CurrentPlayer.FaceIndex, 0);
+            player.Setup(gameState.CurrentPlayer);
+
+            opponent.Attach(playArea, false);
+            opponent.Header.Face.Setup(faceCollection.FacesData, gameState.OtherPlayer.FaceIndex, 0);
+            opponent.Setup(gameState.OtherPlayer);
 
             gameInfo.Setup(gameState.PlayerTurn, gameState);
 
@@ -328,11 +336,6 @@ function SetupFromGameState() {
             gameInfo.Setup(localPlayerIndex, gameState);
             playArea.appendChild(gameInfo.RootNode);
 
-            opponent.Setup(gameState.OtherPlayer);
-            playArea.appendChild(opponent.RootNode);
-
-            player.Setup(gameState.CurrentPlayer);
-            playArea.appendChild(player.RootNode);
 
             if (gameState.PlayerTurn == localPlayerIndex) {
                 PlayerHandModeChooseCard();

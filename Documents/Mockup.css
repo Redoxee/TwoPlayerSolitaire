@@ -45,6 +45,34 @@
     justify-content: center;
 }
 
+#Opponent.PlayerHeader {
+    grid-row: 1;
+}
+
+#Opponent.PlayerStats {
+    grid-row: 2;
+}
+
+#Opponent.PlayerBoard {
+    grid-row: 3;
+}
+
+#LocalPlayer.PlayerBoard {
+    grid-row: 5;
+}
+
+#LocalPlayer.PlayerHand {
+    grid-row: 6;
+}
+
+#LocalPlayer.PlayerStats {
+    grid-row: 7;
+}
+
+#LocalPlayer.PlayerHeader {
+    grid-row: 8;
+}
+
 .GeneralInfoContainer {
     grid-column-start: 2;
     grid-column-end: 2;

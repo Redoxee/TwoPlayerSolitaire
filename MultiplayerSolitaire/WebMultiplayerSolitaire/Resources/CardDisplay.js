@@ -1,6 +1,6 @@
 ﻿class CardDisplay {
-    constructor() {
-        this.RootNode = createElementWithClass("table", "cardDisplay");
+    constructor(styleClass, id) {
+        this.RootNode = createElementWithClassAndId("table", styleClass, id);
         var row = document.createElement("tr");
         this.RootNode.appendChild(row);
         this.Slots = [3]; // Array of card slots.

@@ -1,14 +1,18 @@
 ﻿class Deck {
     constructor() {
-        this.RootNode = createElementWithClass("table", "deck");
-        this.NumberOfCards = 0;
-        var row = document.createElement("tr");
-        this.RootNode.appendChild(row);
+        this.RootNode = createElementWithClass("div", "Deck");
+        var div = createElementWithClass("div");
+        var label = document.createTextNode("Deck");
+        div.appendChild(label);
+        this.RootNode.appendChild(div);
+
+        div = createElementWithClass("div")
         this.CardCountLabel = document.createTextNode("");
-        row.appendChild(this.CardCountLabel);
+        div.appendChild(this.CardCountLabel);
+        this.RootNode.appendChild(div);
     }
 
     Setup(gameState) {
-        this.CardCountLabel.textContent = "Cards in deck " + gameState.CardsInDeck;
+        this.CardCountLabel.textContent = gameState.CardsInDeck;
     }
 }

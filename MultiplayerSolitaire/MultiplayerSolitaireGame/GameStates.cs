@@ -158,7 +158,7 @@
                 {
                     playingPlayer.PairCombo++;
 
-                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.PairBullets;
+                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.PairCombo;
                     propertyChanged.NewValue = playingPlayer.PairCombo;
                     propertyChanged.PlayerIndex = playingPlayer.Index;
 
