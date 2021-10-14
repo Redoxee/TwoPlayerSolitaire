@@ -132,6 +132,10 @@
             {
                 view.OtherPlayer.FaceIndex = this.clientByPlayerIndex[otherPlayerIndex].FaceIndex;
             }
+            else
+            {
+                view.OtherPlayer.FaceIndex = -1;
+            }
 
             view.OtherPlayer.Board = new MSG.Card[otherPlayer.Board.Length];
             otherPlayer.Board.CopyTo(view.OtherPlayer.Board, 0);
@@ -163,41 +167,6 @@
 
             switch (order.OrderType)
             {
-                case "SelectPlayerSlot":
-                    {
-                        if (order.PlayerIndex < 0)
-                        {
-                            System.Console.WriteLine("Missing PlayerIndex");
-                            return;
-                        }
-                        
-                        if (this.TryRegisterClient(client, order.PlayerIndex))
-                        {
-                            OrderAcknowledgement acknowledgement = new OrderAcknowledgement() { OrderID = order.OrderID, FailureFlags = MSG.Failures.None };
-                            this.SendResponseToClient(acknowledgement, client);
-
-                            PlayerViewUpdate playerView = this.GetPlayerView(client.PlayerIndex);
-                            this.SendResponseToClient(playerView, client);
-                        }
-                        else
-                        {
-                            System.Console.WriteLine($"Couldn't register to player slot {order.PlayerIndex}");
-                        }
-
-                        JSONResponse availableSlots = this.RequestAvailablePlayerSlots();
-                        this.BroadCast(availableSlots);
-
-                        break;
-                    }
-
-                case "RequestPlayerSlots":
-                    {
-                        JSONResponse response = this.RequestAvailablePlayerSlots();
-                        this.SendResponseToClient(response, client);
-
-                        break;
-                    }
-
                 case "SelectPlayerFace":
                     {
                         if (order.FaceIndex < 0)
@@ -234,11 +203,23 @@
                         OrderAcknowledgement acknowledgement = new OrderAcknowledgement() { OrderID = order.OrderID, FailureFlags = MSG.Failures.None, PlayerIndex = availableIndex };
                         this.SendResponseToClient(acknowledgement, client);
 
-                        PlayerViewUpdate playerView = this.GetPlayerView(client.PlayerIndex);
-                        this.SendResponseToClient(playerView, client);
-
-                        JSONResponse availableFaces = this.RequestAvailableFaces();
-                        this.BroadCast(availableFaces);
+                        AvailableFaces availableFaces = this.RequestAvailableFaces();
+                        if (!availableFaces.ReadyToPlay)
+                        {
+                            this.BroadCast(availableFaces);
+                        }
+                        else
+                        {
+                            for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
+                            {
+                                ConnectedClient connectedClient = this.clientByPlayerIndex[index];
+                                if (connectedClient != null)
+                                {
+                                    PlayerViewUpdate playerViewUpdate = this.GetPlayerView(connectedClient.PlayerIndex);
+                                    this.SendResponseToClient(playerViewUpdate, connectedClient);
+                                }
+                            }
+                        }
 
                         break;
                     }
@@ -341,7 +322,7 @@
             return response;
         }
 
-        private JSONResponse RequestAvailableFaces()
+        private AvailableFaces RequestAvailableFaces()
         {
             AvailableFaces response = new AvailableFaces
             {

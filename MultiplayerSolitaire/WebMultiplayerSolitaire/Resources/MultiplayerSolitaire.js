@@ -54,7 +54,6 @@ var gameState = null;
 var nextRoundState = null;
 
 var messageHandles = [];
-messageHandles["AvailablePlayerSlots"] = HandleAvailablePlayerSlots;
 messageHandles["AvailableFaces"] = HandleAvailableFaces;
 messageHandles["OrderAcknowledgement"] = HandleOrderAcknowledgement;
 messageHandles["PlayerViewUpdate"] = HandlePlayerViewUpdate;
@@ -94,47 +93,6 @@ function HandleOrderAcknowledgement(messageData) {
     }
 }
 
-function HandleAvailablePlayerSlots(messageData) {
-    availableSlots = messageData.AvaialablePlayerSlots;
-
-    // are we searching for a player slot ?
-    if (localPlayerIndex < 0) {
-        clearPlayArea();
-
-        playArea.appendChild(faceCollection.RootNode);
-        playerSlots.Setup(availableSlots);
-        playArea.appendChild(playerSlots.RootNode);
-    }
-    else {
-        // if not, how many are still open ?
-        var numberOfAvailableSlots = 0;
-        for (var index = 0; index < availableSlots.length; ++index) {
-            if (availableSlots[index]) {
-                numberOfAvailableSlots++;
-            }
-        }
-
-        // we are waiting for the slots to be taken
-        if (numberOfAvailableSlots > 0) {
-            clearPlayArea();
-
-            var p = document.createElement("p").appendChild(document.createTextNode("Waiting for " + numberOfAvailableSlots + " players."));
-            playArea.appendChild(p);
-        }
-        else {
-            // we are ready to play, are we already playing ?
-            if (clientState == "None") {
-                if (gameState == null) {
-                    clientState = "WaitingForGameState";
-                }
-                else {
-                    SetupFromGameState();
-                }
-            }
-        }
-    }
-}
-
 function HandleAvailableFaces(messageData) {
     availableFaces = messageData.Faces;
 
@@ -151,17 +109,6 @@ function HandleAvailableFaces(messageData) {
         clearPlayArea();
         var p = document.createElement("p").appendChild(document.createTextNode("Waiting for opponent."));
         playArea.appendChild(p);
-    }
-    else {
-        // we are ready to play, are we already playing ?
-        if (clientState == "None") {
-            if (gameState == null) {
-                clientState = "WaitingForGameState";
-            }
-            else {
-                SetupFromGameState();
-            }
-        }
     }
 }
 
@@ -233,6 +180,7 @@ function HandleSandboxUpdate(messageData) {
         }
         else if (changeType == "PickedCard") {
             if (gameChange.PlayerIndex == localPlayerIndex) {
+                gameState.CurrentPlayer.Hand[gameChange.IndexInHand] = gameChange.Card;
                 var newCard = new Card(gameChange.IndexInHand);
                 newCard.Setup(gameChange.Card);
                 player.Log("picked " + newCard.CardLabel.textContent);
@@ -256,6 +204,7 @@ function HandleSandboxUpdate(messageData) {
                 player.Log("Combo " + gameChange.CardCombo);
                 for (var index = 0; index < 3; ++index) {
                     if ((gameChange.UsedCards & 1 << index) != 0) {
+                        gameState.CardsInDiscardPile++;
                         opponent.Board.Slots[index].DetatchCard();
                     }
                 }
@@ -295,10 +244,12 @@ function HandleSandboxUpdate(messageData) {
             else if (gameState.GameStateID == "Initialize") {
                 gameState = nextRoundState;
                 nextRoundState = null;
-                clientState = "None";
+                clientState = "WaitForPlay";
             }
             else if (gameState.GameStateID == "Playing") {
-                SetupFromGameState();
+                if (clientState == "WaitForPlay") {
+                    InitializeRound();
+                }
             }
             else if (gameState.GameStateID == "EndGame") {
                 clearPlayArea();
@@ -316,35 +267,45 @@ function SetupFromGameState() {
     }
 
     if (gameState.GameStateID == "Playing") {
-        if (clientState == "None") {
-            clearPlayArea();
+        clearPlayArea();
 
-            player.PlayerStats.SetPairComboSize(gameState.PairComboSize);
-            opponent.PlayerStats.SetPairComboSize(gameState.PairComboSize);
+        player.PlayerStats.SetPairComboSize(gameState.PairComboSize);
+        opponent.PlayerStats.SetPairComboSize(gameState.PairComboSize);
 
-            player.Attach(playArea, true);
-            player.Header.Face.Setup(faceCollection.FacesData, gameState.CurrentPlayer.FaceIndex, 0);
-            player.Setup(gameState.CurrentPlayer);
+        player.Attach(playArea, true);
+        player.Header.Face.Setup(faceCollection.FacesData, gameState.CurrentPlayer.FaceIndex, 0);
+        player.Setup(gameState.CurrentPlayer);
 
-            opponent.Attach(playArea, false);
-            opponent.Header.Face.Setup(faceCollection.FacesData, gameState.OtherPlayer.FaceIndex, 0);
-            opponent.Setup(gameState.OtherPlayer);
+        opponent.Attach(playArea, false);
+        opponent.Header.Face.Setup(faceCollection.FacesData, gameState.OtherPlayer.FaceIndex, 0);
+        opponent.Setup(gameState.OtherPlayer);
 
-            gameInfo.Setup(gameState.PlayerTurn, gameState);
+        gameInfo.Setup(gameState.PlayerTurn, gameState);
 
-            // Settuping the board.
-            gameInfo.Setup(localPlayerIndex, gameState);
-            playArea.appendChild(gameInfo.RootNode);
+        // Settuping the board.
+        gameInfo.Setup(localPlayerIndex, gameState);
+        playArea.appendChild(gameInfo.RootNode);
 
-
-            if (gameState.PlayerTurn == localPlayerIndex) {
-                PlayerHandModeChooseCard();
-                clientState = "SelectHandCard";
-            }
-            else {
-                clientState = "OtherPlayerTurn";
-            }
+        if (gameState.PlayerTurn == localPlayerIndex) {
+            PlayerHandModeChooseCard();
+            clientState = "SelectHandCard";
         }
+        else {
+            clientState = "OtherPlayerTurn";
+        }
+    }
+}
+
+function InitializeRound() {
+    opponent.Setup(gameState.OtherPlayer);
+    player.Setup(gameState.CurrentPlayer);
+    gameInfo.Setup(localPlayerIndex, gameState);
+    if (gameState.PlayerTurn == localPlayerIndex) {
+        PlayerHandModeChooseCard();
+        clientState = "SelectHandCard";
+    }
+    else {
+        clientState = "OtherPlayerTurn";
     }
 }
 
@@ -430,26 +391,8 @@ function RequestPlayerFace(requestedIndex) {
         if (responseData.FailureFlags == "None") {
             localPlayerIndex = responseData.PlayerIndex;
             player.faceIndex = responseData.FaceIndex;
-        }
-    };
 
-    DoSend(requestPlayerIndex);
-}
-
-function RequestPlayerSlots(requestedIndex) {
-    if (localPlayerIndex >= 0) {
-        return;
-    }
-
-    if (!availableSlots[requestedIndex]) {
-        return;
-    }
-
-    var orderID = nextOrderID++;
-    var requestPlayerIndex = '{"OrderType":"SelectPlayerSlot", "PlayerIndex": ' + requestedIndex + ', "OrderID" : ' + orderID + '}';
-    pendingOrders[orderID] = function (responseData) {
-        if (responseData.FailureFlags == "None") {
-            localPlayerIndex = requestedIndex;
+            clientState = "WaitingForGameState";
         }
     };
 
