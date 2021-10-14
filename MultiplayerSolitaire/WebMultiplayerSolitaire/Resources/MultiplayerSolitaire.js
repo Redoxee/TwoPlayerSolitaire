@@ -266,34 +266,35 @@ function SetupFromGameState() {
         return;
     }
 
-    if (gameState.GameStateID == "Playing") {
-        clearPlayArea();
+    clearPlayArea();
 
-        player.PlayerStats.SetPairComboSize(gameState.PairComboSize);
-        opponent.PlayerStats.SetPairComboSize(gameState.PairComboSize);
+    player.PlayerStats.SetPairComboSize(gameState.PairComboSize);
+    opponent.PlayerStats.SetPairComboSize(gameState.PairComboSize);
 
-        player.Attach(playArea, true);
-        player.Header.Face.Setup(faceCollection.FacesData, gameState.CurrentPlayer.FaceIndex, 0);
-        player.Setup(gameState.CurrentPlayer);
+    player.Attach(playArea, true);
+    player.Header.Face.Setup(faceCollection.FacesData, gameState.CurrentPlayer.FaceIndex, 0);
+    player.Setup(gameState.CurrentPlayer);
 
-        opponent.Attach(playArea, false);
-        opponent.Header.Face.Setup(faceCollection.FacesData, gameState.OtherPlayer.FaceIndex, 0);
-        opponent.Setup(gameState.OtherPlayer);
+    opponent.Attach(playArea, false);
+    opponent.Header.Face.Setup(faceCollection.FacesData, gameState.OtherPlayer.FaceIndex, 0);
+    opponent.Setup(gameState.OtherPlayer);
 
-        gameInfo.Setup(gameState.PlayerTurn, gameState);
+    gameInfo.Setup(gameState.PlayerTurn, gameState);
 
-        // Settuping the board.
-        gameInfo.Setup(localPlayerIndex, gameState);
-        playArea.appendChild(gameInfo.RootNode);
+    // Settuping the board.
+    gameInfo.Setup(localPlayerIndex, gameState);
+    playArea.appendChild(gameInfo.RootNode);
 
-        if (gameState.PlayerTurn == localPlayerIndex) {
-            PlayerHandModeChooseCard();
-            clientState = "SelectHandCard";
-        }
-        else {
-            clientState = "OtherPlayerTurn";
-        }
+    if (gameState.PlayerTurn == localPlayerIndex) {
+        PlayerHandModeChooseCard();
+        clientState = "SelectHandCard";
     }
+    else {
+        clientState = "OtherPlayerTurn";
+    }
+
+    var playerSeparator = createElementWithClass("div", "PlayerSeparator");
+    playArea.appendChild(playerSeparator);
 }
 
 function InitializeRound() {
