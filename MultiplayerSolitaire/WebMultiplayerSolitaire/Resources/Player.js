@@ -5,6 +5,7 @@
         this.PlayerStats = new PlayerStats(id);
         this.Board = new CardDisplay("PlayerBoard", id);
         this.Hand = new CardDisplay("PlayerHand", id);
+        this.HasHand = false;
 
         this.RootNode = createElementWithClass("table", "player");
         this.PlayerLabel = document.createTextNode("Player " + localPlayerIndex);
@@ -42,12 +43,19 @@
         if (includeHand) {
             node.appendChild(this.Hand.RootNode);
         }
+
+        this.HasHand = includeHand;
     }
 
     Setup(playerObject) {
         this.PlayerStats.SetScore(playerObject.Score);
         this.PlayerStats.SetHealth(playerObject.Health);
         this.PlayerStats.SetPairCombo(playerObject.PairCombo);
+        if (this.HasHand) {
+            this.Hand.SetupFromArray(playerObject.Hand);
+        }
+
+        this.Board.SetupFromArray(playerObject.Board);
     }
 
     Log(message) {

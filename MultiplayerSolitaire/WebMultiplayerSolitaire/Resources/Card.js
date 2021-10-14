@@ -1,6 +1,6 @@
 ﻿class Card {
     constructor(cardIndex) {
-        this.RootNode = createElementWithClass("div", "card");
+        this.RootNode = createElementWithClass("div", "Card");
         this.CardIndex = cardIndex;
 
         this.CardLabel = document.createTextNode("? of ?");

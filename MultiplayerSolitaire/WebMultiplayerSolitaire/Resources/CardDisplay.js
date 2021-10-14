@@ -1,15 +1,11 @@
 ﻿class CardDisplay {
     constructor(styleClass, id) {
-        this.RootNode = createElementWithClassAndId("table", styleClass, id);
-        var row = document.createElement("tr");
-        this.RootNode.appendChild(row);
+        this.RootNode = createElementWithClassAndId("div", styleClass, id);
         this.Slots = [3]; // Array of card slots.
         for (var index = 0; index < 3; ++index) {
             var slot = new CardSlot(index);
             this.Slots[index] = slot;
-            var col = document.createElement("th");
-            row.appendChild(col);
-            col.appendChild(this.Slots[index].RootNode);
+            this.RootNode.appendChild(this.Slots[index].RootNode);
         }
     }
 

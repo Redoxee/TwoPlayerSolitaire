@@ -1,20 +1,15 @@
 ﻿class CardSlot {
     constructor(index) {
         this.Index = index;
-        this.RootNode = createElementWithClass("table", "cardSlot");
-        var row = document.createElement("tr");
-        this.RootNode.appendChild(row);
-        this.CardReceptacle = row;
+        this.RootNode = createElementWithClass("div", "CardSlot");
+        this.CardReceptacle = createElementWithClass("div", "CardReceptacle");
+        this.RootNode.appendChild(this.CardReceptacle);
         this.Card = null;
 
-        row = document.createElement("tr");
-        this.RootNode.appendChild(row);
         this.Button = document.createElement("button");
-        row.appendChild(this.Button);
         this.ButtonLabel = document.createTextNode("_");
         this.Button.appendChild(this.ButtonLabel);
 
-        this.Button.hidden = true;
         this.Action = function (index) { alert("unset"); };
         var instance = this;
         this.Button.addEventListener("click", function () {
@@ -25,7 +20,10 @@
     }
 
     AttachCard(card) {
+        clearChilds(this.RootNode);
         clearChilds(this.CardReceptacle);
+        this.RootNode.appendChild(this.CardReceptacle);
+
         if (card == null || card.Value < 0) {
             this.Card = null;
             return;
@@ -33,7 +31,6 @@
 
         this.Card = card;
         this.CardReceptacle.appendChild(card.RootNode);
-        this.SetNotInteractable();
     }
 
     DetatchCard() {
@@ -42,13 +39,23 @@
     }
 
     SetInteractable(action, label) {
-        this.Button.hidden = false;
-        this.ButtonLabel.textContent = label;
-        this.Action = action;
+        clearChilds(this.RootNode);
+        if (this.Card == null) {
+            this.RootNode.appendChild(this.Button);
+            this.ButtonLabel.textContent = label;
+            this.Action = action;
+        }
+        else {
+            this.AttachCard(this.Card);
+            this.Card.SetInteractable(action, label);
+        }
     }
 
     SetNotInteractable() {
-        this.Action = null;
-        this.Button.hidden = true;
+        clearChilds(this.RootNode);
+        if (this.Card != null) {
+            this.AttachCard(this.Card);
+            this.Card.SetNotInteractable();
+        }
     }
 }
