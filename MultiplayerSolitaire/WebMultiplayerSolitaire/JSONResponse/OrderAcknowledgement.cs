@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MSGWeb
 {
-    public class OrderAcknowledgement : JSONResponse
+    internal class OrderAcknowledgement : JSONResponse
     {
         public override string MessageType => "OrderAcknowledgement";
         public int OrderID;

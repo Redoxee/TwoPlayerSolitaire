@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MSGWeb
 {
-    public abstract class JSONResponse
+    internal abstract class JSONResponse
     {
         public abstract string MessageType { get; }
     }

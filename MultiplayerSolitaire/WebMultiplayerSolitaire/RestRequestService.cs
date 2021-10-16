@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Resources;
-
-namespace MSGWeb
+﻿namespace MSGWeb
 {
-    public class RestRequestService
+    using System.Resources;
+    
+    internal class RestRequestService
     {
-        private static readonly ResourceManager ResourceManager = new ResourceManager("WebCardGame.Properties.Resources", typeof(Program).Assembly);
+        private static readonly ResourceManager ResourceManager = new ResourceManager("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
 
         public static string HandleRestRequest()
         {

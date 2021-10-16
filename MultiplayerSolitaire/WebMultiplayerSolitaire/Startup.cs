@@ -1,13 +1,12 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-
 namespace MSGWeb
 {
-    public class Startup
-    {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
+    using System;
 
+    internal class Startup
+    {
         public void ConfigureServices(IServiceCollection services)
         {
             // register our custom middleware since we use the IMiddleware factory approach

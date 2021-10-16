@@ -1,6 +1,6 @@
 ﻿namespace MSGWeb
 {
-    public class SandboxChanges : JSONResponse
+    internal class SandboxChanges : JSONResponse
     {
         public override string MessageType => nameof(SandboxChanges);
 

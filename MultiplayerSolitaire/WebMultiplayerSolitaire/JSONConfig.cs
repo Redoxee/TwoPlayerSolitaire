@@ -1,6 +1,6 @@
 ﻿namespace MSGWeb
 {
-    public class JSONConfig
+    internal class JSONConfig
     {
         public string[][][] FacesData;
     }

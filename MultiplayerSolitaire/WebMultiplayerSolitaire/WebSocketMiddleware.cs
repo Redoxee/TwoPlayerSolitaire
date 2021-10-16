@@ -11,8 +11,8 @@ namespace MSGWeb
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    
-    public class WebSocketMiddleware : IMiddleware
+
+    internal class WebSocketMiddleware : IMiddleware
     {
         private static int SocketCounter = 0;
 
@@ -65,7 +65,7 @@ namespace MSGWeb
             {
                 // HTTP 500 Internal server error
                 context.Response.StatusCode = 500;
-                Program.ReportException(ex);
+                MSGWeb.ReportException(ex);
             }
             finally
             {
@@ -97,7 +97,7 @@ namespace MSGWeb
             // but terminating the loops will abort the sockets, preventing graceful closing.
             var disposeQueue = new List<WebSocket>(WebSocketMiddleware.clients.Count);
 
-            while (WebSocketMiddleware.clients.Count > 0)
+            while (!WebSocketMiddleware.clients.IsEmpty)
             {
                 var client = WebSocketMiddleware.clients.ElementAt(0).Value;
                 Console.WriteLine($"Closing Socket {client.SocketId}");
@@ -111,7 +111,7 @@ namespace MSGWeb
                 }
                 else
                 {
-                    CancellationTokenSource timeout = new CancellationTokenSource(Program.CLOSE_SOCKET_TIMEOUT_MS);
+                    CancellationTokenSource timeout = new CancellationTokenSource(MSGWeb.CLOSE_SOCKET_TIMEOUT_MS);
                     try
                     {
                         Console.WriteLine("... starting close handshake");
@@ -119,7 +119,7 @@ namespace MSGWeb
                     }
                     catch (OperationCanceledException ex)
                     {
-                        Program.ReportException(ex);
+                        MSGWeb.ReportException(ex);
                         // normal upon task/token cancellation, disregard
                     }
                 }
@@ -188,7 +188,7 @@ namespace MSGWeb
             catch (Exception ex)
             {
                 Console.WriteLine($"Socket {client.SocketId}:");
-                Program.ReportException(ex);
+                MSGWeb.ReportException(ex);
                 Console.WriteLine(ex.StackTrace);
             }
             finally

@@ -1,6 +1,6 @@
 ﻿namespace MSGWeb
 {
-    public class AvailablePlayerSlot : JSONResponse
+    internal class AvailablePlayerSlot : JSONResponse
     {
         public override string MessageType => "AvailablePlayerSlots";
 

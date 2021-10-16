@@ -1,6 +1,6 @@
 ﻿namespace MSGWeb
 {
-    public class AvailableFaces : JSONResponse
+    internal class AvailableFaces : JSONResponse
     {
         public override string MessageType => "AvailableFaces";
 

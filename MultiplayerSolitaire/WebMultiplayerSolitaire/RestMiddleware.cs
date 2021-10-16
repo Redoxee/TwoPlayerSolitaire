@@ -11,7 +11,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class RestMiddleware : IMiddleware
+    internal class RestMiddleware : IMiddleware
     {
         private static bool ServerIsRunning = true;
         private static CancellationTokenRegistration AppShutdownHandler;
@@ -80,7 +80,7 @@
             {
                 // HTTP 500 Internal server error
                 context.Response.StatusCode = 500;
-                Program.ReportException(ex);
+                MSGWeb.ReportException(ex);
             }
             finally
             {

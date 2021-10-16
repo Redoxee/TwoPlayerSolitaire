@@ -1,6 +1,6 @@
 ﻿namespace MSGWeb
 {
-    public class GameProcess
+    internal class GameProcess
     {
         private static GameProcess instance;
 
@@ -45,7 +45,7 @@
             }
 
             // Faces
-            System.Resources.ResourceManager resourceManager = new System.Resources.ResourceManager("WebCardGame.Properties.Resources", typeof(Program).Assembly);
+            System.Resources.ResourceManager resourceManager = new System.Resources.ResourceManager("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
             string faceConfigFile = resourceManager.GetString("Config");
 
             System.IO.StringReader stringReader = new System.IO.StringReader(faceConfigFile);
@@ -115,6 +115,7 @@
                 PlayerTurn = sandbox.CurrentPlayer,
                 ScoreTarget = sandbox.ScoreTarget,
                 PairComboSize = sandbox.PairComboSize,
+                RoundIndex = sandbox.RoundIndex,
             };
 
 
@@ -163,7 +164,7 @@
             catch (System.Exception ex)
             {
                 System.Console.WriteLine("Error while parsing socket message");
-                Program.ReportException(ex);
+                MSGWeb.ReportException(ex);
                 return;
             }
 
@@ -209,12 +210,12 @@
                         client.FaceIndex = order.FaceIndex;
 
                         OrderAcknowledgement acknowledgement = new OrderAcknowledgement() { OrderID = order.OrderID, FailureFlags = MSG.Failures.None, PlayerIndex = availableIndex };
-                        this.SendResponseToClient(acknowledgement, client);
+                        GameProcess.SendResponseToClient(acknowledgement, client);
 
                         AvailableFaces availableFaces = this.RequestAvailableFaces();
                         if (!availableFaces.ReadyToPlay)
                         {
-                            this.BroadCast(availableFaces);
+                            GameProcess.BroadCast(availableFaces);
                         }
                         else
                         {
@@ -224,7 +225,7 @@
                                 if (connectedClient != null)
                                 {
                                     PlayerViewUpdate playerViewUpdate = this.GetPlayerView(connectedClient.PlayerIndex);
-                                    this.SendResponseToClient(playerViewUpdate, connectedClient);
+                                    GameProcess.SendResponseToClient(playerViewUpdate, connectedClient);
                                 }
                             }
                         }
@@ -235,7 +236,7 @@
                 case "RequestPlayerFaces":
                     {
                         JSONResponse response = this.RequestAvailableFaces();
-                        this.SendResponseToClient(response, client);
+                        GameProcess.SendResponseToClient(response, client);
 
                         break;
                     }
@@ -262,7 +263,7 @@
                             FailureFlags = failures,
                         };
 
-                        this.SendResponseToClient(acknowledgement, client);
+                        GameProcess.SendResponseToClient(acknowledgement, client);
 
                         if (failures == MSG.Failures.None)
                         {
@@ -271,7 +272,7 @@
                                 GameChanges = this.workingGameChanges.GetGameChanges(),
                             };
 
-                            if (this.DoNeedUpdatePlayerView(sandboxChanges))
+                            if (GameProcess.DoNeedUpdatePlayerView(sandboxChanges))
                             {
                                 for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
                                 {
@@ -280,12 +281,12 @@
                                     {
                                         PlayerViewUpdate playerViewUpdate = this.GetPlayerView(connectedClient.PlayerIndex);
                                         playerViewUpdate.IsNextRoundState = true;
-                                        this.SendResponseToClient(playerViewUpdate, connectedClient);
+                                        GameProcess.SendResponseToClient(playerViewUpdate, connectedClient);
                                     }
                                 }
                             }
 
-                            this.BroadCast(sandboxChanges);
+                            GameProcess.BroadCast(sandboxChanges);
                         }
 
                         break;
@@ -299,7 +300,7 @@
             }
         }
 
-        private bool DoNeedUpdatePlayerView(SandboxChanges sandboxChanges)
+        private static bool DoNeedUpdatePlayerView(SandboxChanges sandboxChanges)
         {
             for (int index = 0; index < sandboxChanges.GameChanges.Length; ++index)
             {
@@ -313,21 +314,6 @@
             }
 
             return false;
-        }
-
-        private JSONResponse RequestAvailablePlayerSlots()
-        {
-            AvailablePlayerSlot response = new AvailablePlayerSlot
-            {
-                AvaialablePlayerSlots = new bool[this.clientByPlayerIndex.Length],
-            };
-
-            for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
-            {
-                response.AvaialablePlayerSlots[index] = this.clientByPlayerIndex[index] == null;
-            }
-
-            return response;
         }
 
         private AvailableFaces RequestAvailableFaces()
@@ -362,7 +348,7 @@
             return response;
         }
 
-        private void SendResponseToClient(JSONResponse response, ConnectedClient client)
+        private static void SendResponseToClient(JSONResponse response, ConnectedClient client)
         {
             Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
             System.IO.StringWriter stringWriter = new System.IO.StringWriter();
@@ -374,7 +360,7 @@
             client.MessageQueue.Add(message);
         }
 
-        private void BroadCast(JSONResponse response)
+        private static void BroadCast(JSONResponse response)
         {
             Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
             System.IO.StringWriter stringWriter = new System.IO.StringWriter();

@@ -1,6 +1,6 @@
 ﻿namespace MSGWeb
 {
-    public class JSONOrder
+    internal class JSONOrder
     {
         public string OrderType = null;
         public int OrderID = -1;

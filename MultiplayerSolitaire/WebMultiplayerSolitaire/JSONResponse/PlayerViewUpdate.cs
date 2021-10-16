@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MSGWeb
+﻿namespace MSGWeb
 {
     [System.Serializable]
-    public class PlayerViewUpdate : JSONResponse
+    internal class PlayerViewUpdate : JSONResponse
     {
         public override string MessageType => "PlayerViewUpdate";
 

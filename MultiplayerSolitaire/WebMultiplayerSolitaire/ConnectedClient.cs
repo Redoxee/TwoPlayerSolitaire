@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace MSGWeb
+﻿namespace MSGWeb
 {
-    public class ConnectedClient
+    using System;
+    using System.Collections.Concurrent;
+    using System.Net.WebSockets;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    internal class ConnectedClient
     {
         public int PlayerIndex = -1;
         public int FaceIndex = -1;
@@ -59,7 +59,7 @@ namespace MSGWeb
                 }
                 catch (Exception ex)
                 {
-                    Program.ReportException(ex);
+                    MSGWeb.ReportException(ex);
                 }
             }
         }
