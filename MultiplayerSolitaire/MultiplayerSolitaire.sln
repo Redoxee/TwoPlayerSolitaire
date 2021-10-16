@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiplayerSolitaireGame", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCardGame", "WebMultiplayerSolitaire\WebCardGame.csproj", "{A576E52A-BE3B-4F03-82CB-D21F634FBAA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleCardGame", "ConsoleCardGame\ConsoleCardGame.csproj", "{E214913B-CEB5-4B89-ADFD-DC7394183C1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleCardGame", "ConsoleCardGame\ConsoleCardGame.csproj", "{E214913B-CEB5-4B89-ADFD-DC7394183C1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebConsoleLauncher", "WebConsoleLauncher\WebConsoleLauncher.csproj", "{2534AFF9-C51A-4290-BAB8-C6B410F96965}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,7 +28,10 @@ Global
 		{E214913B-CEB5-4B89-ADFD-DC7394183C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E214913B-CEB5-4B89-ADFD-DC7394183C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E214913B-CEB5-4B89-ADFD-DC7394183C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E214913B-CEB5-4B89-ADFD-DC7394183C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2534AFF9-C51A-4290-BAB8-C6B410F96965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2534AFF9-C51A-4290-BAB8-C6B410F96965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2534AFF9-C51A-4290-BAB8-C6B410F96965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2534AFF9-C51A-4290-BAB8-C6B410F96965}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
