@@ -28,7 +28,15 @@
         private GameProcess()
         {
             this.workingGameChanges = new MSG.GameChangePool();
-            this.gameManager = new MSG.GameManager(MSG.GameManager.GameParameters.Default(), this.workingGameChanges);
+            MSG.GameManager.GameParameters gameParameters = new MSG.GameManager.GameParameters
+            {
+                StaringHealth = 2,
+                MaxHealth = 5,
+                PairComboSize = 4,
+                ScoreTarget = 2,
+            };
+
+            this.gameManager = new MSG.GameManager(gameParameters, this.workingGameChanges);
 
             this.clientByPlayerIndex = new ConnectedClient[2];
             for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)

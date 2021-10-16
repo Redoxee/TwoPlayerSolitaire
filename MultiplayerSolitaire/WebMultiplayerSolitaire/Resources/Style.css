@@ -1,4 +1,8 @@
-﻿#mainContainer {
+﻿body {
+    font-family: "Times New Roman", Times, serif;
+}
+
+#mainContainer {
     display: flex;
     flex-flow: column;
     justify-content: center;

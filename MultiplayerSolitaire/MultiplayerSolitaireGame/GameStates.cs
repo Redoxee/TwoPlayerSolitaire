@@ -214,6 +214,7 @@
 
                 sandbox.CurrentPlayer = otherPlayerIndex;
                 stateMachine.SetNextState(new InitializeRoundState());
+                return;
             }
 
             if (sandbox.Deck.NumberOfCards == 0)

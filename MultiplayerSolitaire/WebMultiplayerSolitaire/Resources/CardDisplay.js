@@ -14,7 +14,10 @@
             if (cardArray[index].Value > -1) {
                 var card = new Card(index);
                 card.Setup(cardArray[index]);
-                var slot = this.Slots[index].AttachCard(card);
+                this.Slots[index].AttachCard(card);
+            }
+            else {
+                this.Slots[index].DetatchCard();
             }
         }
     }
