@@ -1,5 +1,5 @@
 ﻿
-namespace WebMultiplayerSolitaire
+namespace MSGWeb
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Hosting;
@@ -12,8 +12,6 @@ namespace WebMultiplayerSolitaire
     using System.Threading;
     using System.Threading.Tasks;
     
-    using System.Resources;
-
     public class WebSocketMiddleware : IMiddleware
     {
         private static int SocketCounter = 0;

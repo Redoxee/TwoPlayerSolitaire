@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Resources;
 
-namespace WebMultiplayerSolitaire
+namespace MSGWeb
 {
     public class RestRequestService
     {

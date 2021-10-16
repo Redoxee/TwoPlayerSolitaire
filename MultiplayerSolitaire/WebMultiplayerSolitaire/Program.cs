@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Runtime.CompilerServices;
-
-namespace WebMultiplayerSolitaire
+namespace MSGWeb
 {
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Hosting;
+    using System;
+    using System.Runtime.CompilerServices;
+
     // Based on https://github.com/MV10/WebSocketExample
     // By Jon McGuire.
 

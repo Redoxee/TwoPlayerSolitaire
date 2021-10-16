@@ -1,4 +1,4 @@
-﻿namespace WebMultiplayerSolitaire
+﻿namespace MSGWeb
 {
     public class JSONConfig
     {

@@ -1,4 +1,4 @@
-﻿namespace WebMultiplayerSolitaire
+﻿namespace MSGWeb
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Hosting;
