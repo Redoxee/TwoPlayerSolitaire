@@ -57,10 +57,6 @@
 
         this.Board.SetupFromArray(playerObject.Board);
     }
-
-    Log(message) {
-        writeToScreen(message);
-    }
 }
 
 class PlayerHeader {

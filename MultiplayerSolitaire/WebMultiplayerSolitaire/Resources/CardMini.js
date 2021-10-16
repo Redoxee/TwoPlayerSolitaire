@@ -7,6 +7,6 @@
     }
 
     Setup(card) {
-        this.Label.textContent = ValueLabel[card.Value] + SigilSymbol[card.Sigil];
+        this.Label.textContent = MiniValueLabel[card.Value] + SigilSymbol[card.Sigil];
     }
 }

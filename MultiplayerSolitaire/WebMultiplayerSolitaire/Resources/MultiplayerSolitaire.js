@@ -12,10 +12,10 @@ const SigilLabel = [
     "Diamond"];
 
 const SigilSymbol = [
-    '\u2660',
-    '\u2663',
-    '\u2661',
-    '\u2662'];
+    "♠",
+    "♣",
+    "♥",
+    "♦"];
 
 const ValueLabel = [
     "Ace",
@@ -30,6 +30,19 @@ const ValueLabel = [
     "10",
 ];
 
+const MiniValueLabel = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+]
+
 var websocket = null;
 var isConnected = false;
 var gameWebSocketUrl = document.URL.replace("http://", "ws://");
@@ -43,6 +56,7 @@ var player = new Player("LocalPlayer", "You");
 var opponent = new Player("Opponent","Opponent");
 var endGame = new EndGame();
 var faceCollection = new FaceCollection();
+var gameLog = new PooledLogTable();
 
 var clientState = "None";
 var localPlayerIndex = -1;
@@ -150,7 +164,7 @@ function HandleSandboxUpdate(messageData) {
                     return;
                 }
 
-                player.Log("played " + cardMini.Label.textContent);
+                gameLog.Log("You played ", [cardMini]);
 
                 PlayerhandModeUninteractable();
                 PlayerBoardModeUninteractable();
@@ -168,7 +182,7 @@ function HandleSandboxUpdate(messageData) {
                     return;
                 }
 
-                opponent.Log("played " + cardMini.Label.textContent);
+                gameLog.Log("Opponent played ", [cardMini]);
 
                 if (opponent.Board.Slots[gameChange.IndexOnBoard].Card == null) {
                     gameState.CardsInDeck--;
@@ -183,32 +197,41 @@ function HandleSandboxUpdate(messageData) {
                 gameState.CurrentPlayer.Hand[gameChange.IndexInHand] = gameChange.Card;
                 var newCard = new Card(gameChange.IndexInHand);
                 newCard.Setup(gameChange.Card);
-                player.Log("picked " + newCard.CardLabel.textContent);
+
+                var newCardMini = new CardMini(gameChange.Card);
+                gameLog.Log("You picked ", [newCardMini]);
                 player.Hand.Slots[gameChange.IndexInHand].AttachCard(newCard);
             }
         }
 
         else if (changeType == "PlayerCombo") {
-            if (gameChange.PlayerIndex == localPlayerIndex) {
-                player.Log("Combo " + gameChange.CardCombo);
+            var cardInCombo = [];
+            var numberOfCombo = 0;
 
+            if (gameChange.PlayerIndex == localPlayerIndex) {
                 for (var index = 0; index < 3; ++index) {
                     if ((gameChange.UsedCards & 1 << index) != 0) {
                         gameState.CardsInDiscardPile++;
                         gameInfo.DiscardPile.Setup(gameState);
+                        cardInCombo[numberOfCombo++] = new CardMini(player.Board.Slots[index].Card.CardData);
+
                         player.Board.Slots[index].DetatchCard();
                     }
                 }
             }
             else {
-                player.Log("Combo " + gameChange.CardCombo);
                 for (var index = 0; index < 3; ++index) {
                     if ((gameChange.UsedCards & 1 << index) != 0) {
                         gameState.CardsInDiscardPile++;
+                        gameInfo.DiscardPile.Setup(gameState);
+                        cardInCombo[numberOfCombo++] = new CardMini(opponent.Board.Slots[index].Card.CardData);
+
                         opponent.Board.Slots[index].DetatchCard();
                     }
                 }
             }
+
+            gameLog.Log("Combo " + gameChange.CardCombo, cardInCombo);
         }
         else if (changeType == "PlayerPropertyChanged") {
             var target = player;
@@ -284,6 +307,8 @@ function SetupFromGameState() {
     // Settuping the board.
     gameInfo.Setup(localPlayerIndex, gameState);
     playArea.appendChild(gameInfo.RootNode);
+
+    playArea.appendChild(gameLog.RootNode);
 
     if (gameState.PlayerTurn == localPlayerIndex) {
         PlayerHandModeChooseCard();

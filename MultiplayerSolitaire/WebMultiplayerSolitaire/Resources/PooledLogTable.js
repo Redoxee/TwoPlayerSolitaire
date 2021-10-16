@@ -1,37 +1,39 @@
 ﻿class PooledLogTable {
     constructor() {
-        this.RootNode = createElementWithClass("table", "LogTable");
-        this.PoolSize = 10;
+        this.RootNode = createElementWithClass("Div", "GameLog");
+        this.PoolSize = 15;
         this.Pool = [];
         for (var index = 0; index < this.PoolSize; ++index)
         {
-            this.Pool[index] = document.createElement("tr");
+            this.Pool[index] = createElementWithClass("div", "LogEntry");
             this.Pool[index].Label = document.createTextNode("");
-            this.Pool[index].appendChild(this.Pool[index].Label);
         }
 
-        this.Count = 0;
+        this.Cursor = 0;
     }
 
     Clear() {
         clearChilds(this.RootNode);
-        this.Count = 0;
+        this.Cursor = 0;
     }
 
-    Log(message) {
-        if (this.Count == this.PoolSize) {
-            this.PoolSize = this.PoolSize + 20;
-            for (var index = this.Count; index < this.PoolSize; ++index) {
-                this.Pool[index] = document.createElement("tr");
-                this.Pool[index].Label = document.createTextNode("");
-                this.Pool[index].appendChild(this.Pool[index].Label);
+    Log(message, additionalCards) {
+        var poolElement = this.Pool[this.Cursor];
+        clearChilds(poolElement);
+        poolElement.appendChild(poolElement.Label);
+
+        var label = poolElement.Label;
+        label.textContent = message;
+        if (additionalCards != null) {
+            for (var index = 0; index < additionalCards.length; ++index) {
+                poolElement.appendChild(additionalCards[index].RootNode);
             }
         }
 
-        var poolElement = this.Pool[this.Count];
-        var label = poolElement.Label;
-        label.textContent = message;
-        this.RootNode.appendChild(this.Pool[this.Count]);
-        this.Count++;
+        this.RootNode.appendChild(poolElement);
+        this.Cursor++;
+        if (this.Cursor >= this.PoolSize) {
+            this.Cursor = 0;
+        }
     }
 }
