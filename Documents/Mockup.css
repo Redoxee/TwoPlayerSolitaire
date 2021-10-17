@@ -136,23 +136,24 @@ body {
         justify-content: center;
     }
 
-.Deck {
+.CardPile {
     border: 1pt;
     border-style: solid;
     border-color: darkgray;
-    width: 92pt;
-    height: 112pt;
+    width: 160pt;
+    height: 180pt;
     text-align: center;
 }
 
-.DiscardPile {
-    border: 1pt;
-    border-style: solid;
-    border-color: darkgray;
-    width: 92pt;
-    height: 112pt;
-    text-align: center;
+.MiniCardDisplay {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    visibility: hidden;
 }
+
+    .CardPile:hover > .MiniCardDisplay {
+        visibility: visible;
+    }
 
 .Face pre {
     margin: 0pt;
@@ -169,17 +170,26 @@ body {
     }
 
 .GameLog {
+    margin-top: 30pt;
+    margin-right: 5pt;
     grid-column: 1;
-    grid-row-start: 1;
-    grid-row-end: 9;
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 4pt;
+    grid-row-start: 3;
+    grid-row-end: 7;
     width: 200pt;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 4pt;
+}
+
+.LogEntry {
+    display: inline;
 }
 
 .LogEntry > * {
     display: inline;
+    margin-left: 3pt;
 }
 
 .CardMini {
