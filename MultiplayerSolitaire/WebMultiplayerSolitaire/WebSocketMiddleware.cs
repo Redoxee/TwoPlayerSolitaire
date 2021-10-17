@@ -20,6 +20,7 @@ namespace MSGWeb
         private static readonly ConcurrentDictionary<int, ConnectedClient> clients = new ConcurrentDictionary<int, ConnectedClient>();
 
         public static CancellationTokenSource SocketLoopTokenSource = new CancellationTokenSource();
+        public static event System.Action AllClientClosed;
 
         private static bool ServerIsRunning = true;
 
@@ -207,6 +208,11 @@ namespace MSGWeb
 
                 // signal to the middleware pipeline that this task has completed
                 client.TaskCompletion.SetResult(true);
+
+                if (WebSocketMiddleware.clients.IsEmpty && WebSocketMiddleware.AllClientClosed != null)
+                {
+                    WebSocketMiddleware.AllClientClosed();
+                }
             }
         }
     }

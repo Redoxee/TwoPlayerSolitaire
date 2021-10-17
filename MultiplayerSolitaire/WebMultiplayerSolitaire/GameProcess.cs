@@ -12,29 +12,34 @@
 
         private readonly int numberOfFaces;
 
+        public static GameProcess Initialize(MSG.GameManager.GameParameters parameters)
+        {
+            if (GameProcess.instance != null)
+            {
+                System.Console.Error.WriteLine("An instance of game process has already been initialized.");
+                return GameProcess.instance;
+            }
+
+            GameProcess.instance = new GameProcess(parameters);
+            return GameProcess.instance;
+        }
+
         public static GameProcess Instance
         {
             get
             {
                 if (GameProcess.instance == null)
                 {
-                    GameProcess.instance = new GameProcess();
+                    System.Console.Error.WriteLine("No game process initialized");
                 }
 
                 return GameProcess.instance;
             }
         }
 
-        private GameProcess()
+        private GameProcess(MSG.GameManager.GameParameters gameParameters)
         {
             this.workingGameChanges = new MSG.GameChangePool();
-            MSG.GameManager.GameParameters gameParameters = new MSG.GameManager.GameParameters
-            {
-                StaringHealth = 2,
-                MaxHealth = 5,
-                PairComboSize = 4,
-                ScoreTarget = 2,
-            };
 
             this.gameManager = new MSG.GameManager(gameParameters, this.workingGameChanges);
 

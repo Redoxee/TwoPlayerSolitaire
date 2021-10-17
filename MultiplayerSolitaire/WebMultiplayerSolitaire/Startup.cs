@@ -20,7 +20,6 @@ namespace MSGWeb
             app.UseWebSockets(new WebSocketOptions
             {
                 KeepAliveInterval = TimeSpan.FromSeconds(120),
-                ReceiveBufferSize = 64
             });
 
             // add our custom middleware to the pipeline

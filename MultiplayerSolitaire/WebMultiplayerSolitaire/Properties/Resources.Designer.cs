@@ -63,16 +63,17 @@ namespace WebCardGame.Properties {
         /// <summary>
         ///   Looks up a localized string similar to class Card {
         ///    constructor(cardIndex) {
-        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;card&quot;);
+        ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;Card&quot;);
         ///        this.CardIndex = cardIndex;
-        ///        var row = document.createElement(&quot;tr&quot;);
-        ///        this.ContentHolder = document.createElement(&quot;div&quot;);
-        ///        row.appendChild(this.ContentHolder);
+        ///
         ///        this.CardLabel = document.createTextNode(&quot;? of ?&quot;);
-        ///        this.ContentHolder.appendChild(this.CardLabel);
-        ///        this.RootNode.appendChild(row);
-        ///        row = document.createElement(&quot;tr&quot;);
-        ///      [rest of string was truncated]&quot;;.
+        ///        this.Button = document.createElement(&quot;button&quot;);
+        ///
+        ///        this.Action = function (index) { alert(&quot;unset&quot;); };
+        ///        var instance = this;
+        ///        this.Button.addEventListener(&quot;click&quot;, function () {
+        ///            if (instance.Action != null) {
+        ///                instance.Action(instance.CardInde [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Card {
             get {
@@ -82,17 +83,19 @@ namespace WebCardGame.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to class CardDisplay {
-        ///    constructor() {
-        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;cardDisplay&quot;);
-        ///        var row = document.createElement(&quot;tr&quot;);
-        ///        this.RootNode.appendChild(row);
+        ///    constructor(styleClass, id) {
+        ///        this.RootNode = createElementWithClassAndId(&quot;div&quot;, styleClass, id);
         ///        this.Slots = [3]; // Array of card slots.
         ///        for (var index = 0; index &lt; 3; ++index) {
         ///            var slot = new CardSlot(index);
         ///            this.Slots[index] = slot;
-        ///            var col = document.createElement(&quot;th&quot;);
-        ///            row.appendChild(col);
-        ///            col.appendChild(this. [rest of string was truncated]&quot;;.
+        ///            this.RootNode.appendChild(this.Slots[index].RootNode);
+        ///        }
+        ///    }
+        ///
+        ///    SetupFromArray(cardArray) {
+        ///        for (var index = 0; index &lt; 3; ++index) {
+        ///            if (cardA [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CardDisplay {
             get {
@@ -110,7 +113,7 @@ namespace WebCardGame.Properties {
         ///    }
         ///
         ///    Setup(card) {
-        ///        this.Label.textContent = ValueLabel[card.Value] + SigilSymbol[card.Sigil];
+        ///        this.Label.textContent = MiniValueLabel[card.Value] + SigilSymbol[card.Sigil];
         ///    }
         ///}.
         /// </summary>
@@ -124,17 +127,16 @@ namespace WebCardGame.Properties {
         ///   Looks up a localized string similar to class CardSlot {
         ///    constructor(index) {
         ///        this.Index = index;
-        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;cardSlot&quot;);
-        ///        var row = document.createElement(&quot;tr&quot;);
-        ///        this.RootNode.appendChild(row);
-        ///        this.CardReceptacle = row;
+        ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;CardSlot&quot;);
+        ///        this.CardReceptacle = createElementWithClass(&quot;div&quot;, &quot;CardReceptacle&quot;);
+        ///        this.RootNode.appendChild(this.CardReceptacle);
         ///        this.Card = null;
         ///
-        ///        row = document.createElement(&quot;tr&quot;);
-        ///        this.RootNode.appendChild(row);
         ///        this.Button = document.createElement(&quot;button&quot;);
-        ///        row.appendChild(this.Button);
-        ///        this.ButtonLabel = docum [rest of string was truncated]&quot;;.
+        ///        this.ButtonLabel = document.createTextNode(&quot;_&quot;);
+        ///        this.Button.appendChild(this.ButtonLabel);
+        ///
+        ///        this.Action = function (inde [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CardSlot {
             get {
@@ -168,9 +170,10 @@ namespace WebCardGame.Properties {
         ///        &quot;\\#########/&quot;,
         ///        &quot;  ¯¯¯¯¯¯¯¯  &quot;
         ///      ]
-        ///    ]
-        ///  ]
-        ///}.
+        ///    ],
+        ///    [
+        ///      [
+        ///        &quot; _   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Config {
             get {
@@ -181,18 +184,20 @@ namespace WebCardGame.Properties {
         /// <summary>
         ///   Looks up a localized string similar to class Deck {
         ///    constructor() {
-        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;deck&quot;);
-        ///        this.NumberOfCards = 0;
-        ///        var row = document.createElement(&quot;tr&quot;);
-        ///        this.RootNode.appendChild(row);
+        ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;Deck&quot;);
+        ///        var div = createElementWithClass(&quot;div&quot;);
+        ///        var label = document.createTextNode(&quot;Deck&quot;);
+        ///        div.appendChild(label);
+        ///        this.RootNode.appendChild(div);
+        ///
+        ///        div = createElementWithClass(&quot;div&quot;)
         ///        this.CardCountLabel = document.createTextNode(&quot;&quot;);
-        ///        row.appendChild(this.CardCountLabel);
+        ///        div.appendChild(this.CardCountLabel);
+        ///        this.RootNode.appendChild(div);
         ///    }
         ///
         ///    Setup(gameState) {
-        ///        this.CardCountLabel.textContent = &quot;Cards in deck &quot; + gameState.CardsInDeck;
-        ///    }
-        ///}.
+        ///        [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Deck {
             get {
@@ -203,15 +208,19 @@ namespace WebCardGame.Properties {
         /// <summary>
         ///   Looks up a localized string similar to class DiscardPile {
         ///    constructor() {
-        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;discardPile&quot;);
-        ///        this.Label = document.createTextNode(&quot;Cards in discard pile : ?&quot;);
-        ///        this.RootNode.appendChild(this.Label);
+        ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;Deck&quot;);
+        ///        var div = createElementWithClass(&quot;div&quot;);
+        ///        var label = document.createTextNode(&quot;Discard&quot;);
+        ///        div.appendChild(label);
+        ///        this.RootNode.appendChild(div);
+        ///
+        ///        div = createElementWithClass(&quot;div&quot;)
+        ///        this.CardCountLabel = document.createTextNode(&quot;&quot;);
+        ///        div.appendChild(this.CardCountLabel);
+        ///        this.RootNode.appendChild(div);
         ///    }
         ///
-        ///    Setup(gameState) {
-        ///        this.Label.textContent = &quot;Cards in discard Pile : &quot; + gameState.CardsInDiscardPile;
-        ///    }
-        ///}.
+        ///    Setup(gameState)  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DiscardPile {
             get {
@@ -241,30 +250,21 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        ///FacesData = [
-        ///    [
-        ///        [
-        ///            &quot; ~~~~~~~~~ &quot;,
-        ///            &quot;/ ~~~~~~~ \\&quot;,
-        ///            &quot;|          |&quot;,
-        ///            &quot;|   O   O  |&quot;,
-        ///            &quot;|     U    |&quot;,
-        ///            &quot;|   \\___/  |&quot;,
-        ///            &quot;\\         /&quot;,
-        ///            &quot; ¯¯¯¯¯¯¯¯¯ &quot;,
-        ///        ],
-        ///    ],
-        ///    [
-        ///        [
-        ///            &quot; ~~~~~~~~~ &quot;,
-        ///            &quot;/~~~      \\&quot;,
-        ///            &quot;|~~        |&quot;,
-        ///            &quot;|~  O   O  |&quot;,
-        ///            &quot;|   ¯ V ¯  |&quot;,
-        ///            &quot;|# |____| #|&quot;,
-        ///            &quot;\\#########/&quot;,
-        ///       [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to class Face {
+        ///    constructor() {
+        ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;Face&quot;);
+        ///        this.Button = document.createElement(&quot;button&quot;);
+        ///        this.Div = document.createElement(&quot;div&quot;);
+        ///
+        ///        this.Rows = [];
+        ///        this.Pres = [];
+        ///        for (var index = 0; index &lt; 8; ++index) {
+        ///            this.Pres[index] = document.createElement(&quot;pre&quot;);
+        ///            this.Rows[index] = document.createTextNode(&quot;&quot;);
+        ///            this.Pres[index].appendChild(this.Rows[index]);
+        ///        }
+        ///
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Face {
             get {
@@ -296,13 +296,14 @@ namespace WebCardGame.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;!doctype html&gt;
-        ///&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
         ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;Style.css&quot; /&gt;
-        ///
         ///
         ///&lt;div id=mainContainer&gt;
         ///    &lt;h2&gt;Two Players Solitaire&lt;/h2&gt;
-        ///    &lt;div id=playArea&gt;&lt;/div&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div id=playArea&gt;&lt;/div&gt;
+        ///    &lt;/div&gt;
         ///&lt;/div&gt;
         ///
         ///&lt;div id=debugArea&gt;
@@ -311,11 +312,7 @@ namespace WebCardGame.Properties {
         ///&lt;/div&gt;
         ///
         ///&lt;div id=&quot;signature&quot;&gt;
-        ///    Made by &lt;a href=&quot;https://antonmakesgames.itch.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;AntonMakesGames&lt;/a&gt;
-        ///&lt;/div&gt;
-        ///
-        ///&lt;script src=&quot;Card.js&quot;&gt;&lt;/script&gt;
-        ///&lt;script src=&quot;Ca [rest of string was truncated]&quot;;.
+        ///    Made by &lt;a href=&quot;https://antonmakesgames.itch.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;AntonMake [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameIndex {
             get {
@@ -326,17 +323,20 @@ namespace WebCardGame.Properties {
         /// <summary>
         ///   Looks up a localized string similar to class GameInfo {
         ///    constructor() {
-        ///        this.RootNode = document.createElement(&quot;table&quot;);
+        ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;GeneralInfoContainer&quot;);
         ///
-        ///        var roundParagraph = document.createElement(&quot;p&quot;);
-        ///        this.RootNode.appendChild(roundParagraph);
-        ///        this.RoundLabel = document.createTextNode(&quot;&quot;);
-        ///        roundParagraph.appendChild(this.RoundLabel);
+        ///        this.Deck = new Deck();
+        ///        this.RootNode.appendChild(this.Deck.RootNode);
         ///
-        ///        var playerParagraph = document.createElement(&quot;p&quot;);
-        ///        this.RootNode.appendChild(playerParagraph);
-        ///        this.CurrentPlayerMessage = &quot;Current player : &quot;;
-        ///        this.Curren [rest of string was truncated]&quot;;.
+        ///        this.DiscardPile = new DiscardPile();
+        ///        this.RootNode.appendChild(this.DiscardPile.RootNode);
+        ///    }
+        ///
+        ///    Setup(playerIndex, gameState) {
+        ///        this.Deck.Setup(gameState);
+        ///        this.DiscardPile.Setup(gameState);
+        ///    }
+        ///}.
         /// </summary>
         internal static string GameInfo {
             get {
@@ -359,10 +359,10 @@ namespace WebCardGame.Properties {
         ///    &quot;Diamond&quot;];
         ///
         ///const SigilSymbol = [
-        ///    &apos;\u2660&apos;,
-        ///    &apos;\u2663&apos;,
-        ///    &apos;\u2661&apos;,
-        ///    &apos;\u2662&apos;];
+        ///    &quot;♠&quot;,
+        ///    &quot;♣&quot;,
+        ///    &quot;♥&quot;,
+        ///    &quot;♦&quot;];
         ///
         ///const ValueLabel = [
         ///    &quot;Ace&quot;,
@@ -377,9 +377,17 @@ namespace WebCardGame.Properties {
         ///    &quot;10&quot;,
         ///];
         ///
-        ///var websocket = null;
-        ///var isConnected = false;
-        ///var gameWebSocketUrl = document.URL.replace(&quot;http: [rest of string was truncated]&quot;;.
+        ///const MiniValueLabel = [
+        ///    &quot;1&quot;,
+        ///    &quot;2&quot;,
+        ///    &quot;3&quot;,
+        ///    &quot;4&quot;,
+        ///    &quot;5&quot;,
+        ///    &quot;6&quot;,
+        ///    &quot;7&quot;,
+        ///    &quot;8&quot;,
+        ///    &quot;9&quot;,
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MultiplayerSolitaire {
             get {
@@ -399,7 +407,7 @@ namespace WebCardGame.Properties {
         ///
         ///            this.ScoreLabel = document.createTextNode(&quot;Score : &quot;);
         ///            this.HealthLabel = document.createTextNode(&quot;Health : &quot;);
-        ///            this.ShieldLabel =  [rest of string was truncated]&quot;;.
+        ///            this.PairBulletLabe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Opponent {
             get {
@@ -409,18 +417,17 @@ namespace WebCardGame.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to class Player {
-        ///    constructor() {
+        ///    constructor(id, labelName) {
+        ///        this.Header = new PlayerHeader(id, labelName);
+        ///        this.Header.Face.SetInteractable(false);
+        ///        this.PlayerStats = new PlayerStats(id);
+        ///        this.Board = new CardDisplay(&quot;PlayerBoard&quot;, id);
+        ///        this.Hand = new CardDisplay(&quot;PlayerHand&quot;, id);
+        ///        this.HasHand = false;
+        ///
         ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;player&quot;);
         ///        this.PlayerLabel = document.createTextNode(&quot;Player &quot; + localPlayerIndex);
-        ///        var paragraph = document.createElement(&quot;p&quot;);
-        ///        paragraph.appendChild(this.PlayerLabel);
-        ///        this.RootNode.appendChild(paragraph);
-        ///
-        ///        this.Board = new CardDisplay();
-        ///        this.RootNode.appendChild(this.Board.RootNode);
-        ///
-        ///        this.Hand = new CardDisplay();
-        ///        this.RootNode.appendChi [rest of string was truncated]&quot;;.
+        ///        v [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Player {
             get {
@@ -452,21 +459,22 @@ namespace WebCardGame.Properties {
         /// <summary>
         ///   Looks up a localized string similar to class PooledLogTable {
         ///    constructor() {
-        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;LogTable&quot;);
-        ///        this.PoolSize = 10;
+        ///        this.RootNode = createElementWithClass(&quot;Div&quot;, &quot;GameLog&quot;);
+        ///        this.PoolSize = 15;
         ///        this.Pool = [];
         ///        for (var index = 0; index &lt; this.PoolSize; ++index)
         ///        {
-        ///            this.Pool[index] = document.createElement(&quot;tr&quot;);
+        ///            this.Pool[index] = createElementWithClass(&quot;div&quot;, &quot;LogEntry&quot;);
         ///            this.Pool[index].Label = document.createTextNode(&quot;&quot;);
-        ///            this.Pool[index].appendChild(this.Pool[index].Label);
         ///        }
         ///
-        ///        this.Count = 0;
+        ///        this.Cursor = 0;
         ///    }
         ///
         ///    Clear() {
-        ///        clear [rest of string was truncated]&quot;;.
+        ///        clearChilds(this.RootNode);
+        ///        this.Cursor = 0;
+        ///    }        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PooledLogTable {
             get {
@@ -475,38 +483,36 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #debugArea {
-        ///    position: absolute;
-        ///    top: 0pt;
-        ///    right: 0pt;
-        ///    text-align: right;
+        ///   Looks up a localized string similar to body {
+        ///    font-family: &quot;Times New Roman&quot;, Times, serif;
+        ///}
+        ///
+        ///#mainContainer {
         ///    display: flex;
-        ///    flex-direction: column;
-        ///    align-items: end;
-        ///    text-align: right;
+        ///    flex-flow: column;
+        ///    justify-content: center;
+        ///    text-align: center;
         ///}
         ///
-        ///#debugOutput {
-        ///    border: 1pt;
-        ///    border-color: black;
-        ///    border-style: solid;
-        ///    min-width: 300pt;
-        ///    max-width: 50%;
-        ///    text-align: left;
-        ///    display:none;
-        ///    background-color:white;
-        ///
+        ///#playArea {
+        ///    width: 500pt;
+        ///    display: inline-grid;
+        ///    grid-gap: 5pt 10pt;
+        ///    margin-right: 200pt;
         ///}
         ///
-        ///#output &gt; p {
-        ///    overflow-wrap: break-word;
+        ///.PlayerHeader {
+        ///    grid-column: 2;
+        ///    display: flex;
+        ///    flex-direction: row;
+        ///    align-items: center;
+        ///    justify-content: center;
+        ///    gap: 30pt;
         ///}
         ///
-        ///#output span {
-        ///    color: blue;
-        ///}
-        ///
-        ///#output span.erro [rest of string was truncated]&quot;;.
+        ///.PlayerStats {
+        ///    grid-column: 2;
+        ///    display:  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Style {
             get {
@@ -522,8 +528,8 @@ namespace WebCardGame.Properties {
         ///    websocket.onopen = function (e) {
         ///        isConnected = true;
         ///        writeToScreen(&quot;CONNECTED&quot;);
-        ///        var requestPlayerSlots = &apos;{ &quot;OrderType&quot;: &quot;RequestPlayerSlots&quot; }&apos;;
-        ///        DoSend(requestPlayerSlots);
+        ///        var requestFaces = &apos;{ &quot;OrderType&quot;: &quot;RequestPlayerFaces&quot; }&apos;;
+        ///        DoSend(requestFaces);
         ///    };
         ///
         ///    websocket.onclose = function (e) {
@@ -532,7 +538,7 @@ namespace WebCardGame.Properties {
         ///
         ///    websocket.onmessage = RecieveWebSocketMessage;
         ///
-        ///    websocket.onerror = [rest of string was truncated]&quot;;.
+        ///    websocket.onerror = function (e [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string WebSocket {
             get {
