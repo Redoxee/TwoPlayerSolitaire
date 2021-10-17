@@ -30,6 +30,7 @@ namespace WebGUILauncher
         private void InitializeComponent()
         {
             this.LaunchServerButton = new System.Windows.Forms.Button();
+            this.ServerAdress = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // LaunchServerButton
@@ -42,23 +43,38 @@ namespace WebGUILauncher
             this.LaunchServerButton.UseVisualStyleBackColor = true;
             this.LaunchServerButton.Click += new System.EventHandler(this.LauncheGameButton_click);
             // 
+            // ServerAdress
+            // 
+            this.ServerAdress.Location = new System.Drawing.Point(124, 215);
+            this.ServerAdress.Name = "ServerAdress";
+            this.ServerAdress.ReadOnly = true;
+            this.ServerAdress.Size = new System.Drawing.Size(230, 23);
+            this.ServerAdress.TabIndex = 3;
+            this.ServerAdress.Text = "127.0.0.1";
+            // 
             // ServerLauncher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(484, 461);
+            this.Controls.Add(this.ServerAdress);
             this.Controls.Add(this.LaunchServerButton);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(500, 500);
+            this.MinimumSize = new System.Drawing.Size(500, 500);
             this.Name = "ServerLauncher";
             this.Text = "Multiplayer Solitaire Launcher";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ServerLauncher_FormClosing);
             this.Load += new System.EventHandler(this.ServerLauncher_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
         private System.Windows.Forms.Button LaunchServerButton;
+        private System.Windows.Forms.TextBox ServerAdress;
     }
 }
 

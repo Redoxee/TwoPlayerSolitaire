@@ -75,5 +75,11 @@ namespace WebGUILauncher
                 }
             }
         }
+
+        // From https://stackoverflow.com/questions/3253701/get-public-external-ip-address
+        public static System.Net.IPAddress GetPublicIp(string serviceUrl = "https://ipinfo.io/ip")
+        {
+            return System.Net.IPAddress.Parse(new System.Net.WebClient().DownloadString(serviceUrl));
+        }
     }
 }

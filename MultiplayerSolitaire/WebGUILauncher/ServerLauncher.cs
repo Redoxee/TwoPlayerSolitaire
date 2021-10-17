@@ -12,21 +12,24 @@ namespace WebGUILauncher
 {
     public partial class ServerLauncher : Form
     {
+        MSGWeb.MSGWeb.Parameters serverParameters = MSGWeb.MSGWeb.Parameters.Default();
+
         public ServerLauncher()
         {
             InitializeComponent();
+
+            this.serverParameters.OnEveryClientDisconected = this.Server_EveryClientDisconected;
         }
 
         private void ServerLauncher_Load(object sender, EventArgs e)
         {
-
+            string publicIp = Program.GetPublicIp().ToString();
+            this.ServerAdress.Text = $"http://{publicIp}:{this.serverParameters.Port}/{this.serverParameters.EndPoint}";
         }
 
         private void LauncheGameButton_click(object sender, EventArgs e)
         {
-            MSGWeb.MSGWeb.Parameters parameters = MSGWeb.MSGWeb.Parameters.Default();
-            parameters.OnEveryClientDisconected = this.Server_EveryClientDisconected;
-            Program.LaunchGame(parameters);
+            Program.LaunchGame(this.serverParameters);
         }
 
         private void ServerLauncher_FormClosing(object sender, FormClosingEventArgs e)
