@@ -8,5 +8,6 @@
 
     Setup(card) {
         this.Label.textContent = MiniValueLabel[card.Value] + SigilSymbol[card.Sigil];
+        this.RootNode.id = SigilLabel[card.Sigil];
     }
 }

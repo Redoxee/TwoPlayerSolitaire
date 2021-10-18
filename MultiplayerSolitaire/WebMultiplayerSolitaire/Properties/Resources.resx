@@ -127,17 +127,14 @@
   <data name="CardMini" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cardmini.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="CardPile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\cardpile.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="CardSlot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\cardslot.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="Config" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\config.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="Deck" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\deck.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="DiscardPile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\discardpile.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="EndGame" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\endgame.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

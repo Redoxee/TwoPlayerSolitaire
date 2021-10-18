@@ -171,7 +171,9 @@ function HandleSandboxUpdate(messageData) {
 
                 if (player.Board.Slots[gameChange.IndexOnBoard].Card == null) {
                     gameState.CardsInDeck--;
-                    gameInfo.Deck.Setup(gameState);
+                }
+                else {
+                    gameInfo.Deck.AddCard(player.Board.Slots[gameChange.IndexOnBoard].Card.CardData);
                 }
 
                 player.Hand.Slots[gameChange.IndexInHand].DetatchCard();
@@ -186,10 +188,13 @@ function HandleSandboxUpdate(messageData) {
 
                 if (opponent.Board.Slots[gameChange.IndexOnBoard].Card == null) {
                     gameState.CardsInDeck--;
-                    gameInfo.Deck.Setup(gameState);
+                }
+                else {
+                    gameInfo.Deck.AddCard(opponent.Board.Slots[gameChange.IndexOnBoard].Card.CardData);
                 }
 
                 opponent.Board.Slots[gameChange.IndexOnBoard].AttachCard(card);
+                gameInfo.Deck.RemoveCard(gameChange.Card);
             }
         }
         else if (changeType == "PickedCard") {
@@ -201,6 +206,7 @@ function HandleSandboxUpdate(messageData) {
                 var newCardMini = new CardMini(gameChange.Card);
                 gameLog.Log("You picked ", [newCardMini]);
                 player.Hand.Slots[gameChange.IndexInHand].AttachCard(newCard);
+                gameInfo.Deck.RemoveCard(gameChange.Card);
             }
         }
 
@@ -212,7 +218,7 @@ function HandleSandboxUpdate(messageData) {
                 for (var index = 0; index < 3; ++index) {
                     if ((gameChange.UsedCards & 1 << index) != 0) {
                         gameState.CardsInDiscardPile++;
-                        gameInfo.DiscardPile.Setup(gameState);
+                        gameInfo.DiscardPile.AddCard(player.Board.Slots[index].Card.CardData);
                         cardInCombo[numberOfCombo++] = new CardMini(player.Board.Slots[index].Card.CardData);
 
                         player.Board.Slots[index].DetatchCard();
@@ -223,7 +229,7 @@ function HandleSandboxUpdate(messageData) {
                 for (var index = 0; index < 3; ++index) {
                     if ((gameChange.UsedCards & 1 << index) != 0) {
                         gameState.CardsInDiscardPile++;
-                        gameInfo.DiscardPile.Setup(gameState);
+                        gameInfo.DiscardPile.AddCard(opponent.Board.Slots[index].Card.CardData);
                         cardInCombo[numberOfCombo++] = new CardMini(opponent.Board.Slots[index].Card.CardData);
 
                         opponent.Board.Slots[index].DetatchCard();
@@ -241,6 +247,13 @@ function HandleSandboxUpdate(messageData) {
 
             if (gameChange.PlayerProperty == "Score") {
                 target.PlayerStats.SetScore(gameChange.NewValue);
+
+                if (gameChange.PlayerIndex == localPlayerIndex) {
+                    gameLog.Log("You won the round!");
+                }
+                else {
+                    gameLog.Log("Opponent win the round!");
+                }
             }
 
             if (gameChange.PlayerProperty == "Health") {
@@ -302,10 +315,8 @@ function SetupFromGameState() {
     opponent.Header.Face.Setup(faceCollection.FacesData, gameState.OtherPlayer.FaceIndex, 0);
     opponent.Setup(gameState.OtherPlayer);
 
-    gameInfo.Setup(gameState.PlayerTurn, gameState);
-
     // Settuping the board.
-    gameInfo.Setup(localPlayerIndex, gameState);
+    gameInfo.Setup(gameState);
     playArea.appendChild(gameInfo.RootNode);
 
     playArea.appendChild(gameLog.RootNode);
@@ -325,7 +336,7 @@ function SetupFromGameState() {
 function InitializeRound() {
     opponent.Setup(gameState.OtherPlayer);
     player.Setup(gameState.CurrentPlayer);
-    gameInfo.Setup(localPlayerIndex, gameState);
+    gameInfo.Setup(gameState);
     if (gameState.PlayerTurn == localPlayerIndex) {
         PlayerHandModeChooseCard();
         clientState = "SelectHandCard";

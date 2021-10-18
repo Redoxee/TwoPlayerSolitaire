@@ -136,22 +136,22 @@
         justify-content: center;
     }
 
-.Deck {
+.CardPile {
     border: 1pt;
     border-style: solid;
     border-color: darkgray;
-    width: 92pt;
-    height: 112pt;
+    width: 160pt;
+    height: 180pt;
     text-align: center;
 }
 
-.DiscardPile {
-    border: 1pt;
-    border-style: solid;
-    border-color: darkgray;
-    width: 92pt;
-    height: 112pt;
-    text-align: center;
+.MiniCardDisplay {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
+.MiniCardColumn {
+    display: flex;
+    flex-direction: column;
 }
 
 .Face pre {
@@ -186,10 +186,10 @@
     display: inline;
 }
 
-.LogEntry > * {
-    display: inline;
-    margin-left: 3pt;
-}
+    .LogEntry > * {
+        display: inline;
+        margin-left: 3pt;
+    }
 
 .CardMini {
     border: 1pt;

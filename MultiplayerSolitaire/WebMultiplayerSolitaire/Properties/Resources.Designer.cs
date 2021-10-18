@@ -114,12 +114,35 @@ namespace WebCardGame.Properties {
         ///
         ///    Setup(card) {
         ///        this.Label.textContent = MiniValueLabel[card.Value] + SigilSymbol[card.Sigil];
+        ///        this.RootNode.id = SigilLabel[card.Sigil];
         ///    }
         ///}.
         /// </summary>
         internal static string CardMini {
             get {
                 return ResourceManager.GetString("CardMini", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to class CardPile {
+        ///    constructor(title) {
+        ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;CardPile&quot;);
+        ///        var div = createElementWithClass(&quot;div&quot;);
+        ///        var label = document.createTextNode(title);
+        ///        div.appendChild(label);
+        ///        this.RootNode.appendChild(div);
+        ///
+        ///        div = createElementWithClass(&quot;div&quot;)
+        ///        this.CardCountLabel = document.createTextNode(&quot;&quot;);
+        ///        div.appendChild(this.CardCountLabel);
+        ///        this.RootNode.appendChild(div);
+        ///
+        ///        this.MiniCardDispl [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CardPile {
+            get {
+                return ResourceManager.GetString("CardPile", resourceCulture);
             }
         }
         
@@ -178,53 +201,6 @@ namespace WebCardGame.Properties {
         internal static string Config {
             get {
                 return ResourceManager.GetString("Config", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to class Deck {
-        ///    constructor() {
-        ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;Deck&quot;);
-        ///        var div = createElementWithClass(&quot;div&quot;);
-        ///        var label = document.createTextNode(&quot;Deck&quot;);
-        ///        div.appendChild(label);
-        ///        this.RootNode.appendChild(div);
-        ///
-        ///        div = createElementWithClass(&quot;div&quot;)
-        ///        this.CardCountLabel = document.createTextNode(&quot;&quot;);
-        ///        div.appendChild(this.CardCountLabel);
-        ///        this.RootNode.appendChild(div);
-        ///    }
-        ///
-        ///    Setup(gameState) {
-        ///        [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string Deck {
-            get {
-                return ResourceManager.GetString("Deck", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to class DiscardPile {
-        ///    constructor() {
-        ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;Deck&quot;);
-        ///        var div = createElementWithClass(&quot;div&quot;);
-        ///        var label = document.createTextNode(&quot;Discard&quot;);
-        ///        div.appendChild(label);
-        ///        this.RootNode.appendChild(div);
-        ///
-        ///        div = createElementWithClass(&quot;div&quot;)
-        ///        this.CardCountLabel = document.createTextNode(&quot;&quot;);
-        ///        div.appendChild(this.CardCountLabel);
-        ///        this.RootNode.appendChild(div);
-        ///    }
-        ///
-        ///    Setup(gameState)  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DiscardPile {
-            get {
-                return ResourceManager.GetString("DiscardPile", resourceCulture);
             }
         }
         
@@ -332,7 +308,7 @@ namespace WebCardGame.Properties {
         ///        this.RootNode.appendChild(this.DiscardPile.RootNode);
         ///    }
         ///
-        ///    Setup(playerIndex, gameState) {
+        ///    Setup(gameState) {
         ///        this.Deck.Setup(gameState);
         ///        this.DiscardPile.Setup(gameState);
         ///    }
