@@ -34,8 +34,6 @@ namespace WebGUILauncher
 
             Program.CancellationTokenSource = new System.Threading.CancellationTokenSource();
             System.Threading.Tasks.Task.Run(()=>MSGWeb.Run(parameters, Program.CancellationTokenSource.Token));
-
-            Program.OpenBrowser($"http://localhost:{parameters.Port}/{parameters.EndPoint}");
         }
 
         public static void CloseGame()

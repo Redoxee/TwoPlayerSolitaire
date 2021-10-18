@@ -14,10 +14,18 @@ namespace WebGUILauncher
     {
         MSGWeb.MSGWeb.Parameters serverParameters = MSGWeb.MSGWeb.Parameters.Default();
 
+        private States currentState;
+
+        public enum States
+        {
+            Configuration,
+            Running,
+        }
+
         public ServerLauncher()
         {
             InitializeComponent();
-
+            this.currentState = States.Configuration;
             this.serverParameters.OnEveryClientDisconected = this.Server_EveryClientDisconected;
         }
 
@@ -29,7 +37,20 @@ namespace WebGUILauncher
 
         private void LauncheGameButton_click(object sender, EventArgs e)
         {
+            if (this.currentState != States.Configuration)
+            {
+                return;
+            }
+
             Program.LaunchGame(this.serverParameters);
+            this.currentState = States.Running;
+            this.LaunchServerButton.Text = "Server Running";
+            this.LaunchServerButton.Enabled = false;
+
+            if (this.AutoLaunchBrowser.Checked)
+            {
+                Program.OpenBrowser(this.ServerAdress.Text);
+            }
         }
 
         private void ServerLauncher_FormClosing(object sender, FormClosingEventArgs e)
