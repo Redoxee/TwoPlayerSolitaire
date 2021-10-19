@@ -209,7 +209,16 @@ function HandleSandboxUpdate(messageData) {
                 gameInfo.Deck.RemoveCard(gameChange.Card);
             }
         }
-
+        else if (changeType == "CardRemovedFromBoard") {
+            if (gameChange.PlayerIndex == localPlayerIndex) {
+                player.Board.Slots[gameChange.IndexOnBoard].DetatchCard();
+                gameInfo.Deck.AddCard(gameChange.Card);
+            }
+            else {
+                opponent.Board.Slots[gameChange.IndexOnBoard].DetatchCard();
+                gameInfo.Deck.AddCard(gameChange.Card);
+            }
+        }
         else if (changeType == "PlayerCombo") {
             var cardInCombo = [];
             var numberOfCombo = 0;

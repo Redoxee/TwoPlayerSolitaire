@@ -152,19 +152,21 @@
                 comboChanges.CardCombo = combo;
                 comboChanges.UsedCards = usedCards;
 
-                ref GameChange propertyChanged = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerPropertyChanged);
-
                 if (combo == CardCombo.Pair)
                 {
-                    playingPlayer.PairCombo++;
-
-                    propertyChanged.PlayerProperty = GameChange.PlayerProperties.PairCombo;
-                    propertyChanged.NewValue = playingPlayer.PairCombo;
-                    propertyChanged.PlayerIndex = playingPlayer.Index;
-
-                    if (playingPlayer.PairCombo == sandbox.PairComboSize)
+                    for (int index = 0; index < otherPlayer.Board.Length; ++index)
                     {
-                        otherPlayer.Health = 0;
+                        if ((usedCards & 1 << index) != 0 && otherPlayer.Board[index].Value != Card.None)
+                        {
+                            sandbox.Deck.AddCardUnder(otherPlayer.Board[index]);
+
+                            ref GameChange cardRemoved = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.CardRemovedFromBoard);
+                            cardRemoved.Card = otherPlayer.Board[index];
+                            cardRemoved.PlayerIndex = otherPlayerIndex;
+                            cardRemoved.IndexOnBoard = index;
+                            otherPlayer.Board[index].Value = Card.None;
+
+                        }
                     }
                 }
                 else if (combo == CardCombo.Flush)
@@ -174,6 +176,7 @@
                         playingPlayer.Health++;
                     }
 
+                    ref GameChange propertyChanged = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerPropertyChanged);
                     propertyChanged.PlayerProperty = GameChange.PlayerProperties.Health;
                     propertyChanged.NewValue = playingPlayer.Health;
                     propertyChanged.PlayerIndex = playingPlayer.Index;
@@ -182,6 +185,7 @@
                 {
                     otherPlayer.Health--;
 
+                    ref GameChange propertyChanged = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerPropertyChanged);
                     propertyChanged.PlayerProperty = GameChange.PlayerProperties.Health;
                     propertyChanged.NewValue = otherPlayer.Health;
                     propertyChanged.PlayerIndex = otherPlayerIndex;
@@ -190,6 +194,7 @@
                 {
                     otherPlayer.Health-=2;
 
+                    ref GameChange propertyChanged = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayerPropertyChanged);
                     propertyChanged.PlayerProperty = GameChange.PlayerProperties.Health;
                     propertyChanged.NewValue = otherPlayer.Health;
                     propertyChanged.PlayerIndex = otherPlayerIndex;

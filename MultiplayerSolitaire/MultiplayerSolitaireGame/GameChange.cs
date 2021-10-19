@@ -24,6 +24,7 @@
             PickedCard,
             PlayerPropertyChanged,
             PlayerCombo,
+            CardRemovedFromBoard,
             NextPlayer,
             PlayerWon,
         }
