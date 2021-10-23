@@ -6,11 +6,6 @@
     {
         private static readonly ResourceManager ResourceManager = new ResourceManager("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
 
-        public static string HandleRestRequest()
-        {
-            return GetIndexPage();
-        }
-
         public static string GetIndexPage()
         {
             return RestRequestService.ResourceManager.GetString("GameIndex");

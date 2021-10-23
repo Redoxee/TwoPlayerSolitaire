@@ -14,9 +14,10 @@
         // use dependency injection to grab a reference to the hosting container's lifetime cancellation tokens
         public RestMiddleware(IHostApplicationLifetime hostLifetime)
         {
-            // gracefully close all websockets during shutdown (only register on first instantiation)
             if (AppShutdownHandler.Token.Equals(CancellationToken.None))
+            {
                 AppShutdownHandler = hostLifetime.ApplicationStopping.Register(ApplicationShutdownHandler);
+            }
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -28,7 +29,7 @@
                     if (context.Request.Headers["Accept"][0].Contains("text/html"))
                     {
                         Console.WriteLine("Sending HTML to client.");
-                        string response = RestRequestService.HandleRestRequest();
+                        string response = RestRequestService.GetIndexPage();
                         context.Response.ContentType = "text/html";
                         await context.Response.WriteAsync(response);
                     }
