@@ -14,7 +14,7 @@ namespace MSGWeb
             services.AddTransient<RestMiddleware>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment _)
         {
             // enable websocket support
             app.UseWebSockets(new WebSocketOptions
