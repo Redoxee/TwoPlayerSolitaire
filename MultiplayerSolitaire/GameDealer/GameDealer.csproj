@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Docker.DotNet" Version="3.125.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MultiplayerSolitaireGame\MultiplayerSolitaireGame.csproj" />
     <ProjectReference Include="..\WebMultiplayerSolitaire\WebCardGame.csproj" />
   </ItemGroup>

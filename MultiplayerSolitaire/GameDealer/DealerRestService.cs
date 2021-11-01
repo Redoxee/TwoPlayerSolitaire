@@ -28,43 +28,46 @@
             {
                 if (ServerIsRunning)
                 {
-                    if (context.Request.Headers["Accept"][0].Contains("text/html"))
+                    if (context.Request.Method == "GET")
                     {
-                        Console.WriteLine("Sending HTML to client.");
-                        string response = DealerRestService.GetIndexPage();
-                        context.Response.ContentType = "text/html";
-                        await context.Response.WriteAsync(response);
-                    }
-                    else
-                    {
-                        string uri = context.Request.Path.ToUriComponent();
-                        if (uri.EndsWith(".js"))
+                        if (context.Request.Headers["Accept"][0].Contains("text/html"))
                         {
-                            context.Response.ContentType = "application/javascript";
-                            if (DealerRestService.TryGetFile(uri, out string stringResponse))
-                            {
-                                await context.Response.WriteAsync(stringResponse);
-                            }
+                            Console.WriteLine("Sending HTML to client.");
+                            string response = DealerRestService.GetIndexPage();
+                            context.Response.ContentType = "text/html";
+                            await context.Response.WriteAsync(response);
                         }
-                        else if (uri.EndsWith(".css"))
+                        else
                         {
-                            context.Response.ContentType = "text/css";
-                            if (DealerRestService.TryGetFile(uri, out string stringResponse))
+                            string uri = context.Request.Path.ToUriComponent();
+                            if (uri.EndsWith(".js"))
                             {
-                                await context.Response.WriteAsync(stringResponse);
+                                context.Response.ContentType = "application/javascript";
+                                if (DealerRestService.TryGetFile(uri, out string stringResponse))
+                                {
+                                    await context.Response.WriteAsync(stringResponse);
+                                }
                             }
-                        }
-                        else if (uri.EndsWith(".json"))
-                        {
-                            context.Response.ContentType = "text/json";
-                            if (DealerRestService.TryGetFile(uri, out string stringResponse))
+                            else if (uri.EndsWith(".css"))
                             {
-                                await context.Response.WriteAsync(stringResponse);
+                                context.Response.ContentType = "text/css";
+                                if (DealerRestService.TryGetFile(uri, out string stringResponse))
+                                {
+                                    await context.Response.WriteAsync(stringResponse);
+                                }
                             }
-                        }
+                            else if (uri.EndsWith(".json"))
+                            {
+                                context.Response.ContentType = "text/json";
+                                if (DealerRestService.TryGetFile(uri, out string stringResponse))
+                                {
+                                    await context.Response.WriteAsync(stringResponse);
+                                }
+                            }
 
-                        // ignore other requests (such as favicon)
-                        // potentially other middleware will handle it (see finally block)
+                            // ignore other requests (such as favicon)
+                            // potentially other middleware will handle it (see finally block)
+                        }
                     }
                 }
                 else
@@ -89,7 +92,7 @@
         }
 
         // event-handlers are the sole case where async void is valid
-        public static void ApplicationShutdownHandler()
+        private static void ApplicationShutdownHandler()
         {
             DealerRestService.ServerIsRunning = false;
         }

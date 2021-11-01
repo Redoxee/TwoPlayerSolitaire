@@ -11,12 +11,14 @@
         {
             // register our custom middleware since we use the IMiddleware factory approach
             services.AddTransient<DealerRestService>();
+            services.AddTransient<DealerOrderService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // add our custom middleware to the pipeline
             app.UseMiddleware<DealerRestService>();
+            app.UseMiddleware<DealerOrderService>();
         }
     }
 }

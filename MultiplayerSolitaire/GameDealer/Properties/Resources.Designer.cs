@@ -61,20 +61,53 @@ namespace GameDealer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to !DOCTYPE html&gt;
+        ///   Looks up a localized string similar to function requestNewGame() {
+        ///    var xhttp = new XMLHttpRequest();
+        ///    xhttp.onreadystatechange = function () {
+        ///        if (this.readyState == 4 &amp;&amp; this.status == 200) {
+        ///            document.getElementsByClassName(&quot;Response&quot;).innerHTML = this.responseText;
+        ///        }
+        ///    };
+        ///    xhttp.open(&quot;POST&quot;, &quot;RequestNewGame&quot;, true);
+        ///    xhttp.send();
+        ///}.
+        /// </summary>
+        internal static string GameDealer {
+            get {
+                return ResourceManager.GetString("GameDealer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html&gt;
-        ///&lt;head&gt;
-        ///    &lt;meta charset=&quot;utf-8&quot; /&gt;
-        ///    &lt;title&gt;&lt;/title&gt;
-        ///&lt;/head&gt;
-        ///&lt;body&gt;
-        ///    Hello
-        ///&lt;/body&gt;
-        ///&lt;/html&gt;.
+        ///    &lt;head&gt;
+        ///        &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
+        ///        &lt;title&gt;Game Dealer&lt;/title&gt;
+        ///        &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;style.css&quot; /&gt;
+        ///    &lt;/head&gt;
+        ///    &lt;body&gt;
+        ///        &lt;div class=&quot;Title&quot;&gt;Two Players Solitaire&lt;/div&gt;
+        ///        &lt;button onclick=&quot;requestNewGame()&quot;&gt;New Game&lt;/button&gt;
+        ///        &lt;div class=&quot;Response&quot;&gt;&lt;/div&gt;
+        ///        &lt;div id=&quot;signature&quot;&gt;
+        ///            Made by &lt;a href=&quot;https://antonmakesgames.itch.io/&quot; target=&quot;_blank&quot; rel= [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string index {
             get {
                 return ResourceManager.GetString("index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to body {
+        ///    font-family: &quot;Times New Roman&quot;, Times, serif;
+        ///}
+        ///.
+        /// </summary>
+        internal static string style {
+            get {
+                return ResourceManager.GetString("style", resourceCulture);
             }
         }
     }
