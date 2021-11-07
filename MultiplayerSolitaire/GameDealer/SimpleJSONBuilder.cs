@@ -2,8 +2,8 @@
 {
     public class SimpleJSONBuilder
     {
-        private System.Text.StringBuilder stringBuilder;
-        private System.Collections.Generic.List<int> fieldCounter;
+        private readonly System.Text.StringBuilder stringBuilder;
+        private readonly System.Collections.Generic.List<int> fieldCounter;
         
         public SimpleJSONBuilder()
         {
@@ -37,17 +37,17 @@
 
         public SimpleJSONBuilder Add(string name, string value)
         {
-            this.startField();
-            this.appendString(name);
+            this.StartField();
+            this.AppendString(name);
             this.stringBuilder.Append(':');
-            this.appendString(value);
+            this.AppendString(value);
             return this;
         }
 
         public SimpleJSONBuilder Add(string name, int value)
         {
-            this.startField();
-            this.appendString(name);
+            this.StartField();
+            this.AppendString(name);
             this.stringBuilder.Append(':');
             this.stringBuilder.Append(value);
             return this;
@@ -55,8 +55,8 @@
 
         public SimpleJSONBuilder Add(string name, bool value)
         {
-            this.startField();
-            this.appendString(name);
+            this.StartField();
+            this.AppendString(name);
             this.stringBuilder.Append(':');
             this.stringBuilder.Append(value ? "true" : "false");
             return this;
@@ -64,8 +64,8 @@
 
         public SimpleJSONBuilder StartObject(string name)
         {
-            this.startField();
-            this.appendString(name);
+            this.StartField();
+            this.AppendString(name);
             this.stringBuilder.Append(":{");
             this.fieldCounter.Add(0);
             return this;
@@ -78,17 +78,17 @@
             return this;
         }
 
-        private void startField()
+        private void StartField()
         {
-            if (this.fieldCounter[this.fieldCounter.Count - 1] > 0)
+            if (this.fieldCounter[^1] > 0)
             {
                 this.stringBuilder.Append(',');
             }
 
-            this.fieldCounter[this.fieldCounter.Count - 1] += 1;
+            this.fieldCounter[^1] += 1;
         }
 
-        private void appendString(string value)
+        private void AppendString(string value)
         {
             this.stringBuilder.Append('\"').Append(value).Append('\"');
         }

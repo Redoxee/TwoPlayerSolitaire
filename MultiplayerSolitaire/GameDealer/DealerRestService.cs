@@ -11,7 +11,7 @@
     {
         private static bool ServerIsRunning = true;
         private static CancellationTokenRegistration AppShutdownHandler;
-        private static readonly ResourceManager ResourceManager = new ResourceManager("GameDealer.Properties.Resources", typeof(Program).Assembly);
+        private static readonly ResourceManager ResourceManager = new("GameDealer.Properties.Resources", typeof(Program).Assembly);
 
         // use dependency injection to grab a reference to the hosting container's lifetime cancellation tokens
         public DealerRestService(IHostApplicationLifetime hostLifetime)

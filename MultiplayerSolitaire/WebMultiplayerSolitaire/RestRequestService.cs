@@ -4,7 +4,7 @@
     
     internal class RestRequestService
     {
-        private static readonly ResourceManager ResourceManager = new ResourceManager("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
+        private static readonly ResourceManager ResourceManager = new("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
 
         public static string GetIndexPage()
         {

@@ -10,7 +10,8 @@
         private static bool ServerIsRunning = true;
         private static CancellationTokenRegistration AppShutdownHandler;
 
-        private string publicAdresse;
+        private readonly string publicAdresse;
+
 
         public DealerOrderService(IHostApplicationLifetime hostLifetime)
         {
@@ -30,11 +31,11 @@
                 {
                     if (context.Request.Method == "POST")
                     {
-                        SimpleJSONBuilder responseBuilder = new SimpleJSONBuilder();
+                        SimpleJSONBuilder responseBuilder = new();
                         responseBuilder.Start();
 
                         context.Response.ContentType = "text/html";
-                        System.IO.StreamReader requestStringReader = new System.IO.StreamReader(context.Request.Body);
+                        System.IO.StreamReader requestStringReader = new(context.Request.Body);
                         string requestBodyLine = requestStringReader.ReadLine();
                         while (requestBodyLine != null)
                         {
@@ -49,19 +50,17 @@
                         string stringPath = context.Request.Path.ToUriComponent();
                         if (stringPath.EndsWith("RequestNewGame"))
                         {
-                            Dealer.NewGameResult result;
-                            Dealer.Instance.LaunchNewGame(out result);
+                            Dealer.Instance.LaunchNewGame(out Dealer.NewGameResult result);
                             responseBuilder.Add("GameLaunched", result.Success);
-
-                            if (result.Success)
-                            {
-                                string externalAdress = $"{this.publicAdresse}:{result.Port}";
-                                responseBuilder.Add("GameAdress", externalAdress);
-                            }
                         }
 
-                        string status = Dealer.Instance.GetStatus();
+                        string status = Dealer.Instance.GetStatus(out string port);
                         responseBuilder.Add("Status", status);
+                        if (status == "Running")
+                        {
+                            string externalAdress = $"{this.publicAdresse}:{port}";
+                            responseBuilder.Add("GameAdress", externalAdress);
+                        }
 
                         responseBuilder.End();
                         await context.Response.WriteAsync(responseBuilder.ToString());

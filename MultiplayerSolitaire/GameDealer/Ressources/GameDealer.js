@@ -56,7 +56,7 @@ function HandleUpdateFromServer(textContent) {
         console.log(textContent);
         messageData = JSON.parse(textContent);
         status = messageData.Status;
-        if (messageData.GameLaunched) {
+        if (messageData.GameAdress != null) {
             gameAdress = messageData.GameAdress;
         }
     }
@@ -68,7 +68,7 @@ function HandleUpdateFromServer(textContent) {
     serverStatusLabel.textContent = status;
     ClearChilds(content);
     content.append(refreshButton);
-    if (status == "Idle") {
+    if (status == "Idle" || status == "Exited") {
         content.append(newGameButton);
     }
 

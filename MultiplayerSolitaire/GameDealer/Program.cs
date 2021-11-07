@@ -11,8 +11,10 @@
     {
         static void Main(string[] args)
         {
+            Dealer.Initialize();
+
             Parameters parameters = Parameters.Default();
-            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            CancellationTokenSource tokenSource = new();
             CancellationToken cancellationToken = tokenSource.Token;
 
             Task serverTask = Host.CreateDefaultBuilder(args)

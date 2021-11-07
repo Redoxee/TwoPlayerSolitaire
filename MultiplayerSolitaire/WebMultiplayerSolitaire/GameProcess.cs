@@ -50,11 +50,11 @@
             }
 
             // Faces
-            System.Resources.ResourceManager resourceManager = new System.Resources.ResourceManager("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
+            System.Resources.ResourceManager resourceManager = new("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
             string faceConfigFile = resourceManager.GetString("Config");
 
-            System.IO.StringReader stringReader = new System.IO.StringReader(faceConfigFile);
-            Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
+            System.IO.StringReader stringReader = new(faceConfigFile);
+            Newtonsoft.Json.JsonSerializer serializer = new();
             JSONConfig config = (JSONConfig)serializer.Deserialize(stringReader, typeof(JSONConfig));
             this.numberOfFaces = config.FacesData.Length;
         }
@@ -113,7 +113,7 @@
         {
             MSG.Sandbox sandbox = this.gameManager.GetSandbox();
             MSG.Player player = sandbox.Players[playerIndex];
-            PlayerViewUpdate view = new PlayerViewUpdate
+            PlayerViewUpdate view = new()
             {
                 CardsInDeck = sandbox.Deck.NumberOfCards,
                 CardsInDiscardPile = sandbox.DiscardPile.Count,
@@ -159,8 +159,8 @@
 
         public void HandleMessage(ConnectedClient client, string messageString)
         {
-            System.IO.StringReader stringReader = new System.IO.StringReader(messageString);
-            Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
+            System.IO.StringReader stringReader = new(messageString);
+            Newtonsoft.Json.JsonSerializer serializer = new();
             JSONOrder order;
             try
             {
@@ -214,7 +214,7 @@
                         this.TryRegisterClient(client, availableIndex);
                         client.FaceIndex = order.FaceIndex;
 
-                        OrderAcknowledgement acknowledgement = new OrderAcknowledgement() { OrderID = order.OrderID, FailureFlags = MSG.Failures.None, PlayerIndex = availableIndex };
+                        OrderAcknowledgement acknowledgement = new() { OrderID = order.OrderID, FailureFlags = MSG.Failures.None, PlayerIndex = availableIndex };
                         GameProcess.SendResponseToClient(acknowledgement, client);
 
                         AvailableFaces availableFaces = this.RequestAvailableFaces();
@@ -252,7 +252,7 @@
                         int cardIndex = order.CardIndex;
                         int boardIndex = order.BoardIndex;
 
-                        MSG.PlayCardOrder playOrder = new MSG.PlayCardOrder()
+                        MSG.PlayCardOrder playOrder = new()
                         {
                             PlayerIndex = playerIndex,
                             CardIndex = cardIndex,
@@ -262,7 +262,7 @@
                         this.workingGameChanges.Clear();
                         MSG.Failures failures = this.gameManager.ProcessOrder(playOrder, this.workingGameChanges);
 
-                        OrderAcknowledgement acknowledgement = new OrderAcknowledgement()
+                        OrderAcknowledgement acknowledgement = new()
                         {
                             OrderID = order.OrderID,
                             FailureFlags = failures,
@@ -272,7 +272,7 @@
 
                         if (failures == MSG.Failures.None)
                         {
-                            SandboxChanges sandboxChanges = new SandboxChanges()
+                            SandboxChanges sandboxChanges = new()
                             {
                                 GameChanges = this.workingGameChanges.GetGameChanges(),
                             };
@@ -323,7 +323,7 @@
 
         private AvailableFaces RequestAvailableFaces()
         {
-            AvailableFaces response = new AvailableFaces
+            AvailableFaces response = new()
             {
                 Faces = new bool[this.numberOfFaces],
                 ReadyToPlay = true,
@@ -355,9 +355,9 @@
 
         private static void SendResponseToClient(JSONResponse response, ConnectedClient client)
         {
-            Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
-            System.IO.StringWriter stringWriter = new System.IO.StringWriter();
-            Newtonsoft.Json.JsonTextWriter textWriter = new Newtonsoft.Json.JsonTextWriter(stringWriter);
+            Newtonsoft.Json.JsonSerializer serializer = new();
+            System.IO.StringWriter stringWriter = new();
+            Newtonsoft.Json.JsonTextWriter textWriter = new(stringWriter);
             serializer.Serialize(textWriter, response);
             stringWriter.Close();
             string message = stringWriter.ToString();
@@ -367,9 +367,9 @@
 
         private static void BroadCast(JSONResponse response)
         {
-            Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
-            System.IO.StringWriter stringWriter = new System.IO.StringWriter();
-            Newtonsoft.Json.JsonTextWriter textWriter = new Newtonsoft.Json.JsonTextWriter(stringWriter);
+            Newtonsoft.Json.JsonSerializer serializer = new();
+            System.IO.StringWriter stringWriter = new();
+            Newtonsoft.Json.JsonTextWriter textWriter = new(stringWriter);
             serializer.Serialize(textWriter, response);
             stringWriter.Close();
             string message = stringWriter.ToString();

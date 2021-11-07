@@ -3,19 +3,14 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
 
     class Startup
     {
-        public void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services)
         {
             // register our custom middleware since we use the IMiddleware factory approach
             services.AddTransient<DealerRestService>();
             services.AddTransient<DealerOrderService>();
-            //services.Configure<Microsoft.AspNetCore.Builder.IISServerOptions>(option =>
-            //{
-            //    option.AllowSynchronousIO = true;
-            //});
 
             services.Configure<Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerOptions>(option =>
             {
@@ -23,7 +18,7 @@
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment _)
         {
             // add our custom middleware to the pipeline
             app.UseMiddleware<DealerRestService>();

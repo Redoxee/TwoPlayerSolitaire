@@ -17,9 +17,9 @@ namespace MSGWeb
         private static int SocketCounter = 0;
 
         // The key is a socket id
-        private static readonly ConcurrentDictionary<int, ConnectedClient> clients = new ConcurrentDictionary<int, ConnectedClient>();
+        private static readonly ConcurrentDictionary<int, ConnectedClient> clients = new();
 
-        public static CancellationTokenSource SocketLoopTokenSource = new CancellationTokenSource();
+        public static CancellationTokenSource SocketLoopTokenSource = new();
         public static event System.Action AllClientClosed;
 
         private static bool ServerIsRunning = true;
@@ -112,7 +112,7 @@ namespace MSGWeb
                 }
                 else
                 {
-                    CancellationTokenSource timeout = new CancellationTokenSource(MSGWeb.CLOSE_SOCKET_TIMEOUT_MS);
+                    CancellationTokenSource timeout = new(MSGWeb.CLOSE_SOCKET_TIMEOUT_MS);
                     try
                     {
                         Console.WriteLine("... starting close handshake");

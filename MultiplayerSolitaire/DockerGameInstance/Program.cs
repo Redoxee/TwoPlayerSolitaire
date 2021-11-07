@@ -7,7 +7,7 @@
     {
         static void Main(string[] args)
         {
-            System.Threading.CancellationTokenSource cancellationTokenSource = new System.Threading.CancellationTokenSource();
+            System.Threading.CancellationTokenSource cancellationTokenSource = new();
             MSGWeb.Parameters parameter = MSGWeb.Parameters.Default();
 
             int number = args?.Length ?? 0;
