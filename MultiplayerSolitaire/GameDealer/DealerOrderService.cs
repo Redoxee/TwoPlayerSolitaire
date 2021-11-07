@@ -9,12 +9,17 @@
     {
         private static bool ServerIsRunning = true;
         private static CancellationTokenRegistration AppShutdownHandler;
+
+        private string publicAdresse;
+
         public DealerOrderService(IHostApplicationLifetime hostLifetime)
         {
             if (AppShutdownHandler.Token.Equals(CancellationToken.None))
             {
                 AppShutdownHandler = hostLifetime.ApplicationStopping.Register(DealerOrderService.ApplicationShutdownHandler);
             }
+            
+            this.publicAdresse = Program.GetPublicIp().ToString();
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -25,14 +30,41 @@
                 {
                     if (context.Request.Method == "POST")
                     {
+                        SimpleJSONBuilder responseBuilder = new SimpleJSONBuilder();
+                        responseBuilder.Start();
+
+                        context.Response.ContentType = "text/html";
+                        System.IO.StreamReader requestStringReader = new System.IO.StreamReader(context.Request.Body);
+                        string requestBodyLine = requestStringReader.ReadLine();
+                        while (requestBodyLine != null)
+                        {
+                            if (requestBodyLine.StartsWith("Ticket:"))
+                            {
+                                responseBuilder.Add("Ticket", requestBodyLine.Replace("Ticket:", string.Empty));
+                            }
+
+                            requestBodyLine = requestStringReader.ReadLine();
+                        }
+
                         string stringPath = context.Request.Path.ToUriComponent();
                         if (stringPath.EndsWith("RequestNewGame"))
                         {
-                            context.Response.ContentType = "text/html";
-                            Dealer.Instance.LaunchNewGame();
+                            Dealer.NewGameResult result;
+                            Dealer.Instance.LaunchNewGame(out result);
+                            responseBuilder.Add("GameLaunched", result.Success);
 
-                            await context.Response.WriteAsync("Game started at address x.");
+                            if (result.Success)
+                            {
+                                string externalAdress = $"{this.publicAdresse}:{result.Port}";
+                                responseBuilder.Add("GameAdress", externalAdress);
+                            }
                         }
+
+                        string status = Dealer.Instance.GetStatus();
+                        responseBuilder.Add("Status", status);
+
+                        responseBuilder.End();
+                        await context.Response.WriteAsync(responseBuilder.ToString());
                     }
                 }
                 else

@@ -12,6 +12,15 @@
             // register our custom middleware since we use the IMiddleware factory approach
             services.AddTransient<DealerRestService>();
             services.AddTransient<DealerOrderService>();
+            //services.Configure<Microsoft.AspNetCore.Builder.IISServerOptions>(option =>
+            //{
+            //    option.AllowSynchronousIO = true;
+            //});
+
+            services.Configure<Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerOptions>(option =>
+            {
+                option.AllowSynchronousIO = true;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

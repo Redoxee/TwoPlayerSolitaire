@@ -1,3 +1,9 @@
 ﻿body {
     font-family: "Times New Roman", Times, serif;
 }
+
+.Content {
+    display:flex;
+    flex-direction:column;
+    gap: 5pt;
+}

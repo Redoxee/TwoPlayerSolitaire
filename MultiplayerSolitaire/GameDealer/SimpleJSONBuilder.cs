@@ -58,7 +58,7 @@
             this.startField();
             this.appendString(name);
             this.stringBuilder.Append(':');
-            this.stringBuilder.Append(value ? "True" : "False");
+            this.stringBuilder.Append(value ? "true" : "false");
             return this;
         }
 
