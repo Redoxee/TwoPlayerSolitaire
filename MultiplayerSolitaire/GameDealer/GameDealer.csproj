@@ -10,11 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MultiplayerSolitaireGame\MultiplayerSolitaireGame.csproj" />
-    <ProjectReference Include="..\WebMultiplayerSolitaire\WebCardGame.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

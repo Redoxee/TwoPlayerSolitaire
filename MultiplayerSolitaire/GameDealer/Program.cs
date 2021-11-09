@@ -7,13 +7,36 @@
     using System.Threading.Tasks;
     using System.Threading;
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Dealer.Initialize();
-
             Parameters parameters = Parameters.Default();
+            int number = args?.Length ?? 0;
+            for (int index = 0; index < number; ++index)
+            {
+                if (args[index] == "-p")
+                {
+                    parameters.DealerPort = args[index + 1];
+                }
+                else if (args[index] == "-d")
+                {
+                    parameters.Domain = args[index + 1];
+                }
+                else if (args[index] == "-i")
+                {
+                    parameters.GameImage = args[index + 1];
+                }
+                else if (args[index] == "-P")
+                {
+                    parameters.GamePort = ushort.Parse(args[index + 1]);
+                }
+            }
+
+            Console.WriteLine($"Parameters {parameters.ToString()}");
+
+            Dealer.Initialize(parameters);
+
             CancellationTokenSource tokenSource = new();
             CancellationToken cancellationToken = tokenSource.Token;
 
@@ -21,7 +44,7 @@
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseUrls(new string[] {
-                        $"http://{parameters.Domain}:{parameters.Port}/{parameters.EndPoint}",
+                        $"http://{parameters.Domain}:{parameters.DealerPort}/{parameters.EndPoint}",
                     });
                     webBuilder.UseStartup<Startup>();
                 })
@@ -42,17 +65,26 @@
         public struct Parameters
         {
             public string Domain;
-            public string Port;
+            public string DealerPort;
             public string EndPoint;
+            public string GameImage;
+            public ushort GamePort;
 
             public static Parameters Default()
             {
                 return new Parameters
                 {
                     Domain = "*",
-                    Port = "8080",
+                    DealerPort = "80",
                     EndPoint = "",
+                    GameImage = "game_instance",
+                    GamePort = 8081,
                 };
+            }
+
+            public override string ToString()
+            {
+                return $"Domain {this.Domain} | DealerPort {this.DealerPort} | EndPoint {this.EndPoint} | GameImage {this.GameImage} | GamePort {this.GamePort}";
             }
         }
 

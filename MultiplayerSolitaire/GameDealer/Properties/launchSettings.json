@@ -10,6 +10,7 @@
   "profiles": {
     "GameDealer": {
       "commandName": "Project",
+      "commandLineArgs": "-p 80 -d *",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

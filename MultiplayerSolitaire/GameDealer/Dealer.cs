@@ -2,14 +2,13 @@
 {
     using System.Threading.Tasks;
 
-    public class Dealer
+    internal class Dealer
     {
         private static Dealer instance;
 
         private readonly Docker.DotNet.DockerClient dockerClient;
-
-        private const string GameImageName = "game-instance";
-        private const ushort GamePublicPort = 8081;
+        private readonly string gameImageName;
+        private readonly ushort gamePublicPort;
 
         private string gameCrateId = null;
 
@@ -28,9 +27,11 @@
         }
 
 
-        private Dealer()
+        private Dealer(Program.Parameters parameters)
         {
             this.dockerClient = new Docker.DotNet.DockerClientConfiguration(new System.Uri(Dealer.DockerApiUri())).CreateClient();
+            this.gameImageName = parameters.GameImage;
+            this.gamePublicPort = parameters.GamePort;
 
             var containerListParameter = new Docker.DotNet.Models.ContainersListParameters
             {
@@ -40,7 +41,7 @@
                         "ancestor",
                         new System.Collections.Generic.Dictionary<string,bool>()
                         {
-                            { Dealer.GameImageName, true }
+                            { this.gameImageName, true }
                         }
                     }
                 },
@@ -61,7 +62,7 @@
                 {
                     foreach (var port in container.Ports)
                     {
-                        if (port.PublicPort == Dealer.GamePublicPort)
+                        if (port.PublicPort == this.gamePublicPort)
                         {
                             this.gameCrateId = container.ID;
                         }
@@ -70,9 +71,9 @@
             }
         }
 
-        public static void Initialize()
+        public static void Initialize(Program.Parameters parameters)
         {
-            Dealer.instance = new Dealer();
+            Dealer.instance = new Dealer(parameters);
         }
 
         internal static string DockerApiUri()
@@ -107,10 +108,10 @@
                 return;
             }
 
-            var createGameTask = this.RunDockerGameInstance(Dealer.GamePublicPort.ToString());
+            var createGameTask = this.RunDockerGameInstance(this.gamePublicPort.ToString());
             createGameTask.Wait();
             result.Success = true;
-            result.Port = Dealer.GamePublicPort.ToString();
+            result.Port = this.gamePublicPort.ToString();
         }
 
         public string GetStatus(out string port)
@@ -148,7 +149,7 @@
             // Ensuring the image is available.
             await this.dockerClient.Images.CreateImageAsync(new Docker.DotNet.Models.ImagesCreateParameters
             {
-                FromImage = Dealer.GameImageName,
+                FromImage = this.gameImageName,
             },
             new Docker.DotNet.Models.AuthConfig(),
             new System.Progress<Docker.DotNet.Models.JSONMessage>());
@@ -157,7 +158,7 @@
 
             var creationResponse = await this.dockerClient.Containers.CreateContainerAsync(new Docker.DotNet.Models.CreateContainerParameters
             {
-                Image = Dealer.GameImageName,
+                Image = this.gameImageName,
                 ExposedPorts = new System.Collections.Generic.Dictionary<string, Docker.DotNet.Models.EmptyStruct>
                 {
                     {
