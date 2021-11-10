@@ -55,7 +55,7 @@
         {
             if (this.NumberOfCards < 1)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("Picked one toomany cards");
             }
 
             return this.Cards[--this.NumberOfCards];

@@ -129,7 +129,6 @@
             view.CurrentPlayer.Board = new MSG.Card[player.Board.Length];
             player.Board.CopyTo(view.CurrentPlayer.Board, 0);
             view.CurrentPlayer.Health = player.Health;
-            view.CurrentPlayer.PairCombo = player.PairCombo;
             view.CurrentPlayer.Score = player.Score;
             view.CurrentPlayer.Index = player.Index;
             view.CurrentPlayer.FaceIndex = this.clientByPlayerIndex[playerIndex].FaceIndex;
@@ -141,7 +140,6 @@
             view.OtherPlayer.Index = otherPlayerIndex;
             view.OtherPlayer.Score = otherPlayer.Score;
             view.OtherPlayer.Health = otherPlayer.Health;
-            view.OtherPlayer.PairCombo = otherPlayer.PairCombo;
             if (this.clientByPlayerIndex[otherPlayerIndex] != null)
             {
                 view.OtherPlayer.FaceIndex = this.clientByPlayerIndex[otherPlayerIndex].FaceIndex;

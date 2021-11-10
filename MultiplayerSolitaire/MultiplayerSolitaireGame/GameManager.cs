@@ -60,7 +60,7 @@
 
             Player otherPlayer = this.Sandbox.Players[this.Sandbox.OtherPlayerIndex()];
             this.workingStringBuilder.Append("Other Player ").Append(otherPlayer.Index).AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).Append(" PairBullets : ").Append(otherPlayer.PairCombo).AppendLine();
+            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).AppendLine();
             this.workingStringBuilder.Append("Board : ");
             for (int index = 0; index < 3; ++index)
             {
@@ -79,7 +79,7 @@
             }
 
             this.workingStringBuilder.AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health).Append(" PairBullets : ").Append(currentPlayer.PairCombo);
+            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health);
             this.workingStringBuilder.AppendLine();
 
             this.workingStringBuilder.Append("Hand : ");

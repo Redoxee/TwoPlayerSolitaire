@@ -35,7 +35,6 @@
             {
                 Player player = sandbox.Players[index];
                 player.Health = sandbox.HealthBaseValue;
-                player.PairCombo = 0;
                 for (int cardIndex = 0; cardIndex < Player.BoardWidth; ++cardIndex)
                 {
                     player.Board[cardIndex].Value = Card.None;
@@ -101,8 +100,14 @@
             }
 
             player.Board[playCardOrder.BoardIndex] = player.Hand[playCardOrder.CardIndex];
-            
-            player.Hand[playCardOrder.CardIndex] = sandbox.Deck.PickCard();
+            if (sandbox.Deck.NumberOfCards > 0)
+            {
+                player.Hand[playCardOrder.CardIndex] = sandbox.Deck.PickCard();
+            }
+            else
+            {
+                player.Hand[playCardOrder.CardIndex].Value = Card.None;
+            }
 
             ref GameChange playedCard = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayedCard);
             playedCard.PlayerIndex = playCardOrder.PlayerIndex;
@@ -233,7 +238,6 @@
                     int playerGrad = 0;
                     Player player = sandbox.Players[playerIndex];
                     playerGrad += player.Health * 100;
-                    playerGrad += player.PairCombo;
 
                     if (playerGrad > bestPlayerGrade)
                     {

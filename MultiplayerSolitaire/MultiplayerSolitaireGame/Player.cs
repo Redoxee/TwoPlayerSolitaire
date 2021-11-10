@@ -13,7 +13,6 @@ namespace MSG
         public Card[] Board = new Card[Player.BoardWidth];
 
         public int Health;
-        public int PairCombo;
 
         public int Score;
 
