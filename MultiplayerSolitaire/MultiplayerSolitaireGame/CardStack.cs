@@ -1,6 +1,6 @@
 ﻿namespace MSG
 {
-    public class CardStack
+    public class CardStack : AMG.ISerializable
     {
         public Card[] Data;
         public int Count;
@@ -24,6 +24,12 @@
         public void Clear()
         {
             this.Count = 0;
+        }
+
+        public void Serialize(AMG.Serializer serializer)
+        {
+            this.Count = serializer.Serialize("Count", this.Count);
+            this.Data = serializer.Serialize("Data", this.Data);
         }
     }
 }

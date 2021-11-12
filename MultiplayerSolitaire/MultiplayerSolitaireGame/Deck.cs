@@ -1,9 +1,10 @@
 ﻿namespace MSG
 {
+    using AMG;
     using System;
     using System.Text;
 
-    public class Deck
+    public class Deck : AMG.ISerializable
     {
         public Card[] Cards;
         public int NumberOfCards;
@@ -81,6 +82,13 @@
 
             builder.Append($"] ({this.NumberOfCards})");
             return builder.ToString();
+        }
+
+        public void Serialize(Serializer serializer)
+        {
+            this.Cards = serializer.Serialize("Cards", this.Cards);
+            this.NumberOfCards = serializer.Serialize("NumberOfCards", this.NumberOfCards);
+            this.TotalNumberOfCards = serializer.Serialize("TotalNumberOfCards", this.TotalNumberOfCards);
         }
     }
 }
