@@ -37,6 +37,8 @@ namespace MSGWeb
                 .RunAsync(cancellationToken);
         }
 
+        public static MSG.GameManager GameManager => GameProcess.Instance.GetGameManager();
+
         internal static void ReportException(Exception ex, [CallerMemberName] string location = "(Caller name not set)")
         {
             Console.WriteLine($"\n{location}:\n  Exception {ex.GetType().Name}: {ex.Message}");
