@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameDealer", "GameDealer\Ga
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DockerGameClient", "DockerGameInstance\DockerGameClient.csproj", "{6BB8C958-FEBC-4857-B552-1895AB2B78A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMG", "AMG\AMG.csproj", "{3D6651AD-FC02-414C-9F5E-2F927178BB96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{6BB8C958-FEBC-4857-B552-1895AB2B78A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BB8C958-FEBC-4857-B552-1895AB2B78A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BB8C958-FEBC-4857-B552-1895AB2B78A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D6651AD-FC02-414C-9F5E-2F927178BB96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D6651AD-FC02-414C-9F5E-2F927178BB96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D6651AD-FC02-414C-9F5E-2F927178BB96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D6651AD-FC02-414C-9F5E-2F927178BB96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
