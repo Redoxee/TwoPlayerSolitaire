@@ -26,43 +26,53 @@
             {
                 if (ServerIsRunning)
                 {
-                    if (context.Request.Headers["Accept"][0].Contains("text/html"))
+                    string requestStringPath = context.Request.Path.ToUriComponent();
+                    if (context.Request.Method == "GET")
                     {
-                        Console.WriteLine("Sending HTML to client.");
-                        string response = RestRequestService.GetIndexPage();
-                        context.Response.ContentType = "text/html";
-                        await context.Response.WriteAsync(response);
-                    }
-                    else 
-                    {
-                        string uri = context.Request.Path.ToUriComponent();
-                        if (uri.EndsWith(".js"))
+                        if (context.Request.Headers["Accept"][0].Contains("text/html"))
                         {
-                            context.Response.ContentType = "application/javascript";
-                            if (RestRequestService.TryGetFile(uri, out string stringResponse))
-                            {
-                                await context.Response.WriteAsync(stringResponse);
-                            }
+                            Console.WriteLine("Sending HTML to client.");
+                            string response = RestRequestService.GetIndexPage();
+                            context.Response.ContentType = "text/html";
+                            await context.Response.WriteAsync(response);
                         }
-                        else if (uri.EndsWith(".css"))
+                        else
                         {
-                            context.Response.ContentType = "text/css";
-                            if (RestRequestService.TryGetFile(uri, out string stringResponse))
+                            if (requestStringPath.EndsWith(".js"))
                             {
-                                await context.Response.WriteAsync(stringResponse);
+                                context.Response.ContentType = "application/javascript";
+                                if (RestRequestService.TryGetFile(requestStringPath, out string stringResponse))
+                                {
+                                    await context.Response.WriteAsync(stringResponse);
+                                }
                             }
-                        }
-                        else if (uri.EndsWith(".json"))
-                        {
-                            context.Response.ContentType = "text/css";
-                            if (RestRequestService.TryGetFile(uri, out string stringResponse))
+                            else if (requestStringPath.EndsWith(".css"))
                             {
-                                await context.Response.WriteAsync(stringResponse);
+                                context.Response.ContentType = "text/css";
+                                if (RestRequestService.TryGetFile(requestStringPath, out string stringResponse))
+                                {
+                                    await context.Response.WriteAsync(stringResponse);
+                                }
                             }
-                        }
+                            else if (requestStringPath.EndsWith(".json"))
+                            {
+                                context.Response.ContentType = "text/css";
+                                if (RestRequestService.TryGetFile(requestStringPath, out string stringResponse))
+                                {
+                                    await context.Response.WriteAsync(stringResponse);
+                                }
+                            }
 
-                        // ignore other requests (such as favicon)
-                        // potentially other middleware will handle it (see finally block)
+                            // ignore other requests (such as favicon)
+                            // potentially other middleware will handle it (see finally block)
+                        }
+                    }
+                    else if (context.Request.Method == "POST")
+                    {
+                        if (requestStringPath.EndsWith("/RequestSave"))
+                        {
+                            SaveManager.Instance.RequestSave();
+                        }
                     }
                 }
                 else

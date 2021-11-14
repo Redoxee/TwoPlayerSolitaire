@@ -18,6 +18,8 @@ namespace MSGWeb
         {
             // Initialize game.
             GameProcess.Initialize(parameters.GameParameters);
+            SaveManager.Initialize(ref parameters);
+
             cancellationToken.Register(MSGWeb.OnCancellation);
 
             if (parameters.OnEveryClientDisconected != null)
@@ -56,6 +58,10 @@ namespace MSGWeb
             public string Port;
             public string EndPoint;
             public string[] HostArgs;
+
+            public string SavePath;
+            public string loadSavePath;
+
             public MSG.GameManager.GameParameters GameParameters;
             public Action OnEveryClientDisconected;
 
@@ -69,6 +75,8 @@ namespace MSGWeb
                     HostArgs = System.Array.Empty<string>(),
                     GameParameters = MSG.GameManager.GameParameters.Default(),
                     OnEveryClientDisconected = null,
+                    SavePath = null,
+                    loadSavePath = null,
                 };
             }
 
