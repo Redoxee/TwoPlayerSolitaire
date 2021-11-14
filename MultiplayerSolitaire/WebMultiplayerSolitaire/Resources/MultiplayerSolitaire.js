@@ -47,7 +47,8 @@ var websocket = null;
 var isConnected = false;
 var gameWebSocketUrl = document.URL.replace("http://", "ws://");
 
-var output = document.querySelector("#debugOutput");
+var DebugContainer = document.querySelector("#DebugContainer");
+var DebugOutput = document.querySelector("#DebugOutput");
 var playArea = document.querySelector("#playArea");
 
 var playerSlots = new PlayerSlots();
@@ -78,16 +79,28 @@ writeToScreen("WS URI " + gameWebSocketUrl);
 CreateWebSocket();
 
 function writeToScreen(message) {
-    output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
+    DebugOutput.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
 }
 
 function toggleDebug() {
-    if (output.style.display == "none" || output.style.display == "") {
-        output.style.display = "block";
+    if (DebugContainer.style.display == "none" || DebugContainer.style.display == "") {
+        DebugContainer.style.display = "flex";
     }
     else {
-        output.style.display = "none";
+        DebugContainer.style.display = "none";
     }
+}
+
+function RequestSave() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            writeToScreen(this.responseText);
+        }
+    };
+
+    xhttp.open("POST", "RequestSave", true);
+    xhttp.send();
 }
 
 function HandleOrderAcknowledgement(messageData) {

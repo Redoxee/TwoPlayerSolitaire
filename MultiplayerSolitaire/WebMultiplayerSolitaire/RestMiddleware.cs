@@ -71,7 +71,8 @@
                     {
                         if (requestStringPath.EndsWith("/RequestSave"))
                         {
-                            SaveManager.Instance.RequestSave();
+                            string saveResult = SaveManager.Instance.RequestSave();
+                            await context.Response.WriteAsync(saveResult);
                         }
                     }
                 }

@@ -21,12 +21,18 @@
         private SaveManager(ref MSGWeb.Parameters parameters)
         {
             this.savePath = parameters.SavePath;
-            this.gameDateName = System.DateTime.UtcNow.ToString("yyyy_mm_dd");
+            this.gameDateName = System.DateTime.UtcNow.ToString("yyyy-MM-dd-hh-m");
             this.gameSaveInstanceCount = 0;
         }
 
-        public void RequestSave()
+        public string RequestSave()
         {
+            if (string.IsNullOrEmpty(this.savePath))
+            {
+                System.Console.WriteLine("No save path configured.");
+                return "No save path configured.";
+            }
+
             MSG.Sandbox sandbox = GameProcess.Instance.GetGameManager().GetSandbox();
 
             string saveFullPath = $"{this.savePath}/{string.Format(SaveManager.SaveNamePattern, this.gameDateName, this.gameSaveInstanceCount)}";
@@ -38,6 +44,7 @@
             serializer.StartWrite(writer);
             sandbox.Serialize(serializer);
             writer.Close();
+            return $"Game saved at {saveFullPath}";
         }
     }
 }

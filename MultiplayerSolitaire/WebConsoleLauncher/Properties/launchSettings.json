@@ -2,6 +2,7 @@
   "profiles": {
     "WebConsoleLauncher": {
       "commandName": "Project",
+      "commandLineArgs": "--save-path C:\\Users\\Anton\\Documents\\TwoPlayerSolitaire",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
