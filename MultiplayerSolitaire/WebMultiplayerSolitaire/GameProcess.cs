@@ -12,7 +12,7 @@
 
         private readonly int numberOfFaces;
 
-        public static GameProcess Initialize(MSG.GameManager.GameParameters parameters)
+        public static GameProcess Initialize(MSGWeb.Parameters parameters)
         {
             if (GameProcess.instance != null)
             {
@@ -37,11 +37,11 @@
             }
         }
 
-        private GameProcess(MSG.GameManager.GameParameters gameParameters)
+        private GameProcess(MSGWeb.Parameters parameters)
         {
             this.workingGameChanges = new MSG.GameChangePool();
 
-            this.gameManager = new MSG.GameManager(gameParameters, this.workingGameChanges);
+            this.gameManager = new MSG.GameManager(parameters.GameParameters, this.workingGameChanges);
 
             this.clientByPlayerIndex = new ConnectedClient[2];
             for (int index = 0; index < this.clientByPlayerIndex.Length; ++index)
@@ -49,14 +49,26 @@
                 this.clientByPlayerIndex[index] = null;
             }
 
-            // Faces
-            System.Resources.ResourceManager resourceManager = new("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
-            string faceConfigFile = resourceManager.GetString("Config");
+            // Faces.
+            {
+                System.Resources.ResourceManager resourceManager = new("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
+                string faceConfigFile = resourceManager.GetString("Config");
 
-            System.IO.StringReader stringReader = new(faceConfigFile);
-            Newtonsoft.Json.JsonSerializer serializer = new();
-            JSONConfig config = (JSONConfig)serializer.Deserialize(stringReader, typeof(JSONConfig));
-            this.numberOfFaces = config.FacesData.Length;
+                System.IO.StringReader stringReader = new(faceConfigFile);
+                Newtonsoft.Json.JsonSerializer serializer = new();
+                JSONConfig config = (JSONConfig)serializer.Deserialize(stringReader, typeof(JSONConfig));
+                this.numberOfFaces = config.FacesData.Length;
+            }
+
+            // Save load.
+            if (!string.IsNullOrEmpty(parameters.LoadSavePath))
+            {
+                AMG.Serializer serializer = new AMG.Serializer();
+                System.IO.StreamReader reader = new System.IO.StreamReader(parameters.LoadSavePath);
+                serializer.StartRead(reader);
+
+                this.gameManager.GetSandbox().Serialize(serializer);
+            }
         }
 
         public MSG.GameManager GetGameManager()

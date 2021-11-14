@@ -6,7 +6,7 @@
 
         public static SaveManager Instance => SaveManager.instance;
 
-        private const string SaveNamePattern = "TwoPlayerSolitair_{0}_{1}.save";
+        private const string SaveNamePattern = "TwoPlayerSolitaire_{0}_{1}.save";
 
         private string savePath;
         private string gameDateName;
@@ -21,7 +21,7 @@
         private SaveManager(ref MSGWeb.Parameters parameters)
         {
             this.savePath = parameters.SavePath;
-            this.gameDateName = System.DateTime.UtcNow.ToString("yyyy-MM-dd-hh-m");
+            this.gameDateName = System.DateTime.UtcNow.ToString("yyyy-MM-dd-hh-mm");
             this.gameSaveInstanceCount = 0;
         }
 

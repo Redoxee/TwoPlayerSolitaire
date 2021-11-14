@@ -30,6 +30,11 @@
                             parameter.SavePath = args[index + 1];
                             break;
                         }
+                    case "--save-load":
+                        {
+                            parameter.LoadSavePath = args[index + 1];
+                            break;
+                        }
                 }
             }
 

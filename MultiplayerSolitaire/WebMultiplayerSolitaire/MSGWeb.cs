@@ -17,7 +17,7 @@ namespace MSGWeb
         public static async Task Run(Parameters parameters, CancellationToken cancellationToken)
         {
             // Initialize game.
-            GameProcess.Initialize(parameters.GameParameters);
+            GameProcess.Initialize(parameters);
             SaveManager.Initialize(ref parameters);
 
             cancellationToken.Register(MSGWeb.OnCancellation);
@@ -60,7 +60,7 @@ namespace MSGWeb
             public string[] HostArgs;
 
             public string SavePath;
-            public string loadSavePath;
+            public string LoadSavePath;
 
             public MSG.GameManager.GameParameters GameParameters;
             public Action OnEveryClientDisconected;
@@ -76,7 +76,7 @@ namespace MSGWeb
                     GameParameters = MSG.GameManager.GameParameters.Default(),
                     OnEveryClientDisconected = null,
                     SavePath = null,
-                    loadSavePath = null,
+                    LoadSavePath = null,
                 };
             }
 
