@@ -7,7 +7,7 @@ namespace MSG
         public const int BoardWidth = 3;
         public const int HandSize = 3;
 
-        public Card[] Hand = new Card[Player.BoardWidth];
+        public Card[] Hand = new Card[Player.HandSize];
         public Card[] Board = new Card[Player.BoardWidth];
 
         public int Index;

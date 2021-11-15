@@ -21,8 +21,8 @@
         private SaveManager(ref MSGWeb.Parameters parameters)
         {
             this.savePath = parameters.SavePath;
-            this.gameDateName = System.DateTime.UtcNow.ToString("yyyy-MM-dd-hh-mm");
-            this.gameSaveInstanceCount = 0;
+            this.gameDateName = AMG.DateNameConversion.NameDate(System.DateTime.Now);
+            this.gameSaveInstanceCount = 1;
         }
 
         public string RequestSave()
