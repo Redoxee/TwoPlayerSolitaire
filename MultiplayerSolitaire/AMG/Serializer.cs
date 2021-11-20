@@ -105,7 +105,7 @@
 
         private int ReadInt(string name)
         {
-            this.reader.ReadLine();
+            this.ReadName(name);
             string svalue = this.reader.ReadLine();
 
             if (int.TryParse(svalue, out int value))
@@ -153,14 +153,9 @@
 
         private string ReadString(string name)
         {
-            string rname = this.reader.ReadLine();
-            if (rname != name)
-            {
-                System.Console.Error.WriteLine($"Name missmatch : Expected \"{name}\", read \"{rname}\"");
-            }
+            this.ReadName(name);
 
             string svalue = this.reader.ReadLine();
-
             return svalue;
         }
 
@@ -175,7 +170,8 @@
 
         private T ReadSerializable<T>(string name, T serializable) where T : ISerializable
         {
-            this.reader.ReadLine();
+            this.ReadName(name);
+
             serializable.Serialize(this);
             return serializable;
         }
@@ -194,7 +190,8 @@
 
         private T[] ReadSerializables<T>(string name, T[] array) where T : ISerializable
         {
-            this.reader.ReadLine();
+            this.ReadName(name);
+
             string slength = this.reader.ReadLine();
             if (!int.TryParse(slength, out int length))
             {
@@ -220,6 +217,18 @@
         }
 
         #endregion
+
+        private bool ReadName(string expectedName)
+        {
+            string rname = this.reader.ReadLine();
+            if (rname != expectedName)
+            {
+                System.Console.Error.WriteLine($"Name missmatch : Expected \"{expectedName}\", read \"{rname}\"");
+                return false;
+            }
+
+            return true;
+        }
     }
 
     public interface ISerializable
