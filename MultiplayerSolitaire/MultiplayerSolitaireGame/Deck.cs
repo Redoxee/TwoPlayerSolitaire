@@ -36,7 +36,7 @@
 
         public void Shuffle()
         {
-            Random random = new Random();
+            Random random = new ();
 
             for (int index = 0; index < this.NumberOfCards - 1; ++index)
             {
@@ -69,14 +69,14 @@
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append("[");
+            StringBuilder builder = new ();
+            builder.Append('[');
             for (int index = 0; index < this.NumberOfCards; ++index)
             {
                 builder.Append(this.Cards[index].ToString());
                 if (index < this.NumberOfCards - 1)
                 {
-                    builder.Append(",");
+                    builder.Append(',');
                 }
             }
 

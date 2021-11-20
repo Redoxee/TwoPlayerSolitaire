@@ -33,7 +33,7 @@
                 }
             }
 
-            Console.WriteLine($"Parameters {parameters.ToString()}");
+            Console.WriteLine($"Parameters {parameters}");
 
             Dealer.Initialize(parameters);
 

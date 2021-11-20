@@ -125,7 +125,6 @@
 
             return Failures.None;
         }
-
     }
 
     internal class ResolveTurnState : GameState

@@ -6,7 +6,7 @@
 
         internal GameStateMachine stateMachine;
 
-        private readonly System.Text.StringBuilder workingStringBuilder = new System.Text.StringBuilder();
+        private readonly System.Text.StringBuilder workingStringBuilder = new ();
 
         public GameManager(GameParameters gameParameters, GameChangePool gameChanges)
         {
@@ -30,11 +30,6 @@
             this.stateMachine = new GameStateMachine(this);
             GameState firstState = new InitializeGameState();
             this.stateMachine.SetInitialState(firstState, gameChanges);
-        }
-
-        public bool IsGameFinished()
-        {
-            return false;
         }
 
         public Sandbox GetSandbox()
@@ -100,7 +95,7 @@
 
             public static GameParameters Default()
             {
-                GameParameters parameters = new GameParameters
+                GameParameters parameters = new()
                 {
                     ScoreTarget = 2,
                     PairComboSize = 4,
