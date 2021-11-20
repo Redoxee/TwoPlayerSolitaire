@@ -3,8 +3,8 @@
         this.Header = new PlayerHeader(id, labelName);
         this.Header.Face.SetInteractable(false);
         this.PlayerStats = new PlayerStats(id);
-        this.Board = new CardDisplay("PlayerBoard", id);
-        this.Hand = new CardDisplay("PlayerHand", id);
+        this.Board = new CardDisplay("PlayerBoard", id, 3, false);
+        this.Hand = new CardDisplay("PlayerHand", id, 4, true);
         this.HasHand = false;
 
         this.SelectedCardIndex = -1;

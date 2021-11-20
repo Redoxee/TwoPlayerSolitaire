@@ -37,7 +37,9 @@
         }
 
         for (var index = 0; index < gameState.CurrentPlayer.Hand.length; ++index) {
-            this.RemoveCard(gameState.CurrentPlayer.Hand[index]);
+            if (gameState.CurrentPlayer.Hand[index].Value > -1) {
+                this.RemoveCard(gameState.CurrentPlayer.Hand[index]);
+            }
         }
 
         for (var index = 0; index < gameState.CurrentPlayer.Board.length; ++index) {

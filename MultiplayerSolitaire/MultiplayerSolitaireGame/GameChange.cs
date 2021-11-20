@@ -16,6 +16,7 @@
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public PlayerProperties PlayerProperty;
         public int NewValue;
+        public bool PackHand;
 
         public enum GameChangeType
         {

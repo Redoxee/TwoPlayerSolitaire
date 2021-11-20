@@ -35,14 +35,21 @@
             {
                 Player player = sandbox.Players[index];
                 player.Health = sandbox.HealthBaseValue;
-                for (int cardIndex = 0; cardIndex < Player.BoardWidth; ++cardIndex)
+                for (int cardIndex = 0; cardIndex < player.Board.Length; ++cardIndex)
                 {
                     player.Board[cardIndex].Value = Card.None;
                 }
 
-                for (int cardIndex = 0; cardIndex < Player.HandSize; ++cardIndex)
+                for (int cardIndex = 0; cardIndex < player.Hand.Length; ++cardIndex)
                 {
-                    player.Hand[cardIndex] = sandbox.Deck.PickCard();
+                    player.Hand[cardIndex].Value = Card.None;
+                }
+
+                player.HandCount = 0;
+                int numberOfCardsInHand = player.Index == sandbox.CurrentPlayer ? 3 : 4;
+                for (int cardIndex = 0; cardIndex < numberOfCardsInHand; ++cardIndex)
+                {
+                    player.Hand[player.HandCount++] = sandbox.Deck.PickCard();
                 }
             }
 
@@ -71,7 +78,7 @@
 
         public override Failures ProcessOrder(GameStateMachine stateMachine, GameOrder order, GameChangePool gameChanges)
         {
-            if (!(order is PlayCardOrder playCardOrder))
+            if (order is not PlayCardOrder playCardOrder)
             {
                 return Failures.WrongOrder;
             }
@@ -82,17 +89,22 @@
                 return Failures.WrongPlayer;
             }
 
-            if (playCardOrder.CardIndex < 0 || playCardOrder.CardIndex >= Player.BoardWidth)
-            {
-                return Failures.CardOutOfBounds;
-            }
-
-            if (playCardOrder.BoardIndex < 0 || playCardOrder.BoardIndex >= Player.BoardWidth)
-            {
-                return Failures.CardOutOfBounds;
-            }
-
             Player player = sandbox.Players[playCardOrder.PlayerIndex];
+            if (playCardOrder.CardIndex < 0 || playCardOrder.CardIndex >= player.Hand.Length)
+            {
+                return Failures.CardOutOfBounds;
+            }
+
+            if (!player.Hand[playCardOrder.CardIndex].IsValide())
+            {
+                return Failures.CardOutOfBounds;
+            }
+
+            if (playCardOrder.BoardIndex < 0 || playCardOrder.BoardIndex >= player.Board.Length)
+            {
+                return Failures.CardOutOfBounds;
+            }
+
             if (player.Board[playCardOrder.BoardIndex].IsValide())
             {
                 sandbox.Deck.AddCardUnder(player.Board[playCardOrder.BoardIndex]);
@@ -100,14 +112,9 @@
             }
 
             player.Board[playCardOrder.BoardIndex] = player.Hand[playCardOrder.CardIndex];
-            if (sandbox.Deck.NumberOfCards > 0)
-            {
-                player.Hand[playCardOrder.CardIndex] = sandbox.Deck.PickCard();
-            }
-            else
-            {
-                player.Hand[playCardOrder.CardIndex].Value = Card.None;
-            }
+            
+            player.Hand[playCardOrder.CardIndex].Value = Card.None;
+            player.HandCount--;
 
             ref GameChange playedCard = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PlayedCard);
             playedCard.PlayerIndex = playCardOrder.PlayerIndex;
@@ -115,11 +122,33 @@
             playedCard.IndexOnBoard = playCardOrder.BoardIndex;
             playedCard.Card = player.Board[playCardOrder.BoardIndex];
 
-            ref GameChange pickedCard = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PickedCard);
-            pickedCard.PlayerIndex = playCardOrder.PlayerIndex;
-            pickedCard.IndexOnBoard = -1;
-            pickedCard.IndexInHand = playCardOrder.CardIndex;
-            pickedCard.Card = player.Hand[playCardOrder.CardIndex];
+            if (sandbox.Deck.NumberOfCards > 0 && player.HandCount < 3)
+            {
+                player.Hand[playCardOrder.CardIndex] = sandbox.Deck.PickCard();
+                player.HandCount++;
+
+                playedCard.PackHand = false;
+
+                ref GameChange pickedCard = ref gameChanges.AllocateGameChange(GameChange.GameChangeType.PickedCard);
+                pickedCard.PlayerIndex = playCardOrder.PlayerIndex;
+                pickedCard.IndexOnBoard = -1;
+                pickedCard.IndexInHand = playCardOrder.CardIndex;
+                pickedCard.Card = player.Hand[playCardOrder.CardIndex];
+            }
+            else
+            {
+                // Packing hand
+                for (int index = 0; index < player.Hand.Length - 1; ++index)
+                {
+                    if (!player.Hand[index].IsValide())
+                    {
+                        player.Hand[index] = player.Hand[index + 1];
+                        player.Hand[index + 1].Value = Card.None;
+                    }
+                }
+
+                playedCard.PackHand = true;
+            }
 
             stateMachine.SetNextState(new ResolveTurnState());
 

@@ -191,6 +191,17 @@ function HandleSandboxUpdate(messageData) {
 
                 player.Hand.Slots[gameChange.IndexInHand].DetatchCard();
                 player.Board.Slots[gameChange.IndexOnBoard].AttachCard(card);
+
+                if (gameChange.PackHand) {
+                    for (var cardIndex = gameChange.IndexInHand; cardIndex < player.Hand.Slots.length - 1; ++cardIndex) {
+                        var shiftedCard = player.Hand.Slots[cardIndex + 1].Card;
+                        if (shiftedCard != null) {
+                            player.Hand.Slots[cardIndex + 1].DetatchCard();
+                            shiftedCard.CardIndex = cardIndex;
+                            player.Hand.Slots[cardIndex].AttachCard(shiftedCard);
+                        }
+                    }
+                }
             }
             else {
                 if (!AssertClientState("OtherPlayerTurn")) {
@@ -412,28 +423,32 @@ function SelectBoardSlot(slotIndex) {
 }
 
 function PlayerHandModeChooseCard() {
-    for (var index = 0; index < 3; ++index) {
+    for (var index = 0; index < player.Hand.Slots.length; ++index) {
         var card = player.Hand.Slots[index].Card;
-        card.SetInteractable(SelectCardInHand, "Play");
+        if (card != null) {
+            card.SetInteractable(SelectCardInHand, "Play");
+        }
     }
 }
 
 function PlayerhandModeUninteractable() {
-    for (var index = 0; index < 3; ++index) {
+    for (var index = 0; index < player.Hand.Slots.length; ++index) {
         var card = player.Hand.Slots[index].Card;
-        card.SetNotInteractable();
+        if (card != null) {
+            card.SetNotInteractable();
+        }
     }
 }
 
 function PlayerBoardModeChooseSlot() {
-    for (var index = 0; index < 3; ++index) {
+    for (var index = 0; index < player.Board.Slots.length; ++index) {
         var slot = player.Board.Slots[index];
         slot.SetInteractable(SelectBoardSlot, "Play");
     }
 }
 
 function PlayerBoardModeUninteractable() {
-    for (var index = 0; index < 3; ++index) {
+    for (var index = 0; index < player.Board.Slots.length; ++index) {
         var slot = player.Board.Slots[index];
         slot.SetNotInteractable();
     }

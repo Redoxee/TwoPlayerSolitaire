@@ -78,7 +78,7 @@
             this.workingStringBuilder.AppendLine();
 
             this.workingStringBuilder.Append("Hand : ");
-            for (int index = 0; index < 3; ++index)
+            for (int index = 0; index < currentPlayer.Hand.Length; ++index)
             {
                 this.workingStringBuilder.Append(currentPlayer.Hand[index]);
             }
