@@ -200,11 +200,15 @@ namespace MSGWeb
 
                 // don't leave the socket in any potentially connected state
                 if (client.Socket.State != WebSocketState.Closed)
+                {
                     client.Socket.Abort();
+                }
 
                 // by this point the socket is closed or aborted, the ConnectedClient object is useless
                 if (WebSocketMiddleware.clients.TryRemove(client.SocketId, out _))
+                {
                     socket.Dispose();
+                }
 
                 // signal to the middleware pipeline that this task has completed
                 client.TaskCompletion.SetResult(true);

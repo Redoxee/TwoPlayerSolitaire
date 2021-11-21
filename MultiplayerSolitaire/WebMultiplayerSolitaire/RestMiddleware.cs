@@ -46,15 +46,9 @@
                                     await context.Response.WriteAsync(stringResponse);
                                 }
                             }
-                            else if (requestStringPath.EndsWith(".css"))
-                            {
-                                context.Response.ContentType = "text/css";
-                                if (RestRequestService.TryGetFile(requestStringPath, out string stringResponse))
-                                {
-                                    await context.Response.WriteAsync(stringResponse);
-                                }
-                            }
-                            else if (requestStringPath.EndsWith(".json"))
+                            else if (requestStringPath.EndsWith(".css") ||
+                                requestStringPath.EndsWith(".json") ||
+                                requestStringPath.EndsWith(".txt"))
                             {
                                 context.Response.ContentType = "text/css";
                                 if (RestRequestService.TryGetFile(requestStringPath, out string stringResponse))

@@ -1,7 +1,7 @@
 ﻿class PooledLogTable {
     constructor() {
         this.RootNode = createElementWithClass("Div", "GameLog");
-        this.PoolSize = 15;
+        this.PoolSize = 25;
         this.Pool = [];
         for (var index = 0; index < this.PoolSize; ++index)
         {
