@@ -1,0 +1,16 @@
+﻿Two player solitaire is a versus game.
+Your goal is to win two rounds.
+To win a round, reduce your opponent health to 0 or have more health when the deck is empty.
+On your turn choose a card from your hand (bottom row) and place it on your board (middle row).
+Covered cards go back into the deck.
+Make combo to Damage, Heal, Impede your opponent.
+
+Chain : One damage to the opponent.
+Flush : Heal one health point.
+Pair  : Shuffle the oposing cards into the deck.
+Royal (Chain + Flush) : Two damage to the opponent.
+
+Order isn't important to make combos.
+Chain can loop : 10 1 2 is a chain.
+
+Good Luck!

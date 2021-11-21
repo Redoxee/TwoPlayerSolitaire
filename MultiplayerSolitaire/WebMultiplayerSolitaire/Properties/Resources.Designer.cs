@@ -443,6 +443,25 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Two player solitaire is a versus game.
+        ///Your goal is to win two rounds.
+        ///To win a round, reduce your opponent health to 0 or have more health when the deck is empty.
+        ///On your turn choose a card from your hand (bottom row) and place it on your board (middle row).
+        ///Covered cards go back into the deck.
+        ///Make combo to Damage, Heal, Impede your opponent.
+        ///
+        ///Chain : One damage to the opponent.
+        ///Flush : Heal one health point.
+        ///Pair  : Shuffle the oposing cards into the deck.
+        ///Royal (Chain + Flush) : Two damage to  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Rules {
+            get {
+                return ResourceManager.GetString("Rules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to body {
         ///    font-family: &quot;Times New Roman&quot;, Times, serif;
         ///}

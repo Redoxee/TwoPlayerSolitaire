@@ -91,6 +91,16 @@ function toggleDebug() {
     }
 }
 
+function toggleRules() {
+    var rulesContainer = document.querySelector("#RulesContent");
+    if (rulesContainer.style.display == "none" || rulesContainer.style.display == "") {
+        rulesContainer.style.display = "inline";
+    }
+    else {
+        rulesContainer.style.display = "none";
+    }
+}
+
 function RequestSave() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {

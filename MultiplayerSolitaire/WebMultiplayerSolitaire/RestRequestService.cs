@@ -16,7 +16,7 @@
             fileContent = string.Empty;
             
             string[] splitted = name.Split("/");
-            string lastComponent = splitted[^1].Trim().Replace(".json", "").Replace(".js","").Replace(".css","");
+            string lastComponent = splitted[^1].Trim().Replace(".json", "").Replace(".js","").Replace(".css","").Replace(".txt", "");
             if (!string.IsNullOrEmpty(lastComponent))
             {
                 fileContent = RestRequestService.ResourceManager.GetString(lastComponent);
