@@ -11,12 +11,18 @@
         private static bool ServerIsRunning = true;
         private static CancellationTokenRegistration AppShutdownHandler;
 
+        public static void InitializeStatics()
+        {
+            RestMiddleware.AppShutdownHandler = default;
+        }
+
         // use dependency injection to grab a reference to the hosting container's lifetime cancellation tokens
         public RestMiddleware(IHostApplicationLifetime hostLifetime)
         {
-            if (AppShutdownHandler.Token.Equals(CancellationToken.None))
+            if (RestMiddleware.AppShutdownHandler.Token.Equals(CancellationToken.None))
             {
-                AppShutdownHandler = hostLifetime.ApplicationStopping.Register(ApplicationShutdownHandler);
+                RestMiddleware.AppShutdownHandler = hostLifetime.ApplicationStopping.Register(ApplicationShutdownHandler);
+                RestMiddleware.ServerIsRunning = true;
             }
         }
 

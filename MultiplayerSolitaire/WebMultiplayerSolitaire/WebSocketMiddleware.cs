@@ -31,7 +31,20 @@ namespace MSGWeb
         {
             // gracefully close all websockets during shutdown (only register on first instantiation)
             if (AppShutdownHandler.Token.Equals(CancellationToken.None))
+            {
                 AppShutdownHandler = hostLifetime.ApplicationStopping.Register(ApplicationShutdownHandler);
+                WebSocketMiddleware.ServerIsRunning = true;
+            }
+        }
+
+        public static void InitializeStatics()
+        {
+            WebSocketMiddleware.AppShutdownHandler = default;
+
+            WebSocketMiddleware.SocketCounter = 0;
+            WebSocketMiddleware.AllClientClosed = null;
+            WebSocketMiddleware.clients.Clear();
+            WebSocketMiddleware.SocketLoopTokenSource = new();
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -89,6 +102,7 @@ namespace MSGWeb
         public static async void ApplicationShutdownHandler()
         {
             WebSocketMiddleware.ServerIsRunning = false;
+
             await CloseAllSocketsAsync();
         }
 

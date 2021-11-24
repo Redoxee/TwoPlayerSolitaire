@@ -16,6 +16,10 @@ namespace MSGWeb
 
         public static async Task Run(Parameters parameters, CancellationToken cancellationToken)
         {
+
+            WebSocketMiddleware.InitializeStatics();
+            RestMiddleware.InitializeStatics();
+
             // Initialize game.
             GameProcess.Initialize(parameters);
             SaveManager.Initialize(ref parameters);
@@ -26,13 +30,13 @@ namespace MSGWeb
             {
                 WebSocketMiddleware.AllClientClosed += parameters.OnEveryClientDisconected;
             }
-
             await Host.CreateDefaultBuilder(parameters.HostArgs)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseUrls(new string[] { 
                         parameters.Url,
                     });
+
                     webBuilder.UseStartup<Startup>();
                 })
                 .Build()
