@@ -161,8 +161,8 @@
 }
 
 .FaceCollection {
-    display: flex;
-    flex-flow: row;
+    display: grid;
+    grid-template-columns: auto auto auto;
     justify-content: center;
 }
 
