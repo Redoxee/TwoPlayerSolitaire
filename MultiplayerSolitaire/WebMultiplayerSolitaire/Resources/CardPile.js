@@ -24,20 +24,36 @@
         }
     }
 
-    SetupDeck(gameState) {
-        this.NumberOfCards = this.CountDelta;
-        this.CardCountLabel.textContent = gameState.CardsInDeck;
+    CreateAllCards(defaultVisibility) {
         this.AllCards = [];
         for (var sigilIndex = 0; sigilIndex < SigilLabel.length; ++sigilIndex) {
             this.AllCards[sigilIndex] = [];
             clearChilds(this.CardColumns[sigilIndex]);
             for (var valueIndex = 0; valueIndex < ValueLabel.length; ++valueIndex) {
-                this.AddCard({ Value: valueIndex, Sigil: sigilIndex });
+                this.AllCards[sigilIndex][valueIndex] = new CardMini({Sigil: sigilIndex, Value: valueIndex});
+                this.CardColumns[sigilIndex].appendChild(this.AllCards[sigilIndex][valueIndex].RootNode);
+                if (defaultVisibility) {
+                    this.AllCards[sigilIndex][valueIndex].RootNode.style.visibility = "visible";
+                    this.NumberOfCards++;
+                }
+                else {
+                    this.AllCards[sigilIndex][valueIndex].RootNode.style.visibility = "hidden";
+                }
             }
         }
 
+        this.RefreshCountLabel();
+    }
+
+    SetupDeck(gameState) {
+        this.NumberOfCards = this.CountDelta;
+        this.CardCountLabel.textContent = gameState.CardsInDeck;
+        this.CreateAllCards(true);
+
         for (var index = 0; index < gameState.CurrentPlayer.Hand.length; ++index) {
-            this.RemoveCard(gameState.CurrentPlayer.Hand[index]);
+            if (gameState.CurrentPlayer.Hand[index].Value > -1) {
+                this.RemoveCard(gameState.CurrentPlayer.Hand[index]);
+            }
         }
 
         for (var index = 0; index < gameState.CurrentPlayer.Board.length; ++index) {
@@ -50,24 +66,17 @@
     SetupDiscard(gameState) {
         this.NumberOfCards = this.CountDelta;
         this.CardCountLabel.textContent = gameState.CardsInDiscardPile;
-        this.AllCards = [];
-        for (var sigilIndex = 0; sigilIndex < SigilLabel.length; ++sigilIndex) {
-            this.AllCards[sigilIndex] = [];
-            clearChilds(this.CardColumns[sigilIndex]);
-        }
-
-        this.RefreshCountLabel();
+        this.CreateAllCards(false);
     }
 
     AddCard(card) {
-        this.AllCards[card.Sigil][card.Value] = new CardMini(card);
-        this.CardColumns[card.Sigil].appendChild(this.AllCards[card.Sigil][card.Value].RootNode);
+        this.AllCards[card.Sigil][card.Value].RootNode.style.visibility = "visible";
         this.NumberOfCards++;
         this.RefreshCountLabel();
     }
 
     RemoveCard(card) {
-        this.CardColumns[card.Sigil].removeChild(this.AllCards[card.Sigil][card.Value].RootNode);
+        this.AllCards[card.Sigil][card.Value].RootNode.style.visibility = "hidden";
         this.NumberOfCards--;
         this.RefreshCountLabel();
     }

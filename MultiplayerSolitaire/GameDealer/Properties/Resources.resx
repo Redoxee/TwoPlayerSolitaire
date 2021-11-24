@@ -118,58 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Card" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\card.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="GameDealer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ressources\gamedealer.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="CardDisplay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\carddisplay.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="index" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ressources\index.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="CardMini" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\cardmini.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="CardPile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\cardpile.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="CardSlot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\cardslot.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Config" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\config.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="EndGame" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\endgame.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Face" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\face.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="FaceCollection" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\facecollection.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="GameIndex" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\gameindex.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="GameInfo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\gameinfo.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="MultiplayerSolitaire" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\multiplayersolitaire.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Player" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\player.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PlayerSlots" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\playerslots.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PooledLogTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\pooledlogtable.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Rules" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\rules.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Style" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\style.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="WebSocket" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\websocket.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="style" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ressources\style.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

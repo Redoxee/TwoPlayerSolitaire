@@ -1,7 +1,7 @@
 ﻿namespace MSG
 {
     [System.Serializable]
-    public struct Card
+    public struct Card : AMG.ISerializable
     {
         public const short None = -1;
 
@@ -22,6 +22,12 @@
         public bool IsValide()
         {
             return this.Value != Card.None;
+        }
+
+        public void Serialize(AMG.Serializer serializer)
+        {
+            this.Value = serializer.Serialize("Value", this.Value);
+            this.Sigil = (Sigil)serializer.Serialize("Sigil", (int)this.Sigil);
         }
 
         public static readonly string[] ValueNames = {

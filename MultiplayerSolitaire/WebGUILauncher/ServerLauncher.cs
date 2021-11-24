@@ -15,6 +15,8 @@ namespace WebGUILauncher
         MSGWeb.MSGWeb.Parameters serverParameters = MSGWeb.MSGWeb.Parameters.Default();
 
         private States currentState;
+        private string publicIp;
+        private string localIp;
 
         public enum States
         {
@@ -31,8 +33,12 @@ namespace WebGUILauncher
 
         private void ServerLauncher_Load(object sender, EventArgs e)
         {
-            string publicIp = Program.GetPublicIp().ToString();
-            this.ServerAdress.Text = $"http://{publicIp}:{this.serverParameters.Port}/{this.serverParameters.EndPoint}";
+            this.publicIp = Program.GetPublicIp().ToString();
+            this.localIp = Program.GetLocalIp();
+
+            this.PortInput.Text = this.serverParameters.Port;
+
+            this.refreshServerAdresses();
         }
 
         private void LauncheGameButton_click(object sender, EventArgs e)
@@ -42,25 +48,62 @@ namespace WebGUILauncher
                 return;
             }
 
-            Program.LaunchGame(this.serverParameters);
+            Program.StartServer(this.serverParameters);
             this.currentState = States.Running;
             this.LaunchServerButton.Text = "Server Running";
             this.LaunchServerButton.Enabled = false;
+            this.PortInput.Enabled = false;
 
             if (this.AutoLaunchBrowser.Checked)
             {
-                Program.OpenBrowser(this.ServerAdress.Text);
+                Program.OpenBrowser(this.LocalServerAdress.Text);
             }
         }
 
         private void ServerLauncher_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Program.CloseGame();
+            Program.StopServer();
         }
 
         private void Server_EveryClientDisconected()
         {
-            this.Invoke(new Action(()=>this.Close()));
+            if (this.CloseOnServerEnd.Checked)
+            {
+                this.Invoke(new Action(() => this.Close()));
+                return;
+            }
+
+            this.Invoke(new Action(() => { 
+                Program.StopServer();
+                this.currentState = States.Configuration;
+                this.LaunchServerButton.Text = "Launch Server";
+                this.LaunchServerButton.Enabled = true;
+                this.PortInput.Enabled = true;
+            }));
+        }
+
+        private void PortInput_TextChanged(object sender, EventArgs e)
+        {
+            if (!int.TryParse(this.PortInput.Text, out int proposedPort))
+            {
+                this.PortInput.Text = this.serverParameters.Port;
+                return;
+            }
+
+            if (proposedPort < 0 || proposedPort > 65536)
+            {
+                this.PortInput.Text = this.serverParameters.Port;
+                return;
+            }
+
+            this.serverParameters.Port = this.PortInput.Text;
+            this.refreshServerAdresses();
+        }
+
+        private void refreshServerAdresses()
+        {
+            this.PublicServerAdress.Text = $"http://{this.publicIp}:{this.serverParameters.Port}/{this.serverParameters.EndPoint}";
+            this.LocalServerAdress.Text = $"http://{this.localIp}:{this.serverParameters.Port}/{this.serverParameters.EndPoint}";
         }
     }
 }

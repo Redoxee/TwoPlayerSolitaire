@@ -25,7 +25,6 @@
             public int Index;
             public int Score;
             public int Health;
-            public int PairCombo;
             public MSG.Card[] Hand;
             public MSG.Card[] Board;
             public int FaceIndex;

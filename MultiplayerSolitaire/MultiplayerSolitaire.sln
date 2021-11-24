@@ -11,7 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleCardGame", "ConsoleC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebConsoleLauncher", "WebConsoleLauncher\WebConsoleLauncher.csproj", "{2534AFF9-C51A-4290-BAB8-C6B410F96965}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGUILauncher", "WebGUILauncher\WebGUILauncher.csproj", "{4E4F5A8F-0547-437F-94E8-754A8CD252D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGUILauncher", "WebGUILauncher\WebGUILauncher.csproj", "{4E4F5A8F-0547-437F-94E8-754A8CD252D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameDealer", "GameDealer\GameDealer.csproj", "{3F4811EB-4A9A-4CFF-B411-485F974C432F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DockerGameClient", "DockerGameInstance\DockerGameClient.csproj", "{6BB8C958-FEBC-4857-B552-1895AB2B78A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMG", "AMG\AMG.csproj", "{3D6651AD-FC02-414C-9F5E-2F927178BB96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +44,18 @@ Global
 		{4E4F5A8F-0547-437F-94E8-754A8CD252D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E4F5A8F-0547-437F-94E8-754A8CD252D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E4F5A8F-0547-437F-94E8-754A8CD252D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F4811EB-4A9A-4CFF-B411-485F974C432F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F4811EB-4A9A-4CFF-B411-485F974C432F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F4811EB-4A9A-4CFF-B411-485F974C432F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F4811EB-4A9A-4CFF-B411-485F974C432F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BB8C958-FEBC-4857-B552-1895AB2B78A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BB8C958-FEBC-4857-B552-1895AB2B78A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BB8C958-FEBC-4857-B552-1895AB2B78A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BB8C958-FEBC-4857-B552-1895AB2B78A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D6651AD-FC02-414C-9F5E-2F927178BB96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D6651AD-FC02-414C-9F5E-2F927178BB96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D6651AD-FC02-414C-9F5E-2F927178BB96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D6651AD-FC02-414C-9F5E-2F927178BB96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

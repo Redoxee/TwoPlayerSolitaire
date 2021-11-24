@@ -17,9 +17,9 @@ namespace MSGWeb
         private static int SocketCounter = 0;
 
         // The key is a socket id
-        private static readonly ConcurrentDictionary<int, ConnectedClient> clients = new ConcurrentDictionary<int, ConnectedClient>();
+        private static readonly ConcurrentDictionary<int, ConnectedClient> clients = new();
 
-        public static CancellationTokenSource SocketLoopTokenSource = new CancellationTokenSource();
+        public static CancellationTokenSource SocketLoopTokenSource = new();
         public static event System.Action AllClientClosed;
 
         private static bool ServerIsRunning = true;
@@ -31,7 +31,20 @@ namespace MSGWeb
         {
             // gracefully close all websockets during shutdown (only register on first instantiation)
             if (AppShutdownHandler.Token.Equals(CancellationToken.None))
+            {
                 AppShutdownHandler = hostLifetime.ApplicationStopping.Register(ApplicationShutdownHandler);
+                WebSocketMiddleware.ServerIsRunning = true;
+            }
+        }
+
+        public static void InitializeStatics()
+        {
+            WebSocketMiddleware.AppShutdownHandler = default;
+
+            WebSocketMiddleware.SocketCounter = 0;
+            WebSocketMiddleware.AllClientClosed = null;
+            WebSocketMiddleware.clients.Clear();
+            WebSocketMiddleware.SocketLoopTokenSource = new();
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -89,6 +102,7 @@ namespace MSGWeb
         public static async void ApplicationShutdownHandler()
         {
             WebSocketMiddleware.ServerIsRunning = false;
+
             await CloseAllSocketsAsync();
         }
 
@@ -112,7 +126,7 @@ namespace MSGWeb
                 }
                 else
                 {
-                    CancellationTokenSource timeout = new CancellationTokenSource(MSGWeb.CLOSE_SOCKET_TIMEOUT_MS);
+                    CancellationTokenSource timeout = new(MSGWeb.CLOSE_SOCKET_TIMEOUT_MS);
                     try
                     {
                         Console.WriteLine("... starting close handshake");
@@ -200,11 +214,15 @@ namespace MSGWeb
 
                 // don't leave the socket in any potentially connected state
                 if (client.Socket.State != WebSocketState.Closed)
+                {
                     client.Socket.Abort();
+                }
 
                 // by this point the socket is closed or aborted, the ConnectedClient object is useless
                 if (WebSocketMiddleware.clients.TryRemove(client.SocketId, out _))
+                {
                     socket.Dispose();
+                }
 
                 // signal to the middleware pipeline that this task has completed
                 client.TaskCompletion.SetResult(true);

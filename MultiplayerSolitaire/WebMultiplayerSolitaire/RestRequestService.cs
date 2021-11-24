@@ -4,12 +4,7 @@
     
     internal class RestRequestService
     {
-        private static readonly ResourceManager ResourceManager = new ResourceManager("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
-
-        public static string HandleRestRequest()
-        {
-            return GetIndexPage();
-        }
+        private static readonly ResourceManager ResourceManager = new("WebCardGame.Properties.Resources", typeof(MSGWeb).Assembly);
 
         public static string GetIndexPage()
         {
@@ -21,7 +16,7 @@
             fileContent = string.Empty;
             
             string[] splitted = name.Split("/");
-            string lastComponent = splitted[^1].Trim().Replace(".json", "").Replace(".js","").Replace(".css","");
+            string lastComponent = splitted[^1].Trim().Replace(".json", "").Replace(".js","").Replace(".css","").Replace(".txt", "");
             if (!string.IsNullOrEmpty(lastComponent))
             {
                 fileContent = RestRequestService.ResourceManager.GetString(lastComponent);

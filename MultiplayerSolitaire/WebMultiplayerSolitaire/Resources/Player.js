@@ -3,35 +3,9 @@
         this.Header = new PlayerHeader(id, labelName);
         this.Header.Face.SetInteractable(false);
         this.PlayerStats = new PlayerStats(id);
-        this.Board = new CardDisplay("PlayerBoard", id);
-        this.Hand = new CardDisplay("PlayerHand", id);
+        this.Board = new CardDisplay("PlayerBoard", id, 3, false);
+        this.Hand = new CardDisplay("PlayerHand", id, 4, true);
         this.HasHand = false;
-
-        this.RootNode = createElementWithClass("table", "player");
-        this.PlayerLabel = document.createTextNode("Player " + localPlayerIndex);
-        var paragraph = document.createElement("p");
-        paragraph.appendChild(this.PlayerLabel);
-        this.RootNode.appendChild(paragraph);
-
-
-        this.ScoreLabel = document.createTextNode("Score : ");
-        this.HealthLabel = document.createTextNode("Health : ");
-        this.PairBulletLabel = document.createTextNode("Pair Combo : ");
-
-        var statsParagraph = createElementWithClass("tr", "Stats");
-        this.RootNode.appendChild(statsParagraph);
-        var statsTable = document.createElement("table");
-        statsParagraph.appendChild(statsTable);
-
-        var statsHeader = document.createElement("th");
-        statsTable.appendChild(statsHeader);
-        statsHeader.appendChild(this.ScoreLabel);
-        statsHeader = document.createElement("th");
-        statsTable.appendChild(statsHeader);
-        statsHeader.appendChild(this.HealthLabel);
-        statsHeader = document.createElement("th");
-        statsTable.appendChild(statsHeader);
-        statsHeader.appendChild(this.PairBulletLabel);
 
         this.SelectedCardIndex = -1;
     }
@@ -85,7 +59,7 @@ class PlayerStats {
         div = createElementWithClass("div");
         this.PairCombo = document.createTextNode("PairCombo : _");
         div.appendChild(this.PairCombo);
-        this.RootNode.appendChild(div);
+        // this.RootNode.appendChild(div);
     }
 
     SetPairComboSize(comboSize) {

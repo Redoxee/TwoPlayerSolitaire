@@ -47,7 +47,8 @@ var websocket = null;
 var isConnected = false;
 var gameWebSocketUrl = document.URL.replace("http://", "ws://");
 
-var output = document.querySelector("#debugOutput");
+var DebugContainer = document.querySelector("#DebugContainer");
+var DebugOutput = document.querySelector("#DebugOutput");
 var playArea = document.querySelector("#playArea");
 
 var playerSlots = new PlayerSlots();
@@ -78,16 +79,38 @@ writeToScreen("WS URI " + gameWebSocketUrl);
 CreateWebSocket();
 
 function writeToScreen(message) {
-    output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
+    DebugOutput.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
 }
 
 function toggleDebug() {
-    if (output.style.display == "none" || output.style.display == "") {
-        output.style.display = "block";
+    if (DebugContainer.style.display == "none" || DebugContainer.style.display == "") {
+        DebugContainer.style.display = "flex";
     }
     else {
-        output.style.display = "none";
+        DebugContainer.style.display = "none";
     }
+}
+
+function toggleRules() {
+    var rulesContainer = document.querySelector("#RulesContent");
+    if (rulesContainer.style.display == "none" || rulesContainer.style.display == "") {
+        rulesContainer.style.display = "inline";
+    }
+    else {
+        rulesContainer.style.display = "none";
+    }
+}
+
+function RequestSave() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            writeToScreen(this.responseText);
+        }
+    };
+
+    xhttp.open("POST", "RequestSave", true);
+    xhttp.send();
 }
 
 function HandleOrderAcknowledgement(messageData) {
@@ -178,6 +201,17 @@ function HandleSandboxUpdate(messageData) {
 
                 player.Hand.Slots[gameChange.IndexInHand].DetatchCard();
                 player.Board.Slots[gameChange.IndexOnBoard].AttachCard(card);
+
+                if (gameChange.PackHand) {
+                    for (var cardIndex = gameChange.IndexInHand; cardIndex < player.Hand.Slots.length - 1; ++cardIndex) {
+                        var shiftedCard = player.Hand.Slots[cardIndex + 1].Card;
+                        if (shiftedCard != null) {
+                            player.Hand.Slots[cardIndex + 1].DetatchCard();
+                            shiftedCard.CardIndex = cardIndex;
+                            player.Hand.Slots[cardIndex].AttachCard(shiftedCard);
+                        }
+                    }
+                }
             }
             else {
                 if (!AssertClientState("OtherPlayerTurn")) {
@@ -209,7 +243,16 @@ function HandleSandboxUpdate(messageData) {
                 gameInfo.Deck.RemoveCard(gameChange.Card);
             }
         }
-
+        else if (changeType == "CardRemovedFromBoard") {
+            if (gameChange.PlayerIndex == localPlayerIndex) {
+                player.Board.Slots[gameChange.IndexOnBoard].DetatchCard();
+                gameInfo.Deck.AddCard(gameChange.Card);
+            }
+            else {
+                opponent.Board.Slots[gameChange.IndexOnBoard].DetatchCard();
+                gameInfo.Deck.AddCard(gameChange.Card);
+            }
+        }
         else if (changeType == "PlayerCombo") {
             var cardInCombo = [];
             var numberOfCombo = 0;
@@ -390,28 +433,32 @@ function SelectBoardSlot(slotIndex) {
 }
 
 function PlayerHandModeChooseCard() {
-    for (var index = 0; index < 3; ++index) {
+    for (var index = 0; index < player.Hand.Slots.length; ++index) {
         var card = player.Hand.Slots[index].Card;
-        card.SetInteractable(SelectCardInHand, "Play");
+        if (card != null) {
+            card.SetInteractable(SelectCardInHand, "Play");
+        }
     }
 }
 
 function PlayerhandModeUninteractable() {
-    for (var index = 0; index < 3; ++index) {
+    for (var index = 0; index < player.Hand.Slots.length; ++index) {
         var card = player.Hand.Slots[index].Card;
-        card.SetNotInteractable();
+        if (card != null) {
+            card.SetNotInteractable();
+        }
     }
 }
 
 function PlayerBoardModeChooseSlot() {
-    for (var index = 0; index < 3; ++index) {
+    for (var index = 0; index < player.Board.Slots.length; ++index) {
         var slot = player.Board.Slots[index];
         slot.SetInteractable(SelectBoardSlot, "Play");
     }
 }
 
 function PlayerBoardModeUninteractable() {
-    for (var index = 0; index < 3; ++index) {
+    for (var index = 0; index < player.Board.Slots.length; ++index) {
         var slot = player.Board.Slots[index];
         slot.SetNotInteractable();
     }

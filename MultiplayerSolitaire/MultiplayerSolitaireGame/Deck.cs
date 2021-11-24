@@ -1,9 +1,10 @@
 ﻿namespace MSG
 {
+    using AMG;
     using System;
     using System.Text;
 
-    public class Deck
+    public class Deck : AMG.ISerializable
     {
         public Card[] Cards;
         public int NumberOfCards;
@@ -35,7 +36,7 @@
 
         public void Shuffle()
         {
-            Random random = new Random();
+            Random random = new ();
 
             for (int index = 0; index < this.NumberOfCards - 1; ++index)
             {
@@ -55,7 +56,7 @@
         {
             if (this.NumberOfCards < 1)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("Picked one toomany cards");
             }
 
             return this.Cards[--this.NumberOfCards];
@@ -68,19 +69,26 @@
 
         public override string ToString()
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append("[");
+            StringBuilder builder = new ();
+            builder.Append('[');
             for (int index = 0; index < this.NumberOfCards; ++index)
             {
                 builder.Append(this.Cards[index].ToString());
                 if (index < this.NumberOfCards - 1)
                 {
-                    builder.Append(",");
+                    builder.Append(',');
                 }
             }
 
             builder.Append($"] ({this.NumberOfCards})");
             return builder.ToString();
+        }
+
+        public void Serialize(Serializer serializer)
+        {
+            this.Cards = serializer.Serialize("Cards", this.Cards);
+            this.NumberOfCards = serializer.Serialize("NumberOfCards", this.NumberOfCards);
+            this.TotalNumberOfCards = serializer.Serialize("TotalNumberOfCards", this.TotalNumberOfCards);
         }
     }
 }

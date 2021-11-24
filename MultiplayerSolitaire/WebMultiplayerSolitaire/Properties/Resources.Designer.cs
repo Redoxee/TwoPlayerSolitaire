@@ -83,19 +83,17 @@ namespace WebCardGame.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to class CardDisplay {
-        ///    constructor(styleClass, id) {
+        ///    constructor(styleClass, id, maxNumberOfCards, hideOnEmptySlot) {
         ///        this.RootNode = createElementWithClassAndId(&quot;div&quot;, styleClass, id);
-        ///        this.Slots = [3]; // Array of card slots.
-        ///        for (var index = 0; index &lt; 3; ++index) {
-        ///            var slot = new CardSlot(index);
+        ///        this.Slots = [maxNumberOfCards]; // Array of card slots.
+        ///        for (var index = 0; index &lt; maxNumberOfCards; ++index) {
+        ///            var slot = new CardSlot(index, hideOnEmptySlot);
         ///            this.Slots[index] = slot;
         ///            this.RootNode.appendChild(this.Slots[index].RootNode);
         ///        }
         ///    }
         ///
-        ///    SetupFromArray(cardArray) {
-        ///        for (var index = 0; index &lt; 3; ++index) {
-        ///            if (cardA [rest of string was truncated]&quot;;.
+        ///    SetupFromArray(card [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CardDisplay {
             get {
@@ -126,8 +124,11 @@ namespace WebCardGame.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to class CardPile {
-        ///    constructor(title) {
+        ///    constructor(title, countDelta) {
         ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;CardPile&quot;);
+        ///
+        ///        this.CountDelta = countDelta;
+        ///
         ///        var div = createElementWithClass(&quot;div&quot;);
         ///        var label = document.createTextNode(title);
         ///        div.appendChild(label);
@@ -136,9 +137,7 @@ namespace WebCardGame.Properties {
         ///        div = createElementWithClass(&quot;div&quot;)
         ///        this.CardCountLabel = document.createTextNode(&quot;&quot;);
         ///        div.appendChild(this.CardCountLabel);
-        ///        this.RootNode.appendChild(div);
-        ///
-        ///        this.MiniCardDispl [rest of string was truncated]&quot;;.
+        ///        this.R [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CardPile {
             get {
@@ -148,18 +147,19 @@ namespace WebCardGame.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to class CardSlot {
-        ///    constructor(index) {
+        ///    constructor(index, hideOnDetach) {
         ///        this.Index = index;
         ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;CardSlot&quot;);
         ///        this.CardReceptacle = createElementWithClass(&quot;div&quot;, &quot;CardReceptacle&quot;);
         ///        this.RootNode.appendChild(this.CardReceptacle);
         ///        this.Card = null;
         ///
-        ///        this.Button = document.createElement(&quot;button&quot;);
-        ///        this.ButtonLabel = document.createTextNode(&quot;_&quot;);
-        ///        this.Button.appendChild(this.ButtonLabel);
+        ///        this.HideOnDetach = hideOnDetach;
+        ///        if (this.HideOnDetach) {
+        ///            this.RootNode.style.display = &quot;none&quot;;
+        ///        }
         ///
-        ///        this.Action = function (inde [rest of string was truncated]&quot;;.
+        ///        this.Button = document.createElement(&quot;butt [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CardSlot {
             get {
@@ -261,8 +261,8 @@ namespace WebCardGame.Properties {
         ///            instance.OnFaceLoaded();
         ///        }
         ///
-        ///        xmlhttp.open(&quot;POST&quot;, &quot;Config.json&quot;);
-        ///        xmlhttp.setRequestHeader(&quot;Content-type&quot;, &quot;application/x-w [rest of string was truncated]&quot;;.
+        ///        xmlhttp.open(&quot;GET&quot;, &quot;Config.json&quot;);
+        ///        xmlhttp.setRequestHeader(&quot;Content-type&quot;, &quot;application/x-ww [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FaceCollection {
             get {
@@ -272,23 +272,24 @@ namespace WebCardGame.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;!doctype html&gt;
-        ///&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
-        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;Style.css&quot; /&gt;
+        ///&lt;head&gt;
+        ///    &lt;title&gt;Two Players Solitaire&lt;/title&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
+        ///    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;Style.css&quot; /&gt;
+        ///&lt;/head&gt;
         ///
-        ///&lt;div id=mainContainer&gt;
-        ///    &lt;h2&gt;Two Players Solitaire&lt;/h2&gt;
-        ///    &lt;div&gt;
-        ///        &lt;div id=playArea&gt;&lt;/div&gt;
+        ///&lt;body&gt;
+        ///    &lt;div id=mainContainer&gt;
+        ///        &lt;h2&gt;Two Players Solitaire&lt;/h2&gt;
+        ///        &lt;div&gt;
+        ///            &lt;div id=playArea&gt;&lt;/div&gt;
+        ///        &lt;/div&gt;
         ///    &lt;/div&gt;
-        ///&lt;/div&gt;
         ///
-        ///&lt;div id=debugArea&gt;
-        ///    &lt;button onclick=&quot;toggleDebug()&quot;&gt; &lt;/button&gt;
-        ///    &lt;div id=debugOutput&gt;&lt;/div&gt;
-        ///&lt;/div&gt;
-        ///
-        ///&lt;div id=&quot;signature&quot;&gt;
-        ///    Made by &lt;a href=&quot;https://antonmakesgames.itch.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;AntonMake [rest of string was truncated]&quot;;.
+        ///    &lt;div id=debugArea&gt;
+        ///        &lt;button onclick=&quot;toggleDebug()&quot;&gt; &lt;/button&gt;
+        ///        &lt;div id=&quot;DebugContainer&quot;&gt;
+        ///            &lt;button onclick= [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameIndex {
             get {
@@ -301,16 +302,16 @@ namespace WebCardGame.Properties {
         ///    constructor() {
         ///        this.RootNode = createElementWithClass(&quot;div&quot;, &quot;GeneralInfoContainer&quot;);
         ///
-        ///        this.Deck = new Deck();
+        ///        this.Deck = new CardPile(&quot;Deck&quot;, -3);
         ///        this.RootNode.appendChild(this.Deck.RootNode);
         ///
-        ///        this.DiscardPile = new DiscardPile();
+        ///        this.DiscardPile = new CardPile(&quot;DiscardPile&quot;, 0);
         ///        this.RootNode.appendChild(this.DiscardPile.RootNode);
         ///    }
         ///
         ///    Setup(gameState) {
-        ///        this.Deck.Setup(gameState);
-        ///        this.DiscardPile.Setup(gameState);
+        ///        this.Deck.SetupDeck(gameState);
+        ///        this.DiscardPile.SetupDiscard(gameState);
         ///    }
         ///}.
         /// </summary>
@@ -372,38 +373,21 @@ namespace WebCardGame.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to     class Opponent {
-        ///        constructor() {
-        ///            this.RootNode = createElementWithClass(&quot;table&quot;, &quot;otherPlayer&quot;);
-        ///
-        ///            var row = document.createElement(&quot;tr&quot;);
-        ///            this.RootNode.appendChild(row);
-        ///            this.PlayerLabel = document.createTextNode(&quot;Player ?&quot;);
-        ///            row.appendChild(this.PlayerLabel);
-        ///
-        ///            this.ScoreLabel = document.createTextNode(&quot;Score : &quot;);
-        ///            this.HealthLabel = document.createTextNode(&quot;Health : &quot;);
-        ///            this.PairBulletLabe [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string Opponent {
-            get {
-                return ResourceManager.GetString("Opponent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to class Player {
         ///    constructor(id, labelName) {
         ///        this.Header = new PlayerHeader(id, labelName);
         ///        this.Header.Face.SetInteractable(false);
         ///        this.PlayerStats = new PlayerStats(id);
-        ///        this.Board = new CardDisplay(&quot;PlayerBoard&quot;, id);
-        ///        this.Hand = new CardDisplay(&quot;PlayerHand&quot;, id);
+        ///        this.Board = new CardDisplay(&quot;PlayerBoard&quot;, id, 3, false);
+        ///        this.Hand = new CardDisplay(&quot;PlayerHand&quot;, id, 4, true);
         ///        this.HasHand = false;
         ///
-        ///        this.RootNode = createElementWithClass(&quot;table&quot;, &quot;player&quot;);
-        ///        this.PlayerLabel = document.createTextNode(&quot;Player &quot; + localPlayerIndex);
-        ///        v [rest of string was truncated]&quot;;.
+        ///        this.SelectedCardIndex = -1;
+        ///    }
+        ///
+        ///    Attach(node, includeHand) {
+        ///        node.appendChild(this.Header.RootNode);
+        ///        node [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Player {
             get {
@@ -455,6 +439,25 @@ namespace WebCardGame.Properties {
         internal static string PooledLogTable {
             get {
                 return ResourceManager.GetString("PooledLogTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Two player solitaire is a versus game.
+        ///Your goal is to win two rounds.
+        ///To win a round, reduce your opponent health to 0 or have more health when the deck is empty.
+        ///On your turn choose a card from your hand (bottom row) and place it on your board (middle row).
+        ///Covered cards go back into the deck.
+        ///Make combo to Damage, Heal, Impede your opponent.
+        ///
+        ///Chain : One damage to the opponent.
+        ///Flush : Heal one health point.
+        ///Pair  : Shuffle the oposing cards into the deck.
+        ///Royal (Chain + Flush) : Two damage to  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Rules {
+            get {
+                return ResourceManager.GetString("Rules", resourceCulture);
             }
         }
         

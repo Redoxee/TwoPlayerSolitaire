@@ -1,28 +1,24 @@
-﻿namespace MSGWeb
+﻿namespace GameDealer
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Hosting;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Resources;
 
-    internal class RestMiddleware : IMiddleware
+    class DealerRestService : IMiddleware
     {
         private static bool ServerIsRunning = true;
         private static CancellationTokenRegistration AppShutdownHandler;
-
-        public static void InitializeStatics()
-        {
-            RestMiddleware.AppShutdownHandler = default;
-        }
+        private static readonly ResourceManager ResourceManager = new("GameDealer.Properties.Resources", typeof(Program).Assembly);
 
         // use dependency injection to grab a reference to the hosting container's lifetime cancellation tokens
-        public RestMiddleware(IHostApplicationLifetime hostLifetime)
+        public DealerRestService(IHostApplicationLifetime hostLifetime)
         {
-            if (RestMiddleware.AppShutdownHandler.Token.Equals(CancellationToken.None))
+            if (AppShutdownHandler.Token.Equals(CancellationToken.None))
             {
-                RestMiddleware.AppShutdownHandler = hostLifetime.ApplicationStopping.Register(ApplicationShutdownHandler);
-                RestMiddleware.ServerIsRunning = true;
+                AppShutdownHandler = hostLifetime.ApplicationStopping.Register(DealerRestService.ApplicationShutdownHandler);
             }
         }
 
@@ -32,32 +28,38 @@
             {
                 if (ServerIsRunning)
                 {
-                    string requestStringPath = context.Request.Path.ToUriComponent();
                     if (context.Request.Method == "GET")
                     {
                         if (context.Request.Headers["Accept"][0].Contains("text/html"))
                         {
                             Console.WriteLine("Sending HTML to client.");
-                            string response = RestRequestService.GetIndexPage();
+                            string response = DealerRestService.GetIndexPage();
                             context.Response.ContentType = "text/html";
                             await context.Response.WriteAsync(response);
                         }
                         else
                         {
-                            if (requestStringPath.EndsWith(".js"))
+                            string uri = context.Request.Path.ToUriComponent();
+                            if (uri.EndsWith(".js"))
                             {
                                 context.Response.ContentType = "application/javascript";
-                                if (RestRequestService.TryGetFile(requestStringPath, out string stringResponse))
+                                if (DealerRestService.TryGetFile(uri, out string stringResponse))
                                 {
                                     await context.Response.WriteAsync(stringResponse);
                                 }
                             }
-                            else if (requestStringPath.EndsWith(".css") ||
-                                requestStringPath.EndsWith(".json") ||
-                                requestStringPath.EndsWith(".txt"))
+                            else if (uri.EndsWith(".css"))
                             {
                                 context.Response.ContentType = "text/css";
-                                if (RestRequestService.TryGetFile(requestStringPath, out string stringResponse))
+                                if (DealerRestService.TryGetFile(uri, out string stringResponse))
+                                {
+                                    await context.Response.WriteAsync(stringResponse);
+                                }
+                            }
+                            else if (uri.EndsWith(".json"))
+                            {
+                                context.Response.ContentType = "text/json";
+                                if (DealerRestService.TryGetFile(uri, out string stringResponse))
                                 {
                                     await context.Response.WriteAsync(stringResponse);
                                 }
@@ -65,14 +67,6 @@
 
                             // ignore other requests (such as favicon)
                             // potentially other middleware will handle it (see finally block)
-                        }
-                    }
-                    else if (context.Request.Method == "POST")
-                    {
-                        if (requestStringPath.EndsWith("/RequestSave"))
-                        {
-                            string saveResult = SaveManager.Instance.RequestSave();
-                            await context.Response.WriteAsync(saveResult);
                         }
                     }
                 }
@@ -87,7 +81,7 @@
             {
                 // HTTP 500 Internal server error
                 context.Response.StatusCode = 500;
-                MSGWeb.ReportException(ex);
+                Program.ReportException(ex);
             }
             finally
             {
@@ -98,9 +92,29 @@
         }
 
         // event-handlers are the sole case where async void is valid
-        public static void ApplicationShutdownHandler()
+        private static void ApplicationShutdownHandler()
         {
-            RestMiddleware.ServerIsRunning = false;
+            DealerRestService.ServerIsRunning = false;
+        }
+
+        public static string GetIndexPage()
+        {
+            return DealerRestService.ResourceManager.GetString("index");
+        }
+
+        public static bool TryGetFile(string name, out string fileContent)
+        {
+            fileContent = string.Empty;
+
+            string[] splitted = name.Split("/");
+            string lastComponent = splitted[^1].Trim().Replace(".json", "").Replace(".js", "").Replace(".css", "");
+            if (!string.IsNullOrEmpty(lastComponent))
+            {
+                fileContent = DealerRestService.ResourceManager.GetString(lastComponent);
+                return !string.IsNullOrEmpty(fileContent);
+            }
+
+            return false;
         }
     }
 }

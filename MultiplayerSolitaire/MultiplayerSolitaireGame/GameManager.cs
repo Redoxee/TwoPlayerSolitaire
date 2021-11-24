@@ -6,7 +6,7 @@
 
         internal GameStateMachine stateMachine;
 
-        private readonly System.Text.StringBuilder workingStringBuilder = new System.Text.StringBuilder();
+        private readonly System.Text.StringBuilder workingStringBuilder = new ();
 
         public GameManager(GameParameters gameParameters, GameChangePool gameChanges)
         {
@@ -32,11 +32,6 @@
             this.stateMachine.SetInitialState(firstState, gameChanges);
         }
 
-        public bool IsGameFinished()
-        {
-            return false;
-        }
-
         public Sandbox GetSandbox()
         {
             return this.Sandbox;
@@ -60,7 +55,7 @@
 
             Player otherPlayer = this.Sandbox.Players[this.Sandbox.OtherPlayerIndex()];
             this.workingStringBuilder.Append("Other Player ").Append(otherPlayer.Index).AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).Append(" PairBullets : ").Append(otherPlayer.PairCombo).AppendLine();
+            this.workingStringBuilder.Append("Health : ").Append(otherPlayer.Health).AppendLine();
             this.workingStringBuilder.Append("Board : ");
             for (int index = 0; index < 3; ++index)
             {
@@ -79,11 +74,11 @@
             }
 
             this.workingStringBuilder.AppendLine();
-            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health).Append(" PairBullets : ").Append(currentPlayer.PairCombo);
+            this.workingStringBuilder.Append("Health : ").Append(currentPlayer.Health);
             this.workingStringBuilder.AppendLine();
 
             this.workingStringBuilder.Append("Hand : ");
-            for (int index = 0; index < 3; ++index)
+            for (int index = 0; index < currentPlayer.Hand.Length; ++index)
             {
                 this.workingStringBuilder.Append(currentPlayer.Hand[index]);
             }
@@ -100,7 +95,7 @@
 
             public static GameParameters Default()
             {
-                GameParameters parameters = new GameParameters
+                GameParameters parameters = new()
                 {
                     ScoreTarget = 2,
                     PairComboSize = 4,

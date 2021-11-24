@@ -7,14 +7,14 @@ namespace MSGWeb
 
     internal class Startup
     {
-        public void ConfigureServices(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services)
         {
             // register our custom middleware since we use the IMiddleware factory approach
             services.AddTransient<WebSocketMiddleware>();
             services.AddTransient<RestMiddleware>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment _)
         {
             // enable websocket support
             app.UseWebSockets(new WebSocketOptions

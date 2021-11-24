@@ -16,26 +16,34 @@ namespace MSGWeb
 
         public static async Task Run(Parameters parameters, CancellationToken cancellationToken)
         {
+
+            WebSocketMiddleware.InitializeStatics();
+            RestMiddleware.InitializeStatics();
+
             // Initialize game.
-            GameProcess.Initialize(parameters.GameParameters);
+            GameProcess.Initialize(parameters);
+            SaveManager.Initialize(ref parameters);
+
             cancellationToken.Register(MSGWeb.OnCancellation);
 
             if (parameters.OnEveryClientDisconected != null)
             {
                 WebSocketMiddleware.AllClientClosed += parameters.OnEveryClientDisconected;
             }
-
             await Host.CreateDefaultBuilder(parameters.HostArgs)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseUrls(new string[] { 
                         parameters.Url,
                     });
+
                     webBuilder.UseStartup<Startup>();
                 })
                 .Build()
                 .RunAsync(cancellationToken);
         }
+
+        public static MSG.GameManager GameManager => GameProcess.Instance.GetGameManager();
 
         internal static void ReportException(Exception ex, [CallerMemberName] string location = "(Caller name not set)")
         {
@@ -54,6 +62,10 @@ namespace MSGWeb
             public string Port;
             public string EndPoint;
             public string[] HostArgs;
+
+            public string SavePath;
+            public string LoadSavePath;
+
             public MSG.GameManager.GameParameters GameParameters;
             public Action OnEveryClientDisconected;
 
@@ -67,6 +79,8 @@ namespace MSGWeb
                     HostArgs = System.Array.Empty<string>(),
                     GameParameters = MSG.GameManager.GameParameters.Default(),
                     OnEveryClientDisconected = null,
+                    SavePath = null,
+                    LoadSavePath = null,
                 };
             }
 

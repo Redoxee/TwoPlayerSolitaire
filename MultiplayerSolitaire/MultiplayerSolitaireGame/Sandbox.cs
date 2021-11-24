@@ -1,6 +1,8 @@
-﻿namespace MSG
+﻿using AMG;
+
+namespace MSG
 {
-    public class Sandbox
+    public class Sandbox : AMG.ISerializable
     {
         public Deck Deck;
         public CardStack DiscardPile;
@@ -23,6 +25,20 @@
         public int OtherPlayerIndex(int lookingPlayerIndex)
         {
             return (lookingPlayerIndex + 1) % this.Players.Length;
+        }
+
+        public void Serialize(Serializer serializer)
+        {
+            this.CurrentPlayer = serializer.Serialize("CurrentPlayer", this.CurrentPlayer);
+            this.RoundIndex = serializer.Serialize("RoundIndex", this.RoundIndex);
+            this.PairComboSize = serializer.Serialize("PairComboSize", this.PairComboSize);
+            this.HealthBaseValue = serializer.Serialize("HealthBaseValue", this.HealthBaseValue);
+            this.MaxHealth = serializer.Serialize("MaxHealth", this.MaxHealth);
+            this.ScoreTarget = serializer.Serialize("ScoreTarget", this.ScoreTarget);
+
+            this.Deck = serializer.Serialize("Deck", this.Deck);
+            this.DiscardPile = serializer.Serialize("DiscradPile", this.DiscardPile);
+            this.Players = serializer.Serialize("Players", this.Players);
         }
     }
 }

@@ -1,10 +1,15 @@
 ﻿class CardSlot {
-    constructor(index) {
+    constructor(index, hideOnDetach) {
         this.Index = index;
         this.RootNode = createElementWithClass("div", "CardSlot");
         this.CardReceptacle = createElementWithClass("div", "CardReceptacle");
         this.RootNode.appendChild(this.CardReceptacle);
         this.Card = null;
+
+        this.HideOnDetach = hideOnDetach;
+        if (this.HideOnDetach) {
+            this.RootNode.style.display = "none";
+        }
 
         this.Button = document.createElement("button");
         this.ButtonLabel = document.createTextNode("_");
@@ -31,11 +36,19 @@
 
         this.Card = card;
         this.CardReceptacle.appendChild(card.RootNode);
+
+        if (this.HideOnDetach) {
+            this.RootNode.style.display = "flex";
+        }
     }
 
     DetatchCard() {
         clearChilds(this.CardReceptacle);
         this.Card = null;
+
+        if (this.HideOnDetach) {
+            this.RootNode.style.display = "none";
+        }
     }
 
     SetInteractable(action, label) {
